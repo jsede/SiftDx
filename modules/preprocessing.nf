@@ -90,4 +90,34 @@ process kraken2 {
     """
 }
 
+workflow preprocessing {
+    take:
+        pair_id
+        reads  // Accepts the list of reads (R1 and R2)
+        kdb    // Kraken2 database
+        output  // Accept the output directory
 
+    main:
+        // Call fastp
+        fastp_data = fastp(
+            pair_id, 
+            reads, 
+            output
+        )
+        
+        // Call prinseq
+        prinseq_data = prinseq(
+            fastp_data,
+            output
+        )
+
+        // Call Kraken2
+        kraken2_data = kraken2(
+            prinseq_data,
+            kdb,
+            output
+        )
+
+    emit:
+        kraken2_data
+}

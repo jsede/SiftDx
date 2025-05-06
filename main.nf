@@ -1,6 +1,6 @@
 nextflow.enable.dsl=2
 
-include { fastp; prinseq; kraken2 } from './modules/preprocessing.nf'
+include { preprocessing } from './modules/preprocessing.nf'
 
 workflow {    
     def output = params.output ?: new File(params.r1).parent
@@ -8,23 +8,12 @@ workflow {
     def reads = [file(params.r1), file(params.r2)]
     def kdb = params.kraken2_db
     
-    // Call fastp
-    fastp_data = fastp(
-        pair_id, 
-        reads, 
-        output
-    )
-    
-    // Call prinseq
-    prinseq_data = prinseq(
-        fastp_data,
-        output
-     )
-
-    // Call Kraken2
-    kraken2_data = kraken2(
-        prinseq_data,
+    // Call the preprocessing workflow
+    preprocessing_data = preprocessing(
+        pair_id,
+        reads,
         kdb,
         output
     )
+
 }
