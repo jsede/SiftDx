@@ -7,12 +7,14 @@ workflow {
     def pair_id = new File(params.r1).name.split('_')[0]
     def reads = [file(params.r1), file(params.r2)]
     def kdb = params.kraken2_db
+    def bowtie2_index = params.use_ercc ? params.bowtie2_index_ercc : params.bowtie2_index
     
     // Call the preprocessing workflow
     preprocessing_data = preprocessing(
         pair_id,
         reads,
         kdb,
+        bowtie2_index,
         output
     )
 

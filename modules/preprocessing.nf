@@ -73,8 +73,8 @@ process kraken2 {
     output:
         tuple path("kraken2.nonhuman.report"),
         path("kraken2.nonhuman.output"),
-        path("kraken2_nonhuman_1.fastq.gz"),
-        path("kraken2_nonhuman_2.fastq.gz")
+        path("kraken2_nonhuman_1.fastq"),
+        path("kraken2_nonhuman_2.fastq")
 
     script:
     """
@@ -85,26 +85,79 @@ process kraken2 {
             --paired ${read1} ${read2} \
             --unclassified-out kraken2_nonhuman#.fastq
 
-    gzip kraken2_nonhuman_*.fastq
+    """
+}
 
+process bowtie2 {
+    input:
+        tuple val(pair_id), path(kraken2output), path(read1), path(read2)
+        path(bowtie2_index)
+        val(output)
+
+    output:
+        tuple val(pair_id), path("bowtie2_host.sam")
+
+    script:
+    """
+    idx_base=\$(find -L ${bowtie2_index} -name '*.3.bt2' | head -n 1 | xargs readlink -f | sed 's/\\.3\\.bt2\$//')
+    echo "Bowtie2 index base: \${idx_base}"
+    bowtie2 -x \${idx_base} \
+            --very-sensitive-local \
+            -1 ${read1} \
+            -2 ${read2} \
+            -q -S bowtie2_host.sam
+
+    """
+}
+
+process samtools {
+    input:
+        tuple val(pair_id), path(bowtie2_output)
+    
+    output:
+        tuple val(pair_id),
+        path("host_depleted_1.fastq.gz"),
+        path("host_depleted_2.fastq.gz")
+        path("bowtie2_host_sorted.bam")
+
+    script:
+    """
+    samtools fastq \
+        -1 host_depleted_1.fastq \
+        -2 host_depleted_2.fastq \
+        -0 /dev/null -s /dev/null -n -f 13 \
+        ${bowtie2_output}
+    
+    gzip host_depleted_1.fastq
+    gzip host_depleted_2.fastq
+
+    samtools sort ${bowtie2_output} -o bowtie2_host_sorted.bam
     """
 }
 
 workflow preprocessing {
     take:
         pair_id
-        reads  // Accepts the list of reads (R1 and R2)
+        reads  // the list of reads (R1 and R2)
         kdb    // Kraken2 database
-        output  // Accept the output directory
+        bowtie2_index  // Bowtie2 index
+        output  // the output directory
 
     main:
+        log.info "Starting preprocessing:"
+        log.info "Pair ID: ${pair_id}"
+        log.info "Reads: ${reads}"
+        log.info "Output: ${output}"
+        log.info "Kraken2 database: ${kdb}"
+        log.info "Bowtie2 index: ${bowtie2_index}"
+        
         // Call fastp
         fastp_data = fastp(
             pair_id, 
             reads, 
             output
         )
-        
+
         // Call prinseq
         prinseq_data = prinseq(
             fastp_data,
@@ -116,6 +169,18 @@ workflow preprocessing {
             prinseq_data,
             kdb,
             output
+        )
+
+        // Call Bowtie2
+        bowtie2_data = bowtie2(
+            kraken2_data,
+            bowtie2_index,
+            output
+        )
+
+        // Call samtools
+        samtools_data = samtools(
+            bowtie2_data,
         )
 
     emit:
