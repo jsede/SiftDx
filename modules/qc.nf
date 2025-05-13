@@ -74,14 +74,14 @@ workflow qc{
             reads, 
             output
         )
-
+        
         // Call prinseq
         prinseq_data = prinseq(
             pair_id,
             fastp_data,
             output
         )
-    
+        
     emit:
         prinseq_data
 }
