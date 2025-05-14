@@ -26,9 +26,10 @@ process unassembled_reads {
         val output
 
     output:
-        tuple path("unassembled_reads_fwd.fq"),
-        path("unassembled_reads_rev.fq"),
-        path("reads_mapped_to_contigs.cov_stats")
+        tuple path("unassembled_reads_fwd.fq.gz"),
+            path("unassembled_reads_rev.fq.gz"),
+            path("reads_mapped_to_contigs.cov_stats")
+        path("final.contigs.fq")
     
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.*"
@@ -47,6 +48,9 @@ process unassembled_reads {
     samtools view -bS reads_mapped_to_contigs.sam > reads_mapped_to_contigs.bam
     samtools sort reads_mapped_to_contigs.bam > reads_mapped_to_contigs.sorted.bam
     samtools coverage reads_mapped_to_contigs.sorted.bam > reads_mapped_to_contigs.cov_stats
+    seqtk seq -F '#' ${megahit_contigs} > final.contigs.fq
+
+    gzip unassembled_reads_*.fq
     """
 }
 
@@ -59,21 +63,52 @@ process megahit_fail {
         val output
 
     output:
-        tuple path("unassembled_reads_fwd.fq"),
-        path("unassembled_reads_rev.fq"),
-        path("reads_mapped_to_contigs.cov_stats")
+        tuple path("unassembled_reads_fwd.fq.gz"),
+            path("unassembled_reads_rev.fq.gz"),
+            path("reads_mapped_to_contigs.cov_stats")
 
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.cov_stats"
 
     script:
     """
-    cp ${fullyQc_1} unassembled_reads_fwd.fq
-    cp ${fullyQc_2} unassembled_reads_rev.fq
+    cp ${fullyQc_1} unassembled_reads_fwd.fq.gz
+    cp ${fullyQc_2} unassembled_reads_rev.fq.gz
     cp ${cov_stats} reads_mapped_to_contigs.cov_stats
     """
 }
+
+process alignment_prep {
+    input:
+        val pair_id
+        path megahit_contigs
         
+        tuple path(unassembled_reads_fwd), 
+            path(unassembled_reads_rev),
+            path(cov_stats)
+        val output
+
+    output:
+        tuple path("combined_sr_file.fq"),
+            path("combined_sr_file.fa"),
+            path("combined_reads_contigs_file.fq"),
+            path("combined_reads_contigs_file.fa")
+
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
+    
+    script:
+    """
+    python ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_fwd} unassembled_reads_longer_fwd.fq unassembled_reads_shorter_fwd.fq
+    python ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_rev} unassembled_reads_longer_rev.fq unassembled_reads_shorter_rev.fq 
+
+    seqtk mergepe unassembled_reads_shorter_fwd.fq unassembled_reads_shorter_rev.fq > combined_sr_file.fq
+    seqtk seq -a combined_sr_file.fq > combined_sr_file.fa
+    seqtk mergepe ${unassembled_reads_fwd} ${unassembled_reads_rev} > merged_reads.fq
+    cat ${megahit_contigs} merged_reads.fq > combined_reads_contigs_file.fq
+    seqtk seq -a combined_reads_contigs_file.fq > combined_reads_contigs_file.fa
+    """
+}
+
 workflow assembly {
     take:
         pair_id
@@ -116,10 +151,20 @@ workflow assembly {
             output
         )
         
-        final_output = Channel.empty()
-        final_output = final_output.mix(unassembled_reads.out, megahit_fail.out)
-    
+        final_reads = Channel.empty()
+        final_reads = final_reads.mix(unassembled_reads.out[0], megahit_fail.out[0])
+        final_reads.view()
+
+        alignment_prep(
+            pair_id,
+            megahit.out,
+            final_reads,
+            output
+        )
+
+
     emit:
-        final_output
+        alignment_prep.out
+        
 
 }

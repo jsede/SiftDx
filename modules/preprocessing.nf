@@ -34,6 +34,7 @@ workflow preprocessing {
         assembly_data = assembly(
             pair_id,
             human_depletion_data,
+            cov_stats,
             output
         )
 
