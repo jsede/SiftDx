@@ -1,4 +1,3 @@
-import logging
 import sys
 import math
 import numpy as np
@@ -85,8 +84,5 @@ def ercc_plot(args):
         plt.savefig(dirpath + '/ercc_plot.png', dpi=300) # dpi to control resolution
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-    logger.info("Running ERCC plot script")
     args = sys.argv[1:]
     ercc_plot(args)
