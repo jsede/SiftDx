@@ -82,17 +82,19 @@ process alignment_prep {
     input:
         val pair_id
         path megahit_contigs
-        
         tuple path(unassembled_reads_fwd), 
             path(unassembled_reads_rev),
             path(cov_stats)
         val output
 
     output:
-        tuple path("combined_sr_file.fq"),
+        tuple path(megahit_contigs), 
+            path("combined_sr_file.fq"),
             path("combined_sr_file.fa"),
             path("combined_reads_contigs_file.fq"),
-            path("combined_reads_contigs_file.fa")
+            path("combined_reads_contigs_file.fa"),
+            path("unassembled_reads_longer_fwd.fq"),
+            path("unassembled_reads_longer_rev.fq")
 
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
     
@@ -123,7 +125,7 @@ workflow assembly {
             fully_qc, 
             output
         )
-
+        
         valid_files = megahit.out.filter { file -> file.size() > 0 }
         invalid_files = megahit.out.filter { file -> file.size() == 0 }
         
@@ -153,18 +155,15 @@ workflow assembly {
         
         final_reads = Channel.empty()
         final_reads = final_reads.mix(unassembled_reads.out[0], megahit_fail.out[0])
-        final_reads.view()
 
-        alignment_prep(
+        aln_prep_data = alignment_prep(
             pair_id,
             megahit.out,
             final_reads,
             output
         )
-
-
-    emit:
-        alignment_prep.out
         
+    emit:
+        aln_prep_data
 
 }

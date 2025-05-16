@@ -39,5 +39,5 @@ workflow preprocessing {
         )
 
     emit:
-        human_depletion_data
+        assembly_data
 }
