@@ -103,10 +103,11 @@ process alignment_prep {
     python ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_fwd} unassembled_reads_longer_fwd.fq unassembled_reads_shorter_fwd.fq
     python ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_rev} unassembled_reads_longer_rev.fq unassembled_reads_shorter_rev.fq 
 
+    seqtk seq -F '#' ${megahit_contigs} > megahit_contigs.fq
     seqtk mergepe unassembled_reads_shorter_fwd.fq unassembled_reads_shorter_rev.fq > combined_sr_file.fq
     seqtk seq -a combined_sr_file.fq > combined_sr_file.fa
     seqtk mergepe ${unassembled_reads_fwd} ${unassembled_reads_rev} > merged_reads.fq
-    cat ${megahit_contigs} merged_reads.fq > combined_reads_contigs_file.fq
+    cat megahit_contigs.fq merged_reads.fq > combined_reads_contigs_file.fq
     seqtk seq -a combined_reads_contigs_file.fq > combined_reads_contigs_file.fa
     """
 }
