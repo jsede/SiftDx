@@ -15,6 +15,7 @@ workflow {
     def mm2_index = params.mm2_index
     def pluspf_db = params.pluspf_db // Kraken2 PLUSPF database
     def diamond_db = params.diamond_db // Diamond database
+    def blast_db = params.blast_db // BLAST database
     
     // Call the preprocessing workflow
     preprocessing_data = preprocessing(
@@ -36,6 +37,7 @@ workflow {
         mm2_index,
         pluspf_db,
         diamond_db,
+        blast_db,
         output
     )
 }

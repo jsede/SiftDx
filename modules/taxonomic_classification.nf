@@ -35,7 +35,8 @@ process minimap2_reads {
         path "minimap2_reads_out.paf"
         path "minimap2_reads_out_frompaf.m8"
     
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_reads_out.paf"
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_reads_out*"
+
 
     script:
     """
@@ -98,6 +99,37 @@ process diamond {
 
 }
 
+process blast{
+    input:
+        val pair_id
+        path blast_db
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev)
+        val output
+    
+    output:
+        path "nt_alignments_sr_blast.tsv"
+
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nt_alignments_sr_blast.tsv"
+
+    script:
+    """
+    idx_base=\$(readlink -f "${blast_db}")
+    echo "Blast Database: \${idx_base}"
+
+    blastn -task megablast \\
+        -query "${combined_sr_fa}" \\
+        -db "\${idx_base}" \\
+        -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids sscinames" \\
+        -out nt_alignments_sr_blast.tsv
+    """
+}
+
 workflow taxonomic_classification {
     take:
         pair_id
@@ -105,6 +137,7 @@ workflow taxonomic_classification {
         mm2_index
         pluspf_db
         diamond_db
+        blast_db
         output
 
     main:
@@ -141,6 +174,13 @@ workflow taxonomic_classification {
         diamond_data = diamond(
             pair_id,
             diamond_db,
+            preprocessing_data,
+            output
+        )
+
+        blast_data = blast(
+            pair_id,
+            blast_db,
             preprocessing_data,
             output
         )
