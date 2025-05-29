@@ -1,4 +1,6 @@
 process kraken2 {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2.nonhuman.*"
+    
     input:
         val pair_id
         tuple path(read1), path(read2), path(single1), path(single2), path(bad1), path(bad2)
@@ -10,8 +12,6 @@ process kraken2 {
         path("kraken2.nonhuman.output"),
         path("kraken2_nonhuman_1.fastq"),
         path("kraken2_nonhuman_2.fastq")
-    
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2.nonhuman.*"
 
     script:
     """
@@ -26,6 +26,8 @@ process kraken2 {
 }
 
 process bowtie2 {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2_nonhuman_*"
+
     input:
         val pair_id
         tuple path(kraken2report), path(kraken2output),path(read1), path(read2)
@@ -36,8 +38,6 @@ process bowtie2 {
         tuple path("bowtie2_host.sam"),
         path("kraken2_nonhuman_1.fastq.gz"),
         path("kraken2_nonhuman_2.fastq.gz")
-    
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2_nonhuman_*"
 
     script:
     """
@@ -66,6 +66,9 @@ process bowtie2 {
 }
 
 process samtools {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "host_depleted*"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "bowtie2_host_sorted.bam"
+
     input:
         val pair_id
         tuple path(bowtie2_output), path(read1), path(read2)
@@ -76,9 +79,7 @@ process samtools {
         path("host_depleted_2.fastq.gz"),
         path("bowtie2_host_sorted.bam")
 
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "host_depleted*"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "bowtie2_host_sorted.bam"
-
+    
     script:
     """
     samtools fastq \
@@ -95,6 +96,9 @@ process samtools {
 }
 
 process ercc {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
+    publishDir "${output}/${pair_id}/final_plots", mode: 'copy', pattern: "ercc_plot.png"
+    
     input:
         val pair_id
         tuple path(read1), path(read2), path(bowtie2_sorted)
@@ -106,8 +110,6 @@ process ercc {
         path("ercc_coverage.txt"),
         path("ercc_plot.png")
 
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
-    publishDir "${output}/${pair_id}/final_plots", mode: 'copy', pattern: "ercc_plot.png"
     
     script:
     """
@@ -125,6 +127,8 @@ process ercc {
 }
 
 process sortmerna {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sortmerna_output"
+
     input:
         val pair_id
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted) 
@@ -134,8 +138,6 @@ process sortmerna {
     output:
         tuple path("host_depleted_1.fastq.gz"),
         path("host_depleted_2.fastq.gz")
-
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sortmerna_output"
 
     script:
     """
@@ -153,6 +155,8 @@ process sortmerna {
 }
 
 process fullyqc {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_output"
+
     input:
         val pair_id
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted) 
@@ -161,8 +165,6 @@ process fullyqc {
     output:
         tuple path("fullyQc_1.fastq.gz"),
         path("fullyQc_2.fastq.gz")
-
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_output"
 
     script:
     """

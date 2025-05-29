@@ -1,4 +1,6 @@
 process fastp {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
+    
     input:
         val pair_id
         path reads  // Accepts the list of reads (R1 and R2)
@@ -8,8 +10,6 @@ process fastp {
         tuple path("fastp_1.fastq.gz"), 
         path("fastp_2.fastq.gz"), 
         path("fastp.json")    
-
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
 
     script:
     """
@@ -33,11 +33,12 @@ process fastp {
 }
 
 process prinseq {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "prinseq_lc_good*"
+
     input:
         val pair_id
         tuple path(read1), path(read2), path(json)
         val output
-
 
     output:
         tuple path("prinseq_lc_good_out_R1.fastq.gz"),
@@ -46,8 +47,6 @@ process prinseq {
         path("prinseq_lc_single_out_R2.fastq.gz"),
         path("prinseq_lc_bad_out_R1.fastq.gz"),
         path("prinseq_lc_bad_out_R2.fastq.gz")
-
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "prinseq_lc_good*"
 
     script:
     """

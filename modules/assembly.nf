@@ -1,4 +1,6 @@
 process megahit {
+    publishDir "${output}/${pair_id}", mode: 'copy'
+
     input:
         val pair_id
         tuple path(fullyQc_1), path(fullyQc_2)
@@ -7,7 +9,7 @@ process megahit {
     output:
         path("megahit/final.contigs.fa")
 
-    publishDir "${output}/${pair_id}", mode: 'copy'
+    
     
     script:
     """
@@ -19,6 +21,9 @@ process megahit {
 }
 
 process unassembled_reads {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.*"
+
     input:
         val pair_id
         path megahit_contigs
@@ -31,9 +36,7 @@ process unassembled_reads {
             path("reads_mapped_to_contigs.cov_stats")
         path("final.contigs.fq")
     
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.*"
-
+    
     script:
     """
     bbwrap.sh ref=${megahit_contigs} \
@@ -55,6 +58,9 @@ process unassembled_reads {
 }
 
 process megahit_fail {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.cov_stats"
+
     input:
         val pair_id
         path megahit_contigs
@@ -67,9 +73,6 @@ process megahit_fail {
             path("unassembled_reads_rev.fq.gz"),
             path("reads_mapped_to_contigs.cov_stats")
 
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "unassembled_reads*"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "reads_mapped_to_contigs.cov_stats"
-
     script:
     """
     cp ${fullyQc_1} unassembled_reads_fwd.fq.gz
@@ -79,6 +82,8 @@ process megahit_fail {
 }
 
 process alignment_prep {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
+    
     input:
         val pair_id
         path megahit_contigs
@@ -94,9 +99,10 @@ process alignment_prep {
             path("combined_reads_contigs_file.fq"),
             path("combined_reads_contigs_file.fa"),
             path("unassembled_reads_longer_fwd.fq"),
-            path("unassembled_reads_longer_rev.fq")
+            path("unassembled_reads_longer_rev.fq"),
+            path(cov_stats)
 
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy'
+    
     
     script:
     """
