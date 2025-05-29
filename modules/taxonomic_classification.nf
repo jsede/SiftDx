@@ -1,15 +1,22 @@
 process minimap2_contigs {
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_contig_out*"
+    
     input:
         val pair_id
-        path megahit_contigs
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats)
         path mm2_index
         val output
     
     output:
-        path "minimap2_contig_out.paf"
-        path "minimap2_contig_out_frompaf.m8"
-    
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_contig_out*"
+        tuple path ("minimap2_contig_out.paf"),
+        path ("minimap2_contig_out_frompaf.m8")
     
     script:
     """
@@ -19,6 +26,8 @@ process minimap2_contigs {
 }
 
 process minimap2_reads {
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_reads_out*"
+
     input:
         val pair_id
         tuple path(megahit_contigs),
@@ -27,16 +36,14 @@ process minimap2_reads {
             path(combined_lr_contigs_fq),
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
-            path(unassembled_reads_longer_rev)
+            path(unassembled_reads_longer_rev),
+            path(cov_stats)
         path mm2_index
         val output
     
     output:
-        path "minimap2_reads_out.paf"
-        path "minimap2_reads_out_frompaf.m8"
-    
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "minimap2_reads_out*"
-
+        tuple path ("minimap2_reads_out.paf"),
+        path ("minimap2_reads_out_frompaf.m8")
 
     script:
     """
@@ -46,6 +53,8 @@ process minimap2_reads {
 }
 
 process k2_pluspf {
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "combined_rc.kraken.txt"
+
     input:
         val pair_id
         path pluspf_db
@@ -55,13 +64,12 @@ process k2_pluspf {
             path(combined_lr_contigs_fq),
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
-            path(unassembled_reads_longer_rev)
+            path(unassembled_reads_longer_rev),
+            path(cov_stats)
         val output
     
     output:
         path "combined_rc.kraken.txt"
-    
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "combined_rc.kraken.txt"
 
     script:
     """
@@ -71,6 +79,8 @@ process k2_pluspf {
 }
 
 process diamond {
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nr_alignments_file.tsv"
+
     input:
         val pair_id
         path diamond_db
@@ -80,13 +90,12 @@ process diamond {
             path(combined_lr_contigs_fq),
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
-            path(unassembled_reads_longer_rev)
+            path(unassembled_reads_longer_rev),
+            path(cov_stats)
         val output
-    
+
     output:
         path "nr_alignments_file.tsv"
-
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nr_alignments_file.tsv"
     
     script:
     """
@@ -100,6 +109,8 @@ process diamond {
 }
 
 process blast{
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nt_alignments_sr_blast.tsv"
+
     input:
         val pair_id
         path blast_db
@@ -115,7 +126,7 @@ process blast{
     output:
         path "nt_alignments_sr_blast.tsv"
 
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nt_alignments_sr_blast.tsv"
+    
 
     script:
     """
@@ -141,29 +152,24 @@ workflow taxonomic_classification {
         output
 
     main:
-        //Call the minimap2_contigs process
-
-        valid_files = preprocessing_data.map { tuple -> tuple[0] }
-                                        .filter { file -> file.size() > 0 }
-        
-        valid_files.ifEmpty { 
-            log.info "No valid files found. Skipping Minimap2_contigs process."
-        }
+        // Call Minimap2 on the contigs only.
 
         mm2_contigs = minimap2_contigs(
             pair_id,
-            valid_files,
+            preprocessing_data,
             mm2_index,
             output
         )
-
+        
+        // Call Minimap2 on the longer reads.
         mm2_reads = minimap2_reads(
             pair_id,
             preprocessing_data,
             mm2_index,
             output
         )
-
+        
+        // Call Kraken2 with the PlusPF database
         k2_pluspf_data = k2_pluspf(
             pair_id,
             pluspf_db,
@@ -171,6 +177,7 @@ workflow taxonomic_classification {
             output
         )
 
+        // Call Diamond on the combined contigs and longer reads.
         diamond_data = diamond(
             pair_id,
             diamond_db,
@@ -178,10 +185,19 @@ workflow taxonomic_classification {
             output
         )
 
+        // Call Blast on the shorter reads.
         blast_data = blast(
             pair_id,
             blast_db,
             preprocessing_data,
             output
         )
+
+    emit:
+        mm2_contigs.concat(
+            mm2_reads,
+            k2_pluspf_data,
+            diamond_data,
+            blast_data
+        ).view()
 }
