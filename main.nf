@@ -2,6 +2,7 @@ nextflow.enable.dsl=2
 
 include { preprocessing } from './modules/preprocessing.nf'
 include { taxonomic_classification } from './modules/taxonomic_classification.nf'
+include { finalisation } from './modules/finalisation.nf'
 
 workflow {    
     def output = params.output ?: new File(params.r1).parent
@@ -16,6 +17,8 @@ workflow {
     def pluspf_db = params.pluspf_db // Kraken2 PLUSPF database
     def diamond_db = params.diamond_db // Diamond database
     def blast_db = params.blast_db // BLAST database
+    def database = params.database // sql databases for accession2taxid 
+    def taxdump = params.taxdump // Taxdump for taxidtools
     
     // Call the preprocessing workflow
     preprocessing_data = preprocessing(
@@ -40,4 +43,14 @@ workflow {
         blast_db,
         output
     )
+
+    finalisation_data = finalisation(
+        pair_id,
+        preprocessing_data,
+        tax_class_data,
+        database,
+        taxdump,
+        output
+    )
+
 }

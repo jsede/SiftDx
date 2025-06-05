@@ -1,0 +1,248 @@
+import re
+import pandas as pd
+from Bio import SeqIO
+import json
+import assists
+import logging
+import species2lineage as sl
+import acc2taxid as at
+
+exc_kingdom = [
+    "Bacteria",
+    "Eukaryota",
+    "Viruses",
+    'Archaea',
+]
+def read_csv(file, name, col):
+    clean_df = pd.read_csv(
+        file, sep="\t", header=None, names=[name, "accession"], usecols=[0, col]
+    )
+    return clean_df
+
+def blast_cleanup(file, name, col, taxdump, dirpath, entrez_cred):
+    loaded_cache = assists.load_cache_files(dirpath)
+    blast_df = pd.read_csv(
+            file, sep="\t", 
+            header=None, 
+            names=[
+                name, 
+                "accession",
+                "pident", 
+                "length", 
+                "evalue",
+                "bitscore",
+                "qlen",
+                "staxids", 
+                "BLAST_Species"
+                ], 
+                usecols=[0,1,2,3,10,11,12,13, col],
+                dtype = {
+                    'accession': str,
+                    'length': int, 
+                    'pident': float, 
+                    'qlen': int,
+                    'evalue': float,
+                    "bitscore": float,
+                    'staxids': str}
+        )
+    taxid_df = pd.read_csv(
+            file, sep="\t", header=None, names=["taxid"], usecols=[13], dtype=str
+        )
+    taxid_df.drop_duplicates(subset="taxid", keep="first", inplace=True)
+    taxids = taxid_df['taxid'].to_list()
+    get_lineage(taxids, taxdump, dirpath, entrez_cred)
+    lineage_cache = assists.check_lineage_json(loaded_cache[10])
+    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
+    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
+    blast_df['superkingdom'] = blast_df['staxids'].map(mapping_dict)
+    blast_df['alnlen'] = blast_df['length']/blast_df['qlen']
+    
+    bacteria_condition = (blast_df['superkingdom'] == 'Bacteria') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 95)
+    eukaryota_condition = (blast_df['superkingdom'] == 'Eukaryota') | (blast_df['superkingdom'] == 'Archaea') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 98)
+    viruses_condition = (blast_df['superkingdom'] == 'Viruses') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 75)
+    nothing_condition = ~blast_df['superkingdom'].isin(exc_kingdom)
+
+    blast_df = blast_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+    blast_df.drop_duplicates(subset="NT", keep="first", inplace=True)
+    blast_df['accession'] = blast_df['accession'].str.extract(r'([A-Z_]+\d+\.\d+)')
+    full_blast_df = blast_df[["NT", "accession", "BLAST_Species", "staxids", "pident", "alnlen", "evalue", "bitscore"]]
+    blast_df = blast_df[["NT", "accession", "BLAST_Species"]]
+    return blast_df, full_blast_df
+
+
+def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
+    loaded_cache = assists.load_cache_files(dirpath)
+    minimap_df = pd.read_csv(
+            file, sep="\t", header=None, 
+            names=[name, "accession", "pident", "alnlen", "evalue", "bitscore"], 
+            usecols=[0,1,2,3,10,11],
+            dtype = {"accession":str, "pident": float, "alnlen": int, "evalue": float, "bitscore": float}
+        )
+    accession_df = pd.read_csv(
+            file, sep="\t", header=None, names=["accession"], usecols=[5], dtype=str
+        )
+    accession_df.drop_duplicates(subset="accession", keep="first", inplace=True)
+    mm2_accession_list = accession_df["accession"].dropna().to_list()
+    at.nucl_accession_search(database, mm2_accession_list, dirpath, entrez_cred)
+
+    loaded_cache = assists.load_cache_files(dirpath)
+    taxid_dict = loaded_cache[3]
+    minimap_df["MM2_taxid"] = minimap_df["accession"].map(taxid_dict)
+    taxids = list(taxid_dict.values())
+    taxids = list(set(taxids))
+    
+    get_lineage(taxids, taxdump, dirpath, entrez_cred)
+    lineage_cache = assists.check_lineage_json(loaded_cache[10])
+    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
+    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
+    minimap_df['superkingdom'] = minimap_df['MM2_taxid'].map(mapping_dict)
+    
+    bacteria_condition = (minimap_df['superkingdom'] == 'Bacteria') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 95)
+    eukaryota_condition = (minimap_df['superkingdom'] == 'Eukaryota') | (minimap_df['superkingdom'] == 'Archaea') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 98)
+    viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 75)
+    nothing_condition = ~minimap_df['superkingdom'].isin(exc_kingdom)
+
+    minimap_df = minimap_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+    minimap_df.drop_duplicates(subset="MM2_NT", keep="first", inplace=True)
+    full_minimap_df = minimap_df[["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"]]
+    minimap_df = minimap_df[["MM2_NT", "accession"]]
+    return minimap_df, full_minimap_df
+    
+def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
+    loaded_cache = assists.load_cache_files(dirpath)
+    diamond_df = pd.read_csv(
+            file, sep="\t", header=None, 
+            names=[name, "accession", "pident", "length", "evalue", "bitscore", "qlen", "staxids", "sscinames"], 
+            usecols=[0,1,2,3,10,11,12,13,14], 
+            dtype = {"pident":float, "length":int, "evalue": float, "bitscore": float, "qlen":int}
+        )
+    accession_df = pd.read_csv(
+            file, sep="\t", header=None, names=["accession"], usecols=[1], dtype=str
+        )
+    accession_df.drop_duplicates(subset="accession", keep="first", inplace=True)
+    diamond_list = accession_df["accession"].dropna().to_list()
+    at.prot_accession_search(database, diamond_list, dirpath, entrez_cred)
+
+    loaded_cache = assists.load_cache_files(dirpath)
+    taxid_dict = loaded_cache[3]
+    diamond_df["NR_taxid"] = diamond_df["accession"].map(taxid_dict)
+    taxids = list(taxid_dict.values())
+    taxids = list(set(taxids))
+
+    get_lineage(taxids, taxdump, dirpath, entrez_cred)
+    lineage_cache = assists.check_lineage_json(loaded_cache[10])
+    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
+    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
+    diamond_df['superkingdom'] = diamond_df['NR_taxid'].map(mapping_dict)
+    diamond_df['alnlen'] = (diamond_df['length']*3)/diamond_df['qlen']
+
+    bacteria_condition = (diamond_df['superkingdom'] == 'Bacteria') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 95)
+    eukaryota_condition = (diamond_df['superkingdom'] == 'Eukaryota') | (diamond_df['superkingdom'] == 'Archaea') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 98)
+    viruses_condition = (diamond_df['superkingdom'] == 'Viruses') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 75)
+    nothing_condition = ~diamond_df['superkingdom'].isin(exc_kingdom)
+
+    diamond_df = diamond_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+    diamond_df.drop_duplicates(subset="NR", keep="first", inplace=True)
+    full_diamond_df = diamond_df[["NR", "accession", "sscinames", "staxids", "pident", "alnlen", "evalue", "bitscore"]]
+    diamond_df = diamond_df[["NR", "accession"]]
+    return diamond_df, full_diamond_df
+
+
+def get_lineage(taxon_list, taxdump, dirpath, entrez_cred):
+    for taxon in taxon_list:
+        loaded_cache = assists.load_cache_files(dirpath)
+        taxid_dict, prev_failed = loaded_cache[11], loaded_cache[13]
+        taxid_lookup = {entry['taxid']: entry for entry in taxid_dict}
+
+        if taxon in taxid_lookup:
+            logging.info(f"Taxid {taxon} with lineage already found in JSON file.")
+            continue
+        elif taxon in prev_failed:
+            if taxon in taxid_lookup:
+                logging.info(f"Taxid {taxon} was previously failed but is now found in JSON file.")
+                continue
+            else:
+                logging.info(f"Taxid {taxon} has failed all attempts previously.")
+                continue
+        
+        result = sl.get_taxon_lineage(int(taxon), taxdump, entrez_cred)
+        if result is not None:
+            with open(loaded_cache[10], "a") as file:
+                json.dump(result, file)
+                file.write("\n")
+        else:
+            logging.info(f"{taxon} not found, writing to failed_lineage.json")
+            with open(loaded_cache[12], "a") as file:
+                json.dump({taxon: "Not found"}, file)
+                file.write("\n")
+
+def convert_fasta_to_list(fasta_file):
+    headers = []
+    seq_lengths = []
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        header = record.id
+        length = len(record)
+        headers.append(header)
+        seq_lengths.append(length)
+    return headers, seq_lengths
+
+def extract_name_numreads(covstats_file):
+    covstats_df = pd.read_csv(covstats_file, sep="\t", header=0, usecols=[0, 3], dtype = {"#rname": str ,"numreads": int})
+    covstats_df['#rname'] = covstats_df['#rname'].str.extract(r'(\S+)')
+    return covstats_df
+
+def remove_brackets(text):
+    return re.sub(r"\([^)]*\)", "", text)
+
+
+def get_taxid(text):
+    taxid = "-"
+    taxid_pattern = r"\(taxid\s+(\d+)\)"
+    matches = re.search(taxid_pattern, text)
+    if matches:
+        taxid = matches.group(1)
+    return taxid
+
+
+def remove_num_str(text):
+    if isinstance(text, list):
+        if isinstance(text[0], int):
+            return '-'
+        text = text[0] if len(text) > 0 else ''
+    pattern = r"str\..*"
+    result = re.sub(pattern, "", text)
+    return result.strip()
+
+def extract_genus(species):
+    return species.split()[0] if species != "-" else None
+
+def extract_species(species):
+    return " ".join(species.split()[:2]) if species != "-" else None
+
+def rm_dupes_json(file):
+    unique_species = {}
+    with open(file, "r") as infile:
+        for line in infile:
+            json_data = json.loads(line)
+            species_name = list(json_data.keys())[0]
+            taxid = json_data[species_name]
+            if species_name not in unique_species:
+                unique_species[species_name] = taxid
+            elif taxid != '-' and unique_species[species_name] == '-':
+                unique_species[species_name] = taxid
+        
+    with open(file, "w") as outfile:
+        for species_name, taxid in unique_species.items():
+            json_data = {species_name: taxid}
+            json.dump(json_data, outfile)
+            outfile.write("\n")
+        

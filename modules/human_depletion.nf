@@ -118,7 +118,7 @@ process ercc {
     samtools index ${bowtie2_sorted}
     regions=()
     while IFS=\$'\t' read -r region _; do
-        regions+=("$region")
+        regions+=("\$region")
     done < ercc_coverage.txt
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.ERCC_only.out.sam

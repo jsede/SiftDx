@@ -120,7 +120,8 @@ process blast{
             path(combined_lr_contigs_fq),
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
-            path(unassembled_reads_longer_rev)
+            path(unassembled_reads_longer_rev),
+            path(cov_stats)
         val output
     
     output:
@@ -192,12 +193,12 @@ workflow taxonomic_classification {
             preprocessing_data,
             output
         )
-
+        
     emit:
-        mm2_contigs.concat(
-            mm2_reads,
-            k2_pluspf_data,
-            diamond_data,
-            blast_data
-        ).view()
+        mm2_contigs
+            .concat(mm2_reads)
+            .concat(k2_pluspf_data)
+            .concat(diamond_data)
+            .concat(blast_data)
+            .flatten().toList().view()
 }
