@@ -59,30 +59,36 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     
     # clean up the blast_sr file by dropping duplicates
     blast_sr_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species"])
-    full_blast_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species", "staxids", "pident", "qlen", "evalue", "bitscore"])
+    full_blast_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species", "staxids", "pident", "alnlen", "evalue", "bitscore"])
     if os.path.isfile(blast_sr_file) is True and os.stat(blast_sr_file).st_size != 0:
         blast_sr_df, full_blast_df = cleaners.blast_cleanup(blast_sr_file, "NT", 14, taxdump, dirpath, entrez_cred)
     full_blast_df = full_blast_df.rename(columns={"NT": "Fasta_Headers", "BLAST_Species": "sscinames"})
     logging.info("Cleaned up BLAST output and ready to merge")
     # clean up minimap, join them together and merge it with
     minimap_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
-    full_mm2_contigs_df = pd.DataFrame(columns = ["MM2_NT", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
+    full_mm2_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
     if os.path.isfile(minimap_contigs) is True and os.stat(minimap_contigs).st_size != 0:
         minimap_contigs_df, full_mm2_contigs_df = cleaners.minimap_cleanup(minimap_contigs, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_contigs_df = full_mm2_contigs_df.rename(columns={"MM2_NT": "Fasta_Headers"})
     minimap_lr_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
-    full_mm2_reads_df = pd.DataFrame(columns = ["MM2_NT", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
+    full_mm2_reads_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
     if os.path.isfile(minimap_lr) is True and os.stat(minimap_lr).st_size != 0:
         minimap_lr_df, full_mm2_reads_df = cleaners.minimap_cleanup(minimap_lr, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_reads_df = full_mm2_reads_df.rename(columns={"MM2_NT": "Fasta_Headers"})
-    minimap_df = pd.concat(
-        [minimap_contigs_df, minimap_lr_df],
-        keys=["minimap_contigs_df", "minimap_lr_df"],
-    )
-    full_minimap_df = pd.concat(
-        [full_mm2_contigs_df, full_mm2_reads_df],
-        keys=["full_mm2_contigs_df", "full_mm2_reads_df"]
-    )
+# Filter out empty or all-NA DataFrames before concatenation
+    minimap_parts = [
+        ("minimap_contigs_df", minimap_contigs_df),
+        ("minimap_lr_df", minimap_lr_df),
+    ]
+    minimap_parts = [(k, df) for k, df in minimap_parts if not df.empty and not df.isna().all().all()]
+    minimap_df = pd.concat([df for _, df in minimap_parts], keys=[k for k, _ in minimap_parts])
+
+    full_mm2_parts = [
+        ("full_mm2_contigs_df", full_mm2_contigs_df),
+        ("full_mm2_reads_df", full_mm2_reads_df),
+    ]
+    full_mm2_parts = [(k, df) for k, df in full_mm2_parts if not df.empty and not df.isna().all().all()]
+    full_minimap_df = pd.concat([df for _, df in full_mm2_parts], keys=[k for k, _ in full_mm2_parts])
     mm2_accession_list = minimap_df["accession"].dropna().to_list()
     mm2_accession_list = list(dict.fromkeys(mm2_accession_list))
     logging.info("Merged and cleaned up Minimap output and ready to assign taxonomy")
@@ -197,7 +203,9 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
 
     logging.info(f"Kraken, NT & NR merge complete")
     sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath)
-    all_hits_df = pd.concat([full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df])
+    dataframes = [full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df]
+    non_empty_dataframes = [df for df in dataframes if not df.empty and not df.isna().all().all()]
+    all_hits_df = pd.concat(non_empty_dataframes)
 
     desired_cols = [
         'taxid', 'superkingdom', 'kingdom', 'phylum', 'class',
