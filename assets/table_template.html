@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <title>SiftDx Table Summary</title>
+    <style>
+        * {
+            letter-spacing: 0.01px;
+            font-family: Arial;
+        }
+        
+        body {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+        .title p {
+            max-width: 210mm;
+            margin: 0 auto;
+            text-align: center;
+            font-size:25px;
+            padding: 5px 5px 5px 5px;
+            }
+
+        .tab_bar {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .tab-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            padding: 5px 5px;
+            color: #000;
+            background-color: #fff;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+            font-size: 14px;
+        }
+
+        .tab-link.active-tab {
+            background-color: #c0c0c0; 
+            color: black;
+        }       
+
+        .tab-link img {
+            width: 25px;
+            height: 20px;
+            padding-right: 5px;
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .accordion {
+            background-color: rgb(248, 247, 247);
+            color: rgb(48, 48, 48);
+            cursor: pointer;
+            padding: 5px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 0.4s;
+        }
+
+        .panel {
+            padding: 0 10px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            line-height: 2;
+            margin-right: 10px;
+        }
+
+        .panel p {
+            margin: 0;
+            margin-bottom: 10px;
+            margin-top: 5px;
+            padding: 0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .accordion:after {
+            content: '+';
+            font-size: 13px;
+            color: #777;
+            float: right;
+            margin-left: 10px;
+        }
+
+        .active-accordion:after {
+            content: "-"; /* "minus" sign (-) */
+        }
+
+        .highlight {
+            background-color: #ffff99 !important;
+        }
+
+    </style>
+
+    <div class="title" id="title">
+        <p>SiftDx Table Summary</p>
+    </div>
+
+    <div style="margin-top: 10px; margin-bottom: 20px;">
+        <input type="text" id="accordionSearch" placeholder="Search species" style="padding: 5px; width: 300px;">
+        <button onclick="searchAccordions()">Search</button>
+        </div>
+    <div class="tab_bar">
+        <button class="tab-link" onclick="openTab(event, 'bacteria_tab')">
+            <img src="data:image/png;base64, py_bacteria_icon_ph" alt="Bacteria Icon">
+            Bacteria
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'virus_tab')">
+            <img src="data:image/png;base64, py_virus_icon_ph" alt="Virus Icon">
+            Viruses
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'fungi_tab')">
+            <img src="data:image/png;base64, py_fungi_icon_ph" alt="Fungi Icon">
+            Fungi
+        </button>
+        <button class="tab-link" onclick="openTab(event, 'parasite_tab')">
+            <img src="data:image/png;base64, py_parasite_icon_ph" alt="Parasite Icon">
+            Parasites
+        </button>
+    </div>
+            
+    <div id="bacteria_tab" class="tab">
+        <div class="results_accordion">
+            <button class="accordion">py_species1_ph</button>
+                <div class="panel">
+                    <p>
+                        py_species1status_ph
+                    </p>
+                    <p style="padding-bottom: 10px;">
+                        py_species1zscore_ph
+                    </p>
+                </div>
+            <button class="accordion">py_species2_ph</button>
+            <div class="panel">
+                <p>
+                    py_species2status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species2zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species3_ph</button>
+            <div class="panel">
+                <p>
+                    py_species3status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species3zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species4_ph</button>
+            <div class="panel">
+                <p>
+                    py_species4status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species4zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species5_ph</button>
+            <div class="panel">
+                <p>
+                    py_species5status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species5zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species6_ph</button>
+            <div class="panel">
+                <p>
+                    py_species6status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species6zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species7_ph</button>
+            <div class="panel">
+                <p>
+                    py_species7status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species7zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species8_ph</button>
+            <div class="panel">
+                <p>
+                    py_species8status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species8zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species9_ph</button>
+            <div class="panel">
+                <p>
+                    py_species9status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species9zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_species10_ph</button>
+            <div class="panel">
+                <p>
+                    py_species10status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_species10zscore_ph
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="virus_tab" class="tab">
+        <div class="results_accordion">
+            <button class="accordion">py_vspecies1_ph</button>
+                <div class="panel">
+                    <p>
+                        py_vspecies1status_ph
+                    </p>
+                    <p style="padding-bottom: 10px;">
+                        py_vspecies1zscore_ph
+                    </p>
+                </div>
+            <button class="accordion">py_vspecies2_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies2status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies2zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies3_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies3status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies3zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies4_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies4status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies4zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies5_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies5status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies5zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies6_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies6status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies6zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies7_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies7status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies7zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies8_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies8status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies8zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies9_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies9status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies9zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_vspecies10_ph</button>
+            <div class="panel">
+                <p>
+                    py_vspecies10status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_vspecies10zscore_ph
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="fungi_tab" class="tab">
+        <div class="results_accordion">
+            <button class="accordion">py_fspecies1_ph</button>
+                <div class="panel">
+                    <p>
+                        py_fspecies1status_ph
+                    </p>
+                    <p style="padding-bottom: 10px;">
+                        py_fspecies1zscore_ph
+                    </p>
+                </div>
+            <button class="accordion">py_fspecies2_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies2status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies2zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies3_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies3status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies3zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies4_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies4status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies4zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies5_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies5status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies5zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies6_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies6status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies6zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies7_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies7status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies7zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies8_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies8status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies8zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies9_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies9status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies9zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_fspecies10_ph</button>
+            <div class="panel">
+                <p>
+                    py_fspecies10status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_fspecies10zscore_ph
+                </p>
+            </div>
+        </div>
+    </div>
+                
+    <div id="parasite_tab" class="tab">
+        <div class="results_accordion">
+            <button class="accordion">py_pspecies1_ph</button>
+                <div class="panel">
+                    <p>
+                        py_pspecies1status_ph
+                    </p>
+                    <p style="padding-bottom: 10px;">
+                    py_pspecies1zscore_ph
+                    </p>
+                </div>
+            <button class="accordion">py_pspecies2_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies2status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies2zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies3_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies3status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies3zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies4_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies4status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies4zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies5_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies5status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies5zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies6_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies6status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies6zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies7_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies7status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies7zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies8_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies8status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies8zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies9_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies9status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies9zscore_ph
+                </p>
+            </div>
+            <button class="accordion">py_pspecies10_ph</button>
+            <div class="panel">
+                <p>
+                    py_pspecies10status_ph
+                </p>
+                <p style="padding-bottom: 10px;">
+                    py_pspecies10zscore_ph
+                </p>
+            </div>
+        </div>
+
+    <script>
+        function openTab(evt, tabName) {
+        var i, tabContent, tabLinks;
+        tabContent = document.getElementsByClassName("tab");
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+        }
+        tabLinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].classList.remove("active-tab");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.classList.add("active-tab");
+        }
+
+        function toggleAccordion() {
+            this.classList.toggle("active-accordion");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", function () {
+            var acc = document.getElementsByClassName("accordion");
+            for (var i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", toggleAccordion);
+            }
+        });
+
+        document.getElementById('showAllButton').addEventListener('click', function() {
+            var panels = document.getElementsByClassName('panel');
+            for (var j = 0; j < panels.length; j++) {
+                var panel = panels[j];
+                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.previousElementSibling.classList.add('active-accordion');
+            }
+        });
+
+        document.getElementById('hideAllButton').addEventListener('click', function() {
+            var panels = document.getElementsByClassName('panel');
+            for (var j = 0; j < panels.length; j++) {
+                var panel = panels[j];
+                panel.style.maxHeight = null;
+                panel.previousElementSibling.classList.remove('active-accordion');
+        }
+        });
+    </script>
+    <script>
+        document.getElementById("accordionSearch").addEventListener("input", function () {
+        var query = this.value.toLowerCase();
+        var accordions = document.getElementsByClassName("accordion");
+
+        for (var i = 0; i < accordions.length; i++) {
+            var acc = accordions[i];
+            var panel = acc.nextElementSibling;
+            var text = acc.textContent.toLowerCase();
+
+            if (text.includes(query) && query.length > 0) {
+                acc.style.backgroundColor = "#ffffcc"; // yellow highlight
+                panel.style.maxHeight = panel.scrollHeight + "px";
+                acc.classList.add("active-accordion");
+                acc.style.display = ""; // show
+            } else {
+                acc.style.backgroundColor = ""; // reset color
+                panel.style.maxHeight = null;
+                acc.classList.remove("active-accordion");
+                if (query.length > 0) {
+                    acc.style.display = "none"; // hide unmatched (optional)
+                } else {
+                    acc.style.display = ""; // show all if query is empty
+                }
+            }
+        }
+    });
+    </script>

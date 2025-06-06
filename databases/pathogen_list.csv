@@ -1,0 +1,752 @@
+Species,AltNames,GenoSero-types,Disease_type,Disease_Name,Tax_ID,NCBI_Genbank_ID,Status,Commensal,NNDSS_Notifiable,Reference,Version added
+Abiotrophia defectiva,,,bacterial,,46125,NZ_CP053988.1,is a known pathogen,,,1,1.0.0
+Achromobacter xylosoxidans,,,bacterial,,85698,NZ_CP068211.1,is a known pathogen,,,1,1.0.0
+Acinetobacter baumannii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Acinetobacter junii,,,bacterial,,,,is a known pathogen,,,,1.0.1
+Actinomadura madurae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Actinomadura pelletieri,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Actinomyces gerencseriae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Actinomyces israelii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Actinotignum schaalii,,,bacterial,,59505,NZ_CP008802.1,is a known pathogen,,,1,1.0.0
+Aerococcus sanguinicola,,,bacterial,,119206,,is a known pathogen,,,1,1.0.0
+Aerococcus urinae,,,bacterial,,1376,NZ_CP014161.1,is a known pathogen,,,1,1.0.0
+Aeromonas caviae,,,bacterial,,648,NZ_AP022254.1,is a known pathogen,,,1,1.0.0
+Aeromonas hydrophila,,,bacterial,,644,NZ_CP065651.1,is a known pathogen,,,1,1.0.0
+Aeromonas veronii,,,bacterial,,654,NZ_CP044060.1,is a known pathogen,,,1,1.0.0
+Aggregatibacter actinomycetemcomitans,,,bacterial,,714,NZ_CP085096.1,is a known pathogen,,,1,1.0.0
+Aggregatibacter aphrophilus,,,bacterial,,732,NZ_LR134327.1,is a known pathogen,,,1,1.0.0
+Agrobacterium tumefaciens,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Anaerococcus prevotii,,,bacterial,,33034,,is a known pathogen,,,1,1.0.0
+Anaplasma phagocytophilum,,,bacterial,,948,NC_021880.1,is a known pathogen,,,1,1.0.0
+Arcanobacterium haemolyticum,,,bacterial,,28264,NZ_LS483427.1,is a known pathogen,,,1,1.0.0
+Arcobacter butzleri,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Bacillus anthracis,,,bacterial,Anthrax,1392,NC_007530.2,is a known pathogen ,,Yes,1,1.0.0
+Bacillus cereus,,,bacterial,,1396,NZ_CP017060.1,is a known pathogen,,,1,1.0.0
+Bacillus coagulans,,,bacterial,,1398,NZ_CP009709.1,is a known pathogen,,,1,1.0.0
+Bacillus licheniformis,,,bacterial,,1402,NZ_CP014842.1,is a known pathogen,,,1,1.0.0
+Bacteroides fragilis,,,bacterial,,,,is a known pathogen,,Yes,27,1.0.0
+Bartonella bacilliformis,,,bacterial,Bartonellosis/Oroya fever,774,NZ_CP045671.1,is a known pathogen,,,1,1.0.0
+Bartonella clarridgeiae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Bartonella elizabethae,,,bacterial,Bartonellosis,807,NZ_LR134527.1,is a known pathogen,,,1,1.0.0
+Bartonella grahamii,,,bacterial,Bartonellosis,33045,NC_012846.1,is a known pathogen,,,1,1.0.0
+Bartonella henselae,,,bacterial,Bartonellosis,38323,NZ_HG965802.1,is a known pathogen,,,1,1.0.0
+Bartonella quintana,,,bacterial,Bartonellosis/Trench fever,803,NZ_AP019773.1,is a known pathogen,,,1,1.0.0
+Bartonella vinsonii,,,bacterial,Bartonellosis,,,is a known pathogen,,,31,1.0.0
+Bordetella bronchiseptica,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Bordetella pertussis,,,bacterial,Pertussis,520,NZ_CP025371.1,is a known pathogen,,Yes,"1,2",1.0.0
+Bordetella parapertussis,,,bacterial,,519,NZ_CP025070.1,is a known pathogen,,,14,1.0.0
+Bordetella holmesii,,,bacterial,,35814,NZ_CP043146.1,is a known pathogen,,,15,1.0.0
+Bordetella hinzii,,,bacterial,,103855,NZ_CP021395.1,is a known pathogen,,,16,1.0.0
+Borrelia duttonii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Borrelia hermsii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Borrelia mayonii,,,bacterial,Lyme Disease,1674146,NZ_CP015796.1,is a known pathogen,,,1,1.0.0
+Borrelia miyamotoi,,,bacterial,Tickborne relapsing fever,47466,NZ_AP024371.1,is a known pathogen,,,1,1.0.0
+Borrelia parkeri,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Borrelia recurrentis,,,bacterial,Tickborne relapsing fever,44449,NC_011244.1,is a known pathogen,,,1,1.0.0
+Borrelia turicatae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Borreliella burgdorferi,,,bacterial,Lyme Disease,139,GCF_000181575.2,is a known pathogen,,,1,1.0.0
+Brachyspira hyodysenteriae,,,bacterial,,159,NZ_CP046932.1,is a known pathogen,,,1,1.0.0
+Brevibacillus brevis,,,bacterial,,1393,NZ_LR134338.1,is a known pathogen,,,1,1.0.0
+Brevibacillus laterosporus,,,bacterial,,1465,NZ_CP017705.1,is a known pathogen,,,1,1.0.0
+Brucella abortus,,,bacterial,Brucellosis,235,NC_007618.1 (I); NC_007624.1 (II),is a known pathogen,,,1,1.0.0
+Brucella canis,,,bacterial,Brucellosis,36855,NC_010103.1 (I); NC_010104.1 (II),is a known pathogen,,,1,1.0.0
+Brucella melitensis,,,bacterial,Brucellosis,29459,NC_003317.1 (I); NC_003318.1 (II),is a known pathogen,,,1,1.0.0
+Brucella suis,,,bacterial,Brucellosis,29461,NC_004310.3 (I); NC_004311.2 (II),is a known pathogen,,,1,1.0.0
+Burkholderia cenocepacia,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Burkholderia cepacia,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Burkholderia mallei,,,bacterial,Glanders,13373,NZ_CP009727.1 (Chr1); NZ_CP009728.1 (Chr2),is a known pathogen,,,1,1.0.0
+Burkholderia pseudomallei,,,bacterial,Melioidosis,28450,NZ_CP008781.1 (Chr1); NZ_CP008782.1 (Chr2),is a known pathogen,,,1,1.0.0
+Campylobacter coli,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Campylobacter curvus,,,bacterial,Campylobacteriosis,200,NZ_CP053826.1,is a known pathogen,,,1,1.0.0
+Campylobacter fetus,,,bacterial,Campylobacteriosis,196,NZ_CP059443.1,is a known pathogen,,,1,1.0.0
+Campylobacter jejuni,,,bacterial,Campylobacteriosis,197,NC_002163.1,is a known pathogen,,Yes,1,1.0.0
+Campylobacter lari,,,bacterial,Campylobacteriosis,201,NC_012039.1,is a known pathogen,,,1,1.0.0
+Cardiobacterium hominis,,,bacterial,,,,is a known pathogen,Upper Respiratory Tract,,37,1.0.1
+Capnocytophaga canimorsus,,,bacterial,,,,is a known pathogen,,,3,1.0.0
+Chlamydia pneumoniae,,,bacterial,,83558,NC_005043.1,is a known pathogen,,,1,1.0.0
+Chlamydia psittaci,,,bacterial,Psittacosis (ornithosis),83554,NC_017287.1,is a known pathogen,,Yes,"1,2",1.0.0
+Chlamydia trachomatis,,,bacterial,Chlamydia,813,NC_000117.1,is a known pathogen,,Yes,1,1.0.0
+Chromobacterium violaceum,,,bacterial,,,,has been reported in case reports,,,21,1.0.0
+Citrobacter koseri,,,bacterial,,545,NC_009792.1,is a known pathogen,,,7,1.0.0
+Citrobacter freundii,,,bacterial,,546,NZ_CP033744.1,is a known pathogen,,,7,1.0.0
+Clostridioides difficile,,,bacterial,Pseudomembranous colitis,1496,NZ_CP076401.1,is a known pathogen,Gastrointestinal Tract,,1,1.0.0
+Clostridium botulinum,,,bacterial,Botulism,1491,NC_009495.1,is a known pathogen,,Yes,1,1.0.0
+Clostridium perfringens,,,bacterial,Gas gangrene,1502,NZ_CP075979.1,is a known pathogen,,,1,1.0.0
+Clostridium septicum,,,bacterial,,1504,NZ_CP023671.1,is a known pathogen,,,1,1.0.0
+Clostridium tetani,,,bacterial,Tetanus,1513,NC_004557.1,is a known pathogen,,Yes,"1,2",1.0.0
+Clostridium ramosum,,,bacterial,,,,is a known pathogen,Gastrointestinal Tract,,29,1.0.0
+Corynebacterium diphtheriae,,,bacterial,Diptheria,1717,NZ_CP025209.1,is a known pathogen,,Yes,1,1.0.0
+Corynebacterium minutissimum,,,bacterial,Erythrasma,38301,NZ_LS483460.1,is a known pathogen,,,1,1.0.0
+Corynebacterium striatum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Corynebacterium ulcerans,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Coxiella burnetii,,,bacterial,Q fever,777,NC_002971.4,is a known pathogen,,Yes,"1,2",1.0.0
+Cronobacter sakazakii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Cronobacter turicensis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Edwardsiella tarda,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Ehrlichia chaffeensis,,,bacterial,Ehrlichiosis,945,NZ_CP007480.1,is a known pathogen,,,1,1.0.0
+Ehrlichia ewingii,,,bacterial,Ehrlichiosis,947,,is a known pathogen,,,1,1.0.0
+Ehrlichia muris,,,bacterial,Ehrlichiosis,35795,NC_023063.1,is a known pathogen,,,1,1.0.0
+Eikenella corrodens,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Elizabethkingia anophelis,,,bacterial,Elizabethkingia,1117645,NZ_CP023401.1,is a known pathogen,,,1,1.0.0
+Elizabethkingia meningoseptica,,,bacterial,Elizabethkingia,238,NZ_CP016378.1,is a known pathogen,,,1,1.0.0
+Enterobacter cloacae,,,bacterial,,550,GCF_023702375.1,is a known pathogen,,,1,1.0.0
+Enterococcus avium,,,bacterial,,33945,GCF_002891025.1,is a known pathogen,,,10,1.0.0
+Enterococcus faecalis,,,bacterial,,1351,GCF_000393015.1,is a known pathogen,Gastrointestinal Tract; Oral Cavity; Female Urogenital Tract,,1,1.0.0
+Enterococcus faecium,,,bacterial,,1352,NZ_CP038996.1,is a known pathogen,Gastrointestinal Tract,,9,1.0.0
+Enterococcus gallinarum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Erysipelothrix rhusiopathiae,,,bacterial,,1648,NZ_LR134439.1,is a known pathogen,,,1,1.0.0
+Escherichia coli,,,bacterial,Haemolytic uraemic syndrome,562,NC_000913.3,is a known pathogen,,Yes (STEC),"1,2",1.0.0
+Finegoldia magna,,,bacterial,,1260,GCF_002243135.1,is a known pathogen,Skin,,1,1.0.0
+Fluoribacter bozemanae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Francisella tularensis,,,bacterial,Tularaemia,263,GCF_000833355.1,is a known pathogen,,Yes,"1,2",1.0.0
+Fusobacterium necrophorum,,,bacterial,Lemierre's syndrome,859,NZ_CP019306.1,is a known pathogen,,,1,1.0.0
+Fusobacterium nucleatum,,,bacterial,,851,NZ_CP028101.1,is a known pathogen,Oral Cavity,,1,1.0.0
+Gardnerella vaginalis,,,bacterial,bacterial Vaginosis,2702,GCF_002861965.1,is a known pathogen,Female Urogenital Tract,,1,1.0.0
+Gemella haemolysans,,,bacterial,,,GCF_900638055.1,is a known pathogen,Oral Cavity; Upper Respiratory Tract; Gastrointestinal Tract; Genitourinary Tract,,36,1.0.1
+Haemophilus aegyptius,,,bacterial,,197575,NZ_LS483429.1,is a known pathogen,,,1,1.0.0
+Haemophilus influenzae,,,bacterial,,727,NZ_CP007470.1,is a known pathogen,Upper Respiratory Tract,Yes (HIB),"1,2",1.0.0
+Haemophilus parainfluenzae,,,bacterial,,729,GCF_000191405.1,is a known pathogen,Oral Cavity; Upper Respiratory Tract,,1,1.0.0
+Helicobacter pylori,,,bacterial,,,,is a known pathogen,Gastrointestinal Tract,,,1.0.0
+Kingella kingae,Moraxella kingae,,bacterial,,,,is a known pathogen,Upper Respiratory Tract,,,1.0.0
+Kingella denitrificans,,,bacterial,,502,GCF_900451365.1,is a known pathogen,Oral Cavity; Upper Respiratory Tract,,1,1.0.0
+Klebsiella aerogenes,,,bacterial,,548,NZ_CP041925.1,is a known pathogen,,,1,1.0.0
+Klebsiella granulomatis,,,bacterial,Granuloma inguinale (Donovanosis),39824,,is a known pathogen,,Yes,"1,2",1.0.0
+Klebsiella oxytoca,,,bacterial,,571,NZ_CP033844.1,is a known pathogen,,,13,1.0.0
+Klebsiella pneumoniae,,,bacterial,,573,NC_016845.1,is a known pathogen,Gastrointestinal Tract,,1,1.0.0
+Legionella pneumophila,,,bacterial,Legionellosis (Legionnaire's disease),446,NZ_CP015941.1,is a known pathogen,,Yes,"1,2",1.0.0
+Legionella longbeachae,,,bacterial,Pontiac fever,,,is a known pathogen,,,23,1.0.0
+Legionella feeleii,,,bacterial,Pontiac fever,,,is a known pathogen,,,24,1.0.0
+Legionella micdadei,,,bacterial,Pontiac fever (Lochgoilhead fever),,,is a known pathogen,,,25,1.0.0
+Legionella anisa,,,bacterial,Pontiac fever,,,is a known pathogen,,,26,1.0.0
+Lelliottia nimipressuralis,,,bacterial,,69220,GCF_021083665.1,has been reported in case reports,,,5,1.0.0
+Leptospira alexanderi,,,bacterial,Leptospirosis,100053,GCF_002009845.1,is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira alstonii,,,bacterial,Leptospirosis,28452,GCF_001569395.1,is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira borgpetersenii,,,bacterial,Leptospirosis,174,"NZ_CP026671.1 (Chr1); 	NZ_CP026672.1 (Chr2)",is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira interrogans,,,bacterial,Leptospirosis,173,NZ_CP020414.2,is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira kirschneri,,,bacterial,Leptospirosis,29507,GCF_000243695.2,is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira kmetyi,,,bacterial,Leptospirosis,408139,"NZ_CP033614.1 (Chr1); 	NZ_CP033615.1 (Chr2)",is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira mayottensis,,,bacterial,Leptospirosis,1137606,NZ_CP024871.1 (Chr1); NZ_CP024872.1 (Chr2),is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira noguchii,,,bacterial,Leptospirosis,28182,GCF_000306255.2,is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira santarosai,,,bacterial,Leptospirosis,28183,"NZ_CP006694.1 (Chr1); 	NZ_CP006695.1 (Chr2)",is a known pathogen,,Yes,"1,2",1.0.0
+Leptospira weilii,,,bacterial,Leptospirosis,28184,NZ_CP040840.1 (Chr1); NZ_CP040841.1 (Chr2),is a known pathogen,,Yes,"1,2",1.0.0
+Listeria monocytogenes,,,bacterial,Listeriosis,1639,NC_003210.1,is a known pathogen,,Yes,"1,2",1.0.0
+Methylorubrum extorquens,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Moraxella catarrhalis,,,bacterial,,480,NZ_CP018059.1,is a known pathogen,Upper Respiratory Tract,,1,1.0.0
+Moraxella lacunata,,,bacterial,,477,GCF_900453245.1,is a known pathogen,,,1,1.0.0
+Moraxella nonliquefaciens,,,bacterial,,478,NZ_CP065728.1,is a known pathogen,Upper Respiratory Tract,,1,1.0.0
+Morganella morganii,,,bacterial,,582,NZ_LR699007.1,is a known pathogen,Gastrointestinal Tract,,1,1.0.0
+Mycobacterium avium,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium intracellulare,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium kansasii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium leprae,,,bacterial,Leprosy,1769,NZ_CP029543.1,is a known pathogen,,Yes,"1,2",1.0.0
+Mycobacterium lepromatosis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium malmoense,,,bacterial,,1780,NZ_CP080999.1,is a known pathogen,,,1,1.0.0
+Mycobacterium marinum,,,bacterial,,1781,NZ_HG917972.2,is a known pathogen,,,1,1.0.0
+Mycobacterium scrofulaceum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium simiae,,,bacterial,,1784,NZ_AP022568.1,is a known pathogen,Lower Respiratory Tract,,1,1.0.0
+Mycobacterium szulgai,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacterium tuberculosis,,,bacterial,Tuberculosis,1773,GCF_000195955.2,is a known pathogen,,Yes,"1,2",1.0.0
+Mycobacterium ulcerans,,,bacterial,Buruli ulcer,1809,NZ_CP085200.1,is a known pathogen,,,1,1.0.0
+Mycobacterium xenopi,,,bacterial,,1789,GCF_900453395.1,is a known pathogen,,,1,1.0.0
+Mycobacteroides abscessus,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycobacteroides chelonae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycolicibacter terrae,,,bacterial,,1788,,is a known pathogen,,,1,1.0.0
+Mycolicibacterium fortuitum,,,bacterial,,1766,,is a known pathogen,,,1,1.0.0
+Mycolicibacterium smegmatis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycolicibacterium wolinskyi,,,bacterial,,59750,,is a known pathogen,,,1,1.0.0
+Mycoplasma caviae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycoplasma fermentans,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycoplasma genitalium,,,bacterial,,2097,,is a known pathogen,,,1,1.0.0
+Mycoplasma hominis,,,bacterial,,2098,,is a known pathogen,Lower Urogenital Tract,,1,1.0.0
+Mycoplasma penetrans,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Mycoplasma pneumoniae,Mycoplasmoides pneumoniae,,bacterial,,2104,,is a known pathogen,,,1,1.0.0
+Mycoplasma salivarium,,,bacterial,,2124,,is a known pathogen,Oral Cavity,,1,1.0.0
+Neisseria gonorrhoeae,,,bacterial,Gonorrhoea,485,,is a known pathogen,,Yes,"1,2",1.0.0
+Neisseria meningitidis,,,bacterial,Meningococcal disease,487,,is a known pathogen,Upper Respiratory Tract,Yes,"1,2",1.0.0
+Neorickettsia sennetsu,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Neoehrlichia mikurensis,Candidatus Neoehrlichia mikurensis,,bacterial,Neoehrlichiosis,,,has been reported in case reports,,,19,1.0.0
+Nocardia asteroides,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Nocardia brasiliensis,,,bacterial,,37326,,is a known pathogen,,,1,1.0.0
+Nocardia farcinica,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Nocardia nova,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Nocardia otitidiscaviarum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Olsenella uli,,,bacterial,,633147,,has been reported in case reports,Oral Cavity; Gastrointestinal Tract,,4,1.0.0
+Orientia tsutsugamushi,,,bacterial,Scrub typhus,784,,is a known pathogen,,,1,1.0.0
+Paraclostridium bifermentans,,,bacterial,,1490,,is a known pathogen,,,1,1.0.0
+Parvimonas micra,,,bacterial,,33033,,is a known pathogen,Oral Cavity; Upper Respiratory Tract; Lower Respiratory Tract; Gastrointestinal Tract; Female Urogenital Tract,,1,1.0.0
+Pasteurella multocida,,,bacterial,Pasteurellosis,747,,is a known pathogen,,,1,1.0.0
+Peptoniphilus asaccharolyticus,,,bacterial,,1258,,is a known pathogen,Skin,,1,1.0.0
+Peptostreptococcus anaerobius,,,bacterial,,1261,,is a known pathogen,Gastrointestinal Tract,,1,1.0.0
+Photobacterium damselae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Plesiomonas shigelloides,,,bacterial,,703,,is a known pathogen,,,1,1.0.0
+Porphyromonas gingivalis,,,bacterial,,837,,is a known pathogen,Oral Cavity,,1,1.0.0
+Propionibacterium acnes,,,bacterial,,,,is a known pathogen,Oral Cavity; Gastrointestinal Tract; Eyes; Ear Canal,,,1.0.0
+Prevotella bivia,,,bacterial,,28125,,is a known pathogen,Oral Cavity; Female Urogenital Tract,,1,1.0.0
+Prevotella intermedia,,,bacterial,,28131,,is a known pathogen,,,1,1.0.0
+Prevotella melaninogenica,,,bacterial,,28132,,is a known pathogen,Upper Respiratory Tract,,1,1.0.0
+Proteus mirabilis,,,bacterial,,584,,is a known pathogen,,,1,1.0.0
+Proteus penneri,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Proteus vulgaris,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Providencia alcalifaciens,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Providencia rettgeri,,,bacterial,,,,has been reported in case reports,,,17,1.0.0
+Pseudomonas aeruginosa,,,bacterial,,187,,is a known pathogen,,,3,1.0.0
+Pseudomonas fluorescens,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Pseudomonas putida,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Ralstonia pickettii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rhodococcus hoagii,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rickettsia africae,,,bacterial,African tick bite fever,35788,,is a known pathogen,,,1,1.0.0
+Rickettsia akari,,,bacterial,Rickettsialpox,786,,is a known pathogen,,,1,1.0.0
+Rickettsia australis,,,bacterial,Queensland tick typhus (Spotted fever group rickettsiae),787,,is a known pathogen,,,1,1.0.0
+Rickettsia canadensis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rickettsia conorii,,,bacterial,Boutonneuse fever,781,,is a known pathogen,,,1,1.0.0
+Rickettsia felis,,,bacterial,Cat Flea tick typhus (Spotted fever group rickettsiae),42862,,is a known pathogen,,,1,1.0.0
+Rickettsia helvetica,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rickettsia honei,,,bacterial,Flinders Island tick typhus (Spotted fever group rickettsiae),37816,,is a known pathogen,,,11,1.0.0
+Rickettsia japonica,,,bacterial,Japanese spotted fever,35790,,is a known pathogen,,,1,1.0.0
+Rickettsia montanensis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rickettsia parkeri,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Rickettsia prowazekii,,,bacterial,Epidemic typhus (Louse-borne typhus),782,,is a known pathogen,,,1,1.0.0
+Rickettsia rickettsii,,,bacterial,Rocky Mountain spotted fever,783,,is a known pathogen,,,1,1.0.0
+Rickettsia sibirica,,,bacterial,North Asian tick typhus (Siberian tick typhus),35793,,is a known pathogen,,,1,1.0.0
+Rickettsia typhi,,,bacterial,Murine typhus,785,,is a known pathogen,,,1,1.0.0
+Rothia dentocariosa,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Salmonella bongori,,,bacterial,Salmonellosis,54736,,is a known pathogen,,,1,1.0.0
+Salmonella enterica,,,bacterial,Salmonellosis,28901,,is a known pathogen,,Yes,"1,2",1.0.0
+Serratia marcescens,,,bacterial,,615,,is a known pathogen,,,6,1.0.0
+Shewanella algae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Shigella boydii,,,bacterial,Shigellosis,621,,is a known pathogen,,Yes,"1,2",1.0.0
+Shigella dysenteriae,,,bacterial,Shigellosis,622,,is a known pathogen,,Yes,"1,2",1.0.0
+Shigella flexneri,,,bacterial,Shigellosis,623,,is a known pathogen,,Yes,"1,2",1.0.0
+Shigella sonnei,,,bacterial,Shigellosis,624,,is a known pathogen,,Yes,"1,2",1.0.0
+Spirillum minus,,,bacterial,Rat Bite Fever,,,is a known pathogen,,,3,1.0.0
+Staphylococcus aureus,,,bacterial,,1280,,is a known pathogen,Skin; Upper Respiratory Tract,,1,1.0.0
+Staphylococcus capitis,,,bacterial,,29388,,is a known pathogen,Skin,,1,1.0.0
+Staphylococcus epidermidis,,,bacterial,,1282,,is a known pathogen,Skin; Upper Respiratory Tract,,1,1.0.0
+Staphylococcus haemolyticus,,,bacterial,,1283,,is a known pathogen,Skin,,1,1.0.0
+Staphylococcus pseudintermedius,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Staphylococcus saccharolyticus,,,bacterial,,33028,,is a known pathogen,Skin,,1,1.0.0
+Staphylococcus saprophyticus,,,bacterial,,29385,,is a known pathogen,,,1,1.0.0
+Staphylococcus lugdunensis,,,bacterial,,,,is a known pathogen,Skin,,30,1.0.0
+Stenotrophomonas maltophilia,,,bacterial,,40324,,is a known pathogen,,,8,1.0.0
+Streptobacillus moniliformis,,,bacterial,Rat Bite Fever,34105,,is a known pathogen,,,1,1.0.0
+Streptococcus agalactiae,Group B Streptococcus,,bacterial,,1311,,is a known pathogen,Gastrointestinal Tract; Female Urogenital Tract,,1,1.0.0
+Streptococcus anginosus,"Group F,G,L&Viridians Streptococcus",,bacterial,,1328,,is a known pathogen,Upper Respiratory Tract; Gastrointestinal Tract; Urogenital Tract,,1,1.0.0
+Streptococcus criceti,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus dysgalactiae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus equi,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus equinus,Group C Streptococcus,,bacterial,,1335,,is a known pathogen,,,1,1.0.0
+Streptococcus gallolyticus,Group D Streptococcus,,bacterial,,,,is a known pathogen,Gastrointestinal Tract,,28,1.0.0
+Streptococcus gordonii,,,bacterial,,1302,,is a known pathogen,Skin; Oral Cavity; Gastrointestinal Tract,,1,1.0.0
+Streptococcus intermedius,,,bacterial,,1338,,is a known pathogen,Upper Respiratory Tract; Gastrointestinal Tract; Urogenital Tract,,1,1.0.0
+Streptococcus iniae,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus mitis,Group M&O Streptococcus,,bacterial,,28037,,is a known pathogen,Oral Cavity,,1,1.0.0
+Streptococcus mutans,Viridans Streptococcus,,bacterial,,1309,,is a known pathogen,Oral Cavity,,1,1.0.0
+Streptococcus oralis,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus pneumoniae,,,bacterial,Pneumococcal disease,1313,,is a known pathogen,Upper Respiratory Tract,Yes,"1,2",1.0.0
+Streptococcus pyogenes,Group A Streptococcus,,bacterial,,1314,,is a known pathogen,Upper Respiratory Tract,Yes,"1,2",1.0.0
+Streptococcus sanguinis,Group H Streptococcus,,bacterial,,1305,,is a known pathogen,Oral Cavity,,1,1.0.0
+Streptococcus sobrinus,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Streptococcus suis,Group R&S Streptococcus,,bacterial,,1307,,is a known pathogen,,,1,1.0.0
+Suttonella indologenes,,,bacterial,,13276,,is a known pathogen,Upper Respiratory Tract,,1,1.0.0
+Tannerella forsythia,,,bacterial,,28112,,is a known pathogen,,,1,1.0.0
+Tatlockia micdadei,,,bacterial,,451,,is a known pathogen,,,1,1.0.0
+Treponema denticola,,,bacterial,,158,,is a known pathogen,,,1,1.0.0
+Treponema pallidum,,,bacterial,Syphilis,160,,is a known pathogen,,Yes,"1,2",1.0.0
+Treponema vincentii,,,bacterial,,69710,,is a known pathogen,,,1,1.0.0
+Tropheryma whipplei,,,bacterial,Whipple's disease,2039,,is a known pathogen,,,1,1.0.0
+Trueperella pyogenes,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Ureaplasma parvum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
+Ureaplasma urealyticum,,,bacterial,,2130,,is a known pathogen,Urogenital Tract,,1,1.0.0
+Vibrio alginolyticus,,,bacterial,Vibriosis,663,,is a known pathogen,,,1,1.0.0
+Vibrio cholerae,,,bacterial,Cholera,666,,is a known pathogen,,Yes,"1,2",1.0.0
+Vibrio parahaemolyticus,,,bacterial,Vibriosis,670,,is a known pathogen,,,1,1.0.0
+Vibrio vulnificus,,,bacterial,Vibriosis,672,,is a known pathogen,,,1,1.0.0
+Yersinia enterocolitica,,,bacterial,,630,,is a known pathogen,,,1,1.0.0
+Yersinia pestis,,,bacterial,Plague,632,,is a known pathogen,,Yes,"1,2",1.0.0
+Yersinia pseudotuberculosis,,,bacterial,,633,,is a known pathogen,,,1,1.0.0
+Haemophilus ducreyi,,,bacterial,Chancroid,730,,is a known pathogen,,,1,1.0.0
+Acanthamoeba astronyxis,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),65658,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba castellanii,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),5755,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba culbertsoni,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),43142,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba divionensis,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),202919,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba hatchetti,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),65660,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba lenticulata,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),29196,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba lugdunensis,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),61605,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba polyphaga,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),5757,,is a known pathogen,,,"1,3",1.0.0
+Acanthamoeba rhysodes,,,amoeba,Acanthamoeba keratitis or Granulomatous Amebic Encephalitis (GAE),32599,,is a known pathogen,,,"1,3",1.0.0
+Adenocephalus pacificus,Pacific broad tapeworm,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Alternaria alternata,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Alternaria brassicicola,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Ancylostoma braziliense,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Ancylostoma caninum,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Ancylostoma ceylanicum,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Ancylostoma duodenale,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Angiostrongylus cantonensis,Roundworm,,parasitic,Rat Lung Worm Disease,6313,,is a known pathogen,,,"1,3",1.0.0
+Angiostrongylus costaricensis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Anisakis simplex,Herring Worm,,parasitic,Anisakiasis,6269,,is a known pathogen,,,"1,3",1.0.0
+Anncaliia algerae,,,parasitic,Microsporidial Myositis,723287,,is a known pathogen,,,"1,3",1.0.0
+Apophysomyces variabilis,,,fungal,,760013,,is a known pathogen,,,"1,3",1.0.0
+Ascaris lumbricoides,Ascaris,,parasitic,Ascariasis,6252,,is a known pathogen,,,"1,3",1.0.0
+Ascaris suum,,,parasitic,Ascariasis,,,is a known pathogen,,,1,1.0.1
+Aspergillus flavus,,,fungal,Aspergillosis,5059,,is a known pathogen,,,"1,3",1.0.0
+Aspergillus fumigatus,,,fungal,Aspergillosis,746128,,is a known pathogen,,,"1,3",1.0.0
+Aspergillus nidulans,,,fungal,Aspergillosis,162425,,is a known pathogen,,,"1,3",1.0.0
+Aspergillus niger,,,fungal,Aspergillosis,5061,,is a known pathogen,,,"1,3",1.0.0
+Aspergillus terreus,,,fungal,Aspergillosis,33178,,is a known pathogen,,,"1,3",1.0.0
+Babesia divergens,,,parasitic,Babesiosis,,,is a known pathogen,,,1,1.0.1
+Babesia duncani,,,parasitic,Babesiosis,,,is a known pathogen,,,1,1.0.1
+Babesia microti,,,parasitic,Babesiosis,5868,,is a known pathogen,,,"1,3",1.0.0
+Babesia sp. venatorum,,,parasitic,Babesiosis,171411,,is a known pathogen,,,"1,3",1.0.0
+Balamuthia mandrillaris,,,parasitic,,66527,,is a known pathogen,,,1,1.0.0
+Basidiobolus ranarum,,,fungal,,34480,,is a known pathogen,,,1,1.0.0
+Baylisascaris procyonis,Raccoon roundworm,,parasitic,Baylisascaris,,,is a known pathogen,,,3,1.0.0
+Bertiella studeri,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Blastocystis hominis,,,parasitic,Blastocystis,12968,,is a known pathogen,,,1,1.0.0
+Blastomyces dermatitidis,,,fungal,Blastomycosis,5039,,is a known pathogen,,,1,1.0.0
+Blastomyces gilchristii,,,fungal,Blastomycosis,1681229,,is a known pathogen,,,1,1.0.0
+Blastomyces helicus,,,fungal,Blastomycosis,465036,,is a known pathogen,,,1,1.0.0
+Brugia malayi,,,parasitic,Lymphatic filariasis,6279,,is a known pathogen,,,1,1.0.0
+Brugia pahangi,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Brugia timori,,,parasitic,Lymphatic filariasis,42155,,is a known pathogen,,,3,1.0.0
+Candida albicans,,,fungal,Candidiasis,5476,,is a known pathogen,,,1,1.0.0
+Candida dubliniensis,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Candida parapsilosis,,,fungal,Candidiasis,5480,,is a known pathogen,,,1,1.0.0
+Candida tropicalis,,,fungal,Candidiasis,5482,,is a known pathogen,,,1,1.0.0
+Capillaria hepatica,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Chrysomya bezziana,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Cladophialophora bantiana,,,fungal,Cerebral phaeohyphomycosis,89940,,is a known pathogen,,,1,1.0.0
+Cladophialophora boppii,,,fungal,Cerebral phaeohyphomycosis,82106,,is a known pathogen,,,1,1.0.0
+Cladophialophora carrionii,,,fungal,Cerebral phaeohyphomycosis,86049,,is a known pathogen,,,1,1.0.0
+Cladosporium carrionii,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Clavispora lusitaniae,,,fungal,Candidiasis,,,is a known pathogen,,,1,1.0.1
+Clinostomum complanatum,,,parasitic,,235145,,is a known pathogen,,,1,1.0.0
+Clonorchis sinensis,Oriental liver fluke,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Coccidioides immitis,,,fungal,Valley Fever (Coccidioidomycosis),5501,,is a known pathogen,,,1,1.0.0
+Coccidioides posadasii,,,fungal,Valley Fever (Coccidioidomycosis),199306,,is a known pathogen,,,1,1.0.0
+Cochliomyia hominivorax,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Colletotrichum coccodes,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Colletotrichum gloeosporioides,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Conidiobolus coronatus,,,fungal,,34488,,is a known pathogen,,,1,1.0.0
+Conidiobolus incongruus,,,fungal,,90249,,is a known pathogen,,,1,1.0.0
+Contracaecum osculatum,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Cryptococcus gattii,,,fungal,Cryptococcosis,37769,,is a known pathogen,,,1,1.0.0
+Cryptococcus neoformans,,,fungal,Cryptococcosis,5207,,is a known pathogen,,,1,1.0.0
+Cryptosporidium hominis,,,parasitic,Cryptosporidiosis,237895,,is a known pathogen,,Yes,"1,2",1.0.0
+Cryptosporidium parvum,,,parasitic,Cryptosporidiosis,5807,,is a known pathogen,,Yes,"1,2",1.0.0
+Curvularia australiensis,,,fungal,,91365,,is a known pathogen,,,1,1.0.0
+Curvularia hawaiiensis,,,fungal,,1230527,,is a known pathogen,,,1,1.0.0
+Curvularia lunata,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Curvularia papendorfii,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Curvularia spicifera,,,fungal,,145392,,is a known pathogen,,,1,1.0.0
+Cyclospora cayetanensis,,,parasitic,Cyclosporiasis,88456,,is a known pathogen,,,1,1.0.0
+Cystoisospora belli,,,parasitic,Cystoisosporiasis,,,is a known pathogen,,,1,1.0.1
+Demodex brevis,,,parasitic,,574145,,is a known pathogen,,,1,1.0.0
+Demodex folliculorum,,,parasitic,,481310,,is a known pathogen,,,1,1.0.0
+Dermanyssus gallinae,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Dermatobia hominis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Dicrocoelium dendriticum,Lancet liver fluke,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Dientamoeba fragilis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Dioctophyme renale,Giant kidney worm,,parasitic,Dioctophymiasis,,,is a known pathogen,,,1,1.0.1
+Diphyllobothrium latum,Broad tapeworm,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Dirofilaria immitis,Heartworm,,parasitic,Dirofliariasis,6287,,is a known pathogen,,,1,1.0.0
+Dirofilaria repens,,,parasitic,Dirofliariasis,31241,,is a known pathogen,,,1,1.0.0
+Dracunculus medinensis,Guinea worm,,parasitic,Dracunculiasis (guinea worm disease),,,is a known pathogen,,,1,1.0.1
+Echinococcus granulosus,Sensu lato,,parasitic,Hydatid disease (Cystic )echinocccosis,6210,,is a known pathogen,,,1,1.0.0
+Echinococcus multilocularis,,,parasitic,Alveolar echinococcosis,6211,,is a known pathogen,,,1,1.0.0
+Echinococcus oligarthrus,,,parasitic,Echinococcosis,6212,,is a known pathogen,,,1,1.0.0
+Echinococcus vogeli,,,parasitic,Echinococcosis,6213,,is a known pathogen,,,1,1.0.0
+Echinolaelaps echidninus,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Edenia gomezpompae,,,fungal,,461172,,is a known pathogen,,,1,1.0.0
+Emmonsia crescens,,,fungal,Adiaspiromycosis,,,is a known pathogen,,,1,1.0.1
+Encephalitozoon cuniculi,,,parasitic,,6035,,is a known pathogen,,,1,1.0.0
+Encephalitozoon hellem,,,parasitic,,27973,,is a known pathogen,,,1,1.0.0
+Encephalitozoon intestinalis,,,parasitic,,58839,,is a known pathogen,,,1,1.0.0
+Entamoeba histolytica,,,amoeba,Amoebiasis,5759,,is a known pathogen,,,1,1.0.0
+Enterobius Vermicularis,Pinworm,,parasitic,Enterobiasis,51028,,is a known pathogen,,,3,1.0.0
+Enterocytozoon bieneusi,,,parasitic,Microsporidiosis,31281,,is a known pathogen,,,1,1.0.0
+Epidermophyton floccosum,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Exophiala dermatitidis,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Exophiala jeanselmei,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Exophiala spinifera,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Fasciola gigantica,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Fasciola hepatica,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Fasciolopsis buski,,,parasitic,Fasciolopsiasis,,,is a known pathogen,,,1,1.0.1
+Fonsecaea compacta,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Fonsecaea pedrosoi,Fonsecea pedrosoi,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Fonsacaea compactum,Fonsacea compactum,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Fusarium fujikuroi,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Fusarium oxysporum,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Fusarium solani,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Giardia intestinalis,Giardia duodenalis,,parasitic,Giardiasis,5741,,is a known pathogen,,,1,1.0.0
+Gnathostoma hispidum,,,parasitic,Gnathostomiasis,,,is a known pathogen,,,1,1.0.1
+Gnathostoma spinigerum,,,parasitic,Gnathostomiasis ,,,is a known pathogen,,,3,1.0.0
+Halicephalobus gingivalis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Heterophyes heterophyes,,,parasitic,Heterophyiasis,,,is a known pathogen,,,1,1.0.1
+Histoplasma capsulatum,,,fungal,Histoplasmosis,5037,,is a known pathogen,,,1,1.0.0
+Hymenolepis diminuta,,,parasitic,Hymenolepiasis,,,is a known pathogen,,,1,1.0.1
+Leishmania aethiopica,,,parasitic,Cutaneous leishmaniasis,5667,,is a known pathogen,,,1,1.0.0
+Leishmania amazonensis,,,parasitic,Leishmaniasis,5659,,is a known pathogen,,,1,1.0.0
+Leishmania braziliensis,,,parasitic,Leishmaniasis,5660,,is a known pathogen,,,1,1.0.0
+Leishmania chagasi,Leishmania infantum,,parasitic,Leishmaniasis,44271,,is a known pathogen,,,1,1.0.0
+Leishmania colombiensis,,,parasitic,Leishmaniasis,93413,,is a known pathogen,,,1,1.0.0
+Leishmania donovani,,,parasitic,Leishmaniasis,5661,,is a known pathogen,,,1,1.0.0
+Leishmania guyanensis,,,parasitic,Leishmaniasis,5670,,is a known pathogen,,,1,1.0.0
+Leishmania infantum,,,parasitic,Leishmaniasis,5671,,is a known pathogen,,,1,1.0.0
+Leishmania major,,,parasitic,Leishmaniasis,5664,,is a known pathogen,,,1,1.0.0
+Leishmania martiniquensis,,,parasitic,Leishmaniasis,1580590,,is a known pathogen,,,1,1.0.0
+Leishmania mexicana,,,parasitic,Leishmaniasis,5665,,is a known pathogen,,,1,1.0.0
+Leishmania naiffi,,,parasitic,Leishmaniasis,5678,,is a known pathogen,,,1,1.0.0
+Leishmania panamensis,,,parasitic,Leishmaniasis,5679,,is a known pathogen,,,1,1.0.0
+Leishmania peruviana,,,parasitic,Leishmaniasis,5681,,is a known pathogen,,,1,1.0.0
+Leishmania tropica,,,parasitic,Leishmaniasis,5666,,is a known pathogen,,,1,1.0.0
+Lichtheimia corymbifera,,,fungal,,42458,,is a known pathogen,,,1,1.0.0
+Lichtheimia ramosa,,,fungal,,688394,,is a known pathogen,,,1,1.0.0
+Linguatula serrata,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Loa loa,,,parasitic,,7209,,is a known pathogen,,,1,1.0.0
+Lomentospora prolificans,,,fungal,,41688,,is a known pathogen,,,1,1.0.0
+Madurella mycetomatis,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Mansonella ozzardi,,,parasitic,Mansonellosis,,,is a known pathogen,,,1,1.0.1
+Mansonella perstans,,,parasitic,Mansonellosis,,,is a known pathogen,,,1,1.0.1
+Mansonella streptocerca,,,parasitic,Mansonellosis,,,is a known pathogen,,,1,1.0.1
+Metagonimus yokogawai,,,parasitic,Metagonimiasis,,,is a known pathogen,,,1,1.0.1
+Moniliformis moniliformis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Mucor circinelloides,,,fungal,,36080,,is a known pathogen,,,1,1.0.0
+Naegleria fowleri,,,amoeba,Amoebic meningoencephalitis (PAM),5763,,is a known pathogen,,,1,1.0.0
+Necator americanus,,,parasitic,Intestinal hookworm,,,is a known pathogen,,,1,1.0.1
+Neobalantidium coli,,,parasitic,Balantidiasis,71585,,is a known pathogen,,,1,1.0.0
+Onchocerca volvulus,,,parasitic,River Blindness (Onchocerciasis),6282,,is a known pathogen,,Yes,"1,3",1.0.0
+Opisthorchis felineus,,,parasitic,Opisthorchiasis,,,is a known pathogen,,,1,1.0.1
+Opisthorchis sinensis,,,parasitic,Opisthorchiasis,,,is a known pathogen,,,1,1.0.1
+Opisthorchis viverrini,,,parasitic,Opisthorchiasis,,,is a known pathogen,,,1,1.0.1
+Ornithonyssus bacoti,Tropical rat mite; Liponyssus bacoti,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Ornithonyssus bursa,Tropical fowl mite,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Ornithonyssus sylviarum,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Paracapillaria philippinensis,,,parasitic,Capillariasis,,,is a known pathogen,,,1,1.0.1
+Paracoccidioides brasiliensis,,,fungal,Paracoccidioidomycosis,121759,,is a known pathogen,,,1,1.0.0
+Paragonimus africanus,Lung Fluke,,parasitic,Paragonimaiasis,434055,,is a known pathogen,,,1,1.0.0
+Paragonimus heterotremus,Lung Fluke,,parasitic,Paragonimaiasis,100268,,is a known pathogen,,,1,1.0.0
+Paragonimus kellicotti,Lung Fluke,,parasitic,Paragonimaiasis,100269,,is a known pathogen,,,1,1.0.0
+Paragonimus mexicanus,Lung Fluke,,parasitic,Paragonimaiasis,100270,,is a known pathogen,,,1,1.0.0
+Paragonimus siamensis,Lung Fluke,,parasitic,Paragonimaiasis,100271,,is a known pathogen,,,1,1.0.0
+Paragonimus skrjabini,Lung Fluke,,parasitic,Paragonimaiasis,59630,,is a known pathogen,,,1,1.0.0
+Paragonimus westermani,Lung Fluke,,parasitic,Paragonimaiasis,34504,,is a known pathogen,,,1,1.0.0
+Pediculus humanus,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Phialophora verrucosa,,,fungal,Chromoblastomycosis,39412,,is a known pathogen,,,"1,20",1.0.0
+Pichia kudriavzevii,,,fungal,Candidiasis,4909,,is a known pathogen,,,1,1.0.0
+Plasmodium falciparum,,,parasitic,Malaria,5833,,is a known pathogen,,Yes,"1,2",1.0.0
+Plasmodium knowlesi,,,parasitic,Malaria,,,is a known pathogen,,,1,1.0.1
+Plasmodium malariae,,,parasitic,Malaria,5858,,is a known pathogen,,Yes,"1,2",1.0.0
+Plasmodium ovale,,,parasitic,Malaria,36330,,is a known pathogen,,Yes,"1,2",1.0.0
+Plasmodium vivax,,,parasitic,Malaria,5855,,is a known pathogen,,Yes,"1,2",1.0.0
+Plasmodium knowlesi,,,parasitic,Malaria,5850,,is a known pathogen,,Yes,2,1.0.0
+Pneumocystis jirovecii,,,fungal,Pneumocystis pneumonia,42068,,is a known pathogen,,,1,1.0.0
+Pogonomyrmex uruguayensis,,,parasitic,,269704,,is a known pathogen,,,1,1.0.0
+Pseudoterranova decipiens,Seal worm,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Pthirus pubis,Crab louse,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Pythium insidiosum,,,fungal,Pythiosis,,,has been reported in case reports,,,18,1.0.0
+Rhinocladiella aquaspersa,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Rhinocladiella mackenziei,,,fungal,Human cerebral phaeohyphomycosis,,,is a known pathogen,,,1,1.0.1
+Rhinosporidium seeberi,,,fungal,Rhinosporidiosis,90339,,is a known pathogen,,,1,1.0.0
+Rhizomucor pusillus,,,fungal,,4840,,is a known pathogen,,,1,1.0.0
+Rhizopus microsporus,,,fungal,Mucormycosis,58291,,is a known pathogen,,,1,1.0.0
+Rhizopus oryzae,,,fungal,Mucormycosis,64495,,is a known pathogen,,,1,1.0.0
+Rodentolepis nana,Dwarf tapeworm,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Saccharomyces cerevisiae,Saccharomyces cerevisiae,,fungal,,,,is a known pathogen,,,1,1.0.1
+Saksenaea erythrospora,,,fungal,,931868,,is a known pathogen,,,1,1.0.0
+Saksenaea vasiformis,,,fungal,,90258,,is a known pathogen,,,1,1.0.0
+Sappinia diploidea,,,amoeba,,,,is a known pathogen,,,1,1.0.1
+Sappinia pedata,,,amoeba,,,,is a known pathogen,,,1,1.0.1
+Sarcocystis hominis,,,parasitic,Sarcocystosis,,,is a known pathogen,,,1,1.0.1
+Sarcocystis suihominis,,,parasitic,Sarcocystosis,,,is a known pathogen,,,1,1.0.1
+Sarcoptes scabiei,Itch Mite,,parasitic,Scabies,52283,,is a known pathogen,,,1,1.0.0
+Scedosporium apiospermum,,,fungal,Pseudallescheriasis,563466,,is a known pathogen,,,1,1.0.0
+Scedosporium boydii,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Schistosoma guineensis,Blood Fluke,,parasitic,Schistosomiasis,393876,,is a known pathogen,,,1,1.0.0
+Schistosoma haematobium,Blood Fluke,,parasitic,Schistosomiasis,6185,,is a known pathogen,,,1,1.0.0
+Schistosoma intercalatum,Blood Fluke,,parasitic,Schistosomiasis,6187,,is a known pathogen,,,1,1.0.0
+Schistosoma japonicum,Blood Fluke,,parasitic,Schistosomiasis,6182,,is a known pathogen,,,1,1.0.0
+Schistosoma malayensis,Blood Fluke,,parasitic,Schistosomiasis,53353,,is a known pathogen,,,1,1.0.0
+Schistosoma mansoni,Blood Fluke,,parasitic,Schistosomiasis,6183,,is a known pathogen,,,1,1.0.0
+Schistosoma mekongi,Blood Fluke,,parasitic,Schistosomiasis,38744,,is a known pathogen,,,1,1.0.0
+Scopulariopsis brevicaulis,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Spirometra erinaceieuropaei,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Sporothrix schenckii,,,fungal,Sporotrichosis,29908,,is a known pathogen,,,1,1.0.0
+Sporothrix brasiliensis,,,fungal,Sporotrichosis,,,is a known pathogen,,,3,1.0.0
+Strongyloides stercoralis,Threadworm,,parasitic,Strongyloidiasis,6248,,is a known pathogen,,,1,1.0.0
+Taenia multiceps,,,parasitic,Coenurosis,,,is a known pathogen,,,1,1.0.1
+Taenia saginata,Beef tapeworm,,parasitic,Taeniasis,,,is a known pathogen,,,1,1.0.1
+Taenia serialis,,,parasitic,Coenurosis,,,is a known pathogen,,,3,1.0.1
+Taenia brauni,,,parasitic,Coenurosis,,,is a known pathogen,,,3,1.0.1
+Taenia glomeratus,,,parasitic,Coenurosis,,,is a known pathogen,,,3,1.0.1
+Taenia solium,Pork tapeworm,,parasitic,Cysticercosis,6204,,is a known pathogen,,,1,1.0.0
+Talaromyces marneffei,,,fungal,Talaromycosis,,,is a known pathogen,,,1,1.0.1
+Thelazia callipaeda,,,parasitic,Thelaziasis,,,is a known pathogen,,,1,1.0.1
+Toxocara canis,,,parasitic,Toxocariasis,,,a zoonotic pathogen,,,3,1.0.0
+Toxocara cati,,,parasitic,Toxocariasis,,,a zoonotic pathogen,,,3,1.0.0
+Toxoplasma gondii,,,parasitic,Toxoplasmosis,5811,,is a known pathogen,,,1,1.0.0
+Trachipleistophora hominis,,,parasitic,,72359,,is a known pathogen,,,1,1.0.0
+Trematosphaeria grisea,,,fungal,Mycetoma,,,is a known pathogen,,,1,1.0.1
+Trichinella britovi,,,parasitic,Trichinellosis,,,is a known pathogen,,,1,1.0.1
+Trichinella nativa,,,parasitic,Trichinellosis,,,is a known pathogen,,,1,1.0.1
+Trichinella nelsoni,,,parasitic,Trichinellosis,,,is a known pathogen,,,1,1.0.1
+Trichinella papuae,,,parasitic,Trichinellosis,,,is a known pathogen,,,3,1.0.1
+Trichinella pseudospiralis,,,parasitic,Trichinellosis,6337,,is a known pathogen,,,1,1.0.0
+Trichinella spiralis,,,parasitic,Trichinellosis,6334,,is a known pathogen,,,1,1.0.0
+Trichomonas vaginalis,,,parasitic,Trichomoniasis,5722,,is a known pathogen,,,1,1.0.0
+Trichophyton rubrum,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Trichuris trichiura,Human whipworm,,parasitic,Trichuriasis,,,is a known pathogen,,,1,1.0.1
+Trichuris vulpis,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Trypanosoma brucei,,,parasitic,Sleeping Sickness (African Trypanosomiasis),5691,,is a known pathogen,,,1,1.0.0
+Trypanosoma cruzi,,,parasitic,Chagas Disease (American Trypanosomiasis),5693,,is a known pathogen,,,1,1.0.0
+Tubulinosema acridophagus,,,fungal,Microsporidiosis,307626,,is a known pathogen,,,1,1.0.0
+Tunga penetrans,,,parasitic,Tungiasis,,,is a known pathogen,,,1,1.0.1
+Uncinaria stenocephala,,,parasitic,,,,is a known pathogen,,,1,1.0.1
+Vittaforma corneae,,,fungal,Microsporidiosis,42399,,is a known pathogen,,,1,1.0.0
+Wangiella dermatitidis,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
+Wuchereria bancrofti,,,parasitic,Lymphatic filariasis,6293,,is a known pathogen,,,"1,3",1.0.0
+Candida auris,,,fungal,,,,is a known pathogen,,,1,1.0.1
+Candida glabrata,,,fungal,,5478,,is a known pathogen,,,1,1.0.0
+Adeno-associated virus,,,viral,,272636,,is a known pathogen,,,1,1.0.0
+Aichivirus A,,,viral,,72149,,is a known pathogen,,,1,1.0.0
+Akhmeta virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Alphapapillomavirus 4,,,viral,,337043,,is a known pathogen (Oncovirus),,,1,1.0.0
+Alphapapillomavirus 7,,,viral,,337042,,is a known pathogen (Oncovirus),,,1,1.0.0
+Alphapapillomavirus 9,,,viral,,337041,,is a known pathogen (Oncovirus),,,1,1.0.0
+Andes orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Argentinian mammarenavirus,,,viral,,2169991,,is a known pathogen,,,1,1.0.0
+Australian bat lyssavirus,,,viral,,90961,NC_003243.1,is a known pathogen,,Yes,"1,2",1.0.0
+Avian orthoavulavirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
+Banna virus,,,viral,,77763,,is a known pathogen,,,1,1.0.0
+Barmah Forest virus,,,viral,,11020,NC_001786.1,is a known pathogen,,Yes,"1,2",1.0.0
+Bayou orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Betacoronavirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
+Betapolyomavirus macacae,SV40,,viral,Progressive multifocal leukoencephalopathy,,,is a known pathogen,,,35,1.0.2
+Bhanja bandavirus,,,viral,,,,is a known pathogen,,,22,1.0.0
+Black Creek Canal orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Borna disease virus,Mammalian 1 orthobornavirus,,viral,,,,has been reported in case reports,,,,1.0.0
+Bourbon virus,,,viral,,,,is a known pathogen,,,3,1.0.0
+Bufavirus-3,,,viral,,,,is a known pathogen,,,1,1.0.1
+Bundibugyo ebolavirus,,,viral,viral haemorrhagic fever,565995,NC_014373.1,is a known pathogen,,Yes,"1,2",1.0.0
+Bunyamwera orthobunyavirus,,,viral,,1933179,NC_001925.1 (L); NC_001926.1 (M); NC_001927.1 (S),is a known pathogen,,,1,1.0.0
+Bwamba orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Cache Valley orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Cali mammarenavirus,,,viral,,2169993,,is a known pathogen,,,1,1.0.0
+California encephalitis orthobunyavirus,California encephalitis virus,,viral,,1933264,,is a known pathogen,,,1,1.0.0
+Cardiovirus A,,,viral,,1821749,,is a known pathogen,,,1,1.0.0
+Chandipura vesiculovirus,Chandipura virus,,viral,,1972576,NC_020805.1,is a known pathogen,,,1,1.0.0
+Chapare mammarenavirus,Chapare virus,,viral,Chapare Hemorrhagic Fever,499556,,is a known pathogen,,,1,1.0.0
+Chikungunya virus,,,viral,,37124,NC_004162.2,is a known pathogen,,Yes,"1,2",1.0.0
+Colorado tick fever virus,Colorado tick fever coltivirus,,viral,Colorado Tick Fever,,,is a known pathogen,,,3,1.0.0
+Cosavirus A,,,viral,,1330491,,is a known pathogen,,,1,1.0.0
+Cowpox virus,,,viral,,10243,NC_003663.2,is a known pathogen,,,1,1.0.0
+Coxsackievirus,,,viral,"Hand, foot, and mouth disease",12066,,is a known pathogen,,,"1,3",1.0.0
+Crimean-Congo hemorrhagic fever orthonairovirus,,,viral,viral haemorrhagic fever,1980519,,is a known pathogen,,Yes,"1,2",1.0.0
+Dabie bandavirus,Severe fever with thrombocytopenia virus or Huaiyangshan banyangvirus,,viral,Severe fever with thrombocytopenia syndrome,,,is a known pathogen,,,,1.0.0
+Dengue virus,,,viral,Dengue,12637,,is a known pathogen,,Yes,"1,2",1.0.0
+Dhori thogotovirus,,,viral,,11318,,is a known pathogen,,,1,1.0.0
+Dobrava-Belgrade orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Dugbe orthonairovirus,,,viral,,1980521,,is a known pathogen,,,1,1.0.0
+Duvenhage lyssavirus,,,viral,,38767,,is a known pathogen,,,1,1.0.0
+Eastern equine encephalitis virus,,,viral,,11021,NC_003899.1,is a known pathogen,,,1,1.0.0
+Echovirus,,,viral,,33758,,is a known pathogen,,,1,1.0.0
+Enterovirus A,,,viral,"Hand, foot, and mouth disease",138948,,is a known pathogen,,,1,1.0.0
+Enterovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
+Enterovirus C,Poliovirus,,viral,Poliomyelitis,138950,,is a known pathogen,,Yes,"1,2",1.0.0
+Enterovirus D,,,viral,,138951,,is a known pathogen,,,1,1.0.0
+European bat lyssavirus,,,viral,,38768,NC_009527.1,is a known pathogen,,,1,1.0.0
+Everglades virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Getah virus,,,viral,,59300,GCF_000855805.1,is a known pathogen,,,1,1.0.0
+Guanarito mammarenavirus,,,viral,,45219,NC_005082.1 (L); NC_005077.1 (S),is a known pathogen,,,1,1.0.0
+Guaroa orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Hantaan orthohantavirus,,,viral,,1980471,NC_005219.1,is a known pathogen,,,1,1.0.0
+Heartland banyangvirus,Heartland bandavirus,,viral,,2560519,NC_024495.1 (L); NC_024494.1 (M); NC_024496.1 (S),is a known pathogen,,,1,1.0.0
+Hendra henipavirus,Hendra Virus,,viral,,63330,NC_001906.3,is a known pathogen,,,1,1.0.0
+Hepacivirus C,Hepatitis C Virus,,viral,Hepatitis C,11103,NC_004102.1 (G1); NC_009823.1 (G2); NC_009824.1 (G3); NC_009825.1 (G4); NC_009826.1 (G5); NC_009827.1 (G6),is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
+Hepatitis B virus,,,viral,,10407,NC_003977.2,is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
+Hepatitis delta virus,,,viral,Hepatitis D,12475,NC_001653.2,is a known pathogen,,Yes,"1,2",1.0.0
+Hepatovirus A,,,viral,Hepatitis A,12092,NC_001489.1,is a known pathogen,,Yes,"1,2",1.0.0
+Human adenovirus sp.,,,viral,,1907210,,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 1,Herpes Simplex Virus 1,,viral,Herpes,10298,NC_001806.2,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 2,Herpes Simplex Virus 2,,viral,Herpes,10310,NC_001798.2,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 3,Varicella-Zoster Virus,,viral,Chickenpox/Shingles,10335,NC_001348.1,is a known pathogen,,,1,1.0.0
+Human astrovirus,,,viral,,1868658,NC_001943.1,is a known pathogen,,,1,1.0.0
+Human betaherpesvirus 5,Human Cytomegalovirus,,viral,,10359,NC_006273.2,is a known pathogen (Oncovirus),,,1,1.0.0
+Human betaherpesvirus 6,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human betaherpesvirus 6A,Human Herpesvirus 6A,,viral,,10368,NC_001664.2,is a known pathogen,,,1,1.0.0
+Human betaherpesvirus 6B,Human Herpesvirus 6B,,viral,,10368,NC_000898.1,is a known pathogen,,,,1.0.0
+Human betaherpesvirus 7,,,viral,,10372,NC_001716.2,is a known pathogen,,,1,1.0.0
+Human bocavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human coronavirus 229E,,,viral,,,NC_002645.1,is a known pathogen,,,,1.0.0
+Human coronavirus HKU1,,,viral,,,NC_006577.2,is a known pathogen,,,,1.0.0
+Human coronavirus NL63,,,viral,,,NC_005831.2,is a known pathogen,,,,1.0.0
+Human coronavirus OC43,,,viral,,,KU131570.1,is a known pathogen,,,,1.0.0
+Human gammaherpesvirus 4,Epstein Barr Virus,,viral,,10376,NC_009334.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Human gammaherpesvirus 8,Kaposi's sarcoma-associated herpesvirus,,viral,,37296,NC_009333.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Human immunodeficiency virus,Human immunodeficiency virus 1,,viral,,12721,NC_001802.1,is a known pathogen,,Yes,"1,2",1.0.0
+Human mastadenovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human mastadenovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human mastadenovirus C,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human mastadenovirus D,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human mastadenovirus F,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human metapneumovirus,,,viral,,,NC_004148.2,is a known pathogen,,,,1.0.0
+Human orthopneumovirus,Respiratory Syncytial Virus,,viral,,11250,NC_001803.1,is a known pathogen,,Yes,"1,2",1.0.0
+Human orthorubulavirus 2,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human orthorubulavirus 4,,,viral,,,,is a known pathogen,,,1,1.0.1
+Human parainfluenzavirus,,,viral,,,,is a known pathogen,,,,1.0.0
+Human polyomavirus 1,BK polyomavirus; Betapolyomavirus hominis,,viral,,1891762,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 10,MW polyomavirus; Deltapolyomavirus decihominis,,viral,,,,is a known pathogen,,,1,1.0.1
+Human polyomavirus 2,John Cunningham virus; JC polyomavirus; Betapolyomavirus secuhominis,,viral,Progressive multifocal leukoencephalopathy,1891763,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 3,KI polyomavirus; Betapolyomavirus tertihominis,,viral,,1891764,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 4,WU polyomavirus; Betapolyomavirus quartihominis,,viral,,1891765,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 5,Merkel Cell Polyomavirus; Alphapolyomavirus quintihominis,,viral,,493803,NC_004108.1 (L); NC_004109.1 (M); NC_004110.1 (S),is a known pathogen (Oncovirus),,,1,1.0.0
+Human polyomavirus 8,Trichodysplasia spinulosa polyomavirus,,viral,Trichodysplasia spinulosa,1891727,,has been reported in case reports,,,12,1.0.0
+Human respirovirus 1,,,viral,,12730,,is a known pathogen,,,1,1.0.0
+Human respirovirus 3,,,viral,,11216,,is a known pathogen,,,1,1.0.0
+Human rhinovirus sp.,,,viral,,169066,,is a known pathogen,,,1,1.0.0
+Human rubulavirus 2,,,viral,,1979160,,is a known pathogen,,,1,1.0.0
+Human rubulavirus 4,,,viral,,1979161,,is a known pathogen,,,1,1.0.0
+Human torovirus,,,viral,,67605,,is a known pathogen,,,1,1.0.0
+Ilesha orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Ilheus virus,,,viral,,,,is a known pathogen,,,33,1.0.0
+Influenza A virus,,,viral,,11320,,is a known pathogen,,,1,1.0.0
+Influenza B virus,,,viral,,11520,,is a known pathogen,,Yes,"1,2",1.0.0
+Influenza C virus,,,viral,,11552,,is a known pathogen,,Yes,"1,2",1.0.0
+Isfahan vesiculovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Jamestown Canyon orthobunyavirus,Jamestown Canyon virus,,viral,,2560532,,is a known pathogen,,Yes,"1,2",1.0.0
+Orthoflavivirus japonicum,Japanese encephalitis virus,,viral,Japanese encephalitis,11072,NC_001437.1,is a known pathogen,,Yes,"1,2",1.0.0
+Kyasanur Forest disease virus,Alkhurma hemorrhagic fever virus,,viral,Kyasanur Forest disease,33743,NC_039218.1,is a known pathogen,,Yes,"1,2",1.0.0
+La Crosse orthobunyavirus,,,viral,,2560547,GCF_000850965.1,is a known pathogen,,,1,1.0.0
+Lagos bat lyssavirus,,,viral,,38766,NC_020807.1,is a known pathogen,,,1,1.0.0
+Langat virus,,,viral,,11085,NC_003690.1,is a known pathogen,,,1,1.0.0
+Lassa mammarenavirus,,,viral,viral haemorrhagic fever,11620,NC_004297.1 (L Seg); NC_004296.1 (S Seg),is a known pathogen,,Yes,"1,2",1.0.0
+Louping ill virus,,,viral,,11086,NC_001809.1,is a known pathogen,,,1,1.0.0
+Lujo mammarenavirus,Lujo virus,,viral,Lujo hemorrhagic fever,,,is a known pathogen,,,3,1.0.0
+Lymphocytic choriomeningitis mammarenavirus,,,viral,,11623,NC_004291.1 (L); NC_004294.1 (S),is a known pathogen,,,1,1.0.0
+Macacine alphaherpesvirus 1,,,viral,,10325,,is a known pathogen,,,1,1.0.0
+Machupo mammarenavirus,,,viral,,11628,,is a known pathogen,,,1,1.0.0
+Mammalian orthoreovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Mammalian rubulavirus 5,,,viral,,1979162,,is a known pathogen,,,1,1.0.0
+Marburg marburgvirus,,,viral,viral haemorrhagic fever,11269,NC_001608.3,is a known pathogen,,Yes,"1,2",1.0.0
+Mayaro virus,,,viral,,59301,NC_003417.1,is a known pathogen,,,1,1.0.0
+Measles morbillivirus,,,viral,Measles,11234,NC_001498.1,is a known pathogen,,Yes,"1,2",1.0.0
+Middelburg virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Middle East respiratory syndrome-related coronavirus,,,viral,,1335626,NC_019843.3,is a known pathogen,,Yes,"1,2",1.0.0
+Mokola lyssavirus,,,viral,,12538,,is a known pathogen,,,1,1.0.0
+Molluscum contagiosum virus,,,viral,,10279,NC_001731.1,is a known pathogen,,,1,1.0.0
+Monkeypox virus,,,viral,,10244,NC_003310.1,is a known pathogen,,Yes,"1,2",1.0.0
+Mucambo virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Mumps rubulavirus,,,viral,Mumps,1979165,NC_002200.1,is a known pathogen,,Yes,"1,2",1.0.0
+Mupapillomavirus 1,,,viral,,334203,,is a known pathogen (Oncovirus),,,1,1.0.0
+Murray Valley encephalitis virus,,,viral,Murray Valley encephalitis,11079,NC_000943.1,is a known pathogen,,Yes,"1,2",1.0.0
+Nairobi sheep disease orthonairovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Naples phlebovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+New York hantavirus,,,viral,Hantavirus pulmonary syndrome,44755,,is a known pathogen,,,1,1.0.0
+Nipah henipavirus,Nipah Virus,,viral,,121791,NC_002728.1,is a known pathogen,,,1,1.0.0
+Norwalk virus,Norovirus,GI,viral,Winter vomiting disease,11983,NC_001959.2,is a known pathogen,,,1,1.0.0
+Omsk hemorrhagic fever virus,,,viral,Omsk hemorrhagic fever,12542,NC_005062.1,is a known pathogen,,Yes,"1,2",1.0.0
+Onyong-nyong virus,,,viral,,2169701,NC_001512.1,is a known pathogen,,,1,1.0.0
+Orf virus,,,viral,,10258,,is a known pathogen,,,1,1.0.0
+Oropouche orthobunyavirus,Oropouche virus,,viral,Oropouche fever,1933309,,is a known pathogen,,,1,1.0.0
+Orthohepevirus A,Hepatitis E Virus,,viral,,1678143,NC_001434.1,is a known pathogen,,Yes,"1,2",1.0.0
+Orungo virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Parechovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
+Parechovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
+Pegivirus C,,,viral,,1985356,,is a known pathogen,,,1,1.0.0
+Powassan virus,,,viral,,11083,NC_003687.1,is a known pathogen,,,1,1.0.0
+Primate erythroparvovirus 1,Parvovirus B19 or Human Bocavirus 2,,viral,,194440,NC_028101.1,is a known pathogen,,,1,1.0.0
+Primate T-lymphotropic virus 1,,,viral,,194441,NC_001436.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Primate T-lymphotropic virus 2,,,viral,,1511900,NC_001488.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Primate erythroparvovirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
+Pseudocowpox virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Punta Toro phlebovirus,Punta Toro virus,,viral,,1933186,NC_027203.1 (L); NC_027201.1 (M); NC_027202.1 (N),is a known pathogen,,,1,1.0.0
+Puumala orthohantavirus,,,viral,,1980486,,is a known pathogen,,,1,1.0.0
+Rabies lyssavirus,,,viral,Rabies,11292,NC_001542.1,is a known pathogen,,Yes,"1,2",1.0.0
+Rhinovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
+Rhinovirus C,,,viral,,,,is a known pathogen,,,1,1.0.1
+Rift Valley fever phlebovirus,,,viral,Rift Valley fever,1933187,,is a known pathogen,,  ,1,1.0.0
+Rocio virus,,,viral,Rocio viral encephalitis,,,is a known pathogen,,,32,1.0.0
+Rosavirus A,,,viral,,1511805,,is a known pathogen,,Yes,"1,2",1.0.0
+Ross River virus,,,viral,Ross River Fever,11029,NC_001544.1,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus A,,,viral,,28875,,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus B,,,viral,,28876,,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus C,,,viral,,36427,,is a known pathogen,,Yes,"1,2",1.0.0
+Rubella virus,,,viral,Rubella,11041,,is a known pathogen,,Yes,"1,2",1.0.0
+Russian Spring-Summer encephalitis virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Saint Louis encephalitis virus,,,viral,St. Louis encephalitis,11080,,is a known pathogen,,,1,1.0.0
+Salivirus A,,,viral,,1330524,,is a known pathogen,,,1,1.0.0
+Sapporo virus,,,viral,,95342,,is a known pathogen,,,1,1.0.0
+Semliki Forest Virus,,,viral,,11033,,is a known pathogen,,,1,1.0.0
+Seoul orthohantavirus,,,viral,,1980490,,is a known pathogen,,,1,1.0.0
+Severe acute respiratory syndrome-related coronavirus,,,viral,SARS,694009,NC_004718.3,is a known pathogen,,Yes,"1,2",1.0.0
+Severe acute respiratory syndrome-related coronavirus 2,,,viral,COVID-19,2697049,NC_045512.2,is a known pathogen,,Yes,"1,2",1.0.0
+Sicilian phlebovirus,Sandfly fever Turkey virus,,viral,Sandfly fever,28292,,is a known pathogen,,,1,1.0.0
+Sin Nombre orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Simian foamy virus,,,viral,,11642,NC_001364.1,is a known pathogen,,,1,1.0.0
+Sindbis virus,Ockelbo virus,,viral,Sindbis fever,11034,NC_001547.1,is a known pathogen,,,1,1.0.0
+Snowshoe hare orthobunyavirus,,,viral,,2560767,,is a known pathogen,,,1,1.0.0
+Spondweni virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Sudan ebolavirus,,,viral,viral haemorrhagic fever,186540,,is a known pathogen,,Yes,"1,2",1.0.0
+Tai Forest ebolavirus,,,viral,viral haemorrhagic fever,186541,NC_014372.1,is a known pathogen,,Yes,"1,2",1.0.0
+Tanapox virus,,,viral,,99000,,is a known pathogen,,,1,1.0.0
+Tick-borne encephalitis virus,,,viral,,11084,NC_001672.1,is a known pathogen,,,1,1.0.0
+Tonate virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Torque teno virus,,,viral,,68887,,is a known pathogen,,,1,1.0.0
+Toscana phlebovirus,,,viral,,2734478,,is a known pathogen,,,1,1.0.0
+Trivittatus orthobunyavirus,,,viral,,2560823,,is a known pathogen,,,1,1.0.0
+unidentified human coronavirus,,,viral,,2749936,,is a known pathogen,,,1,1.0.0
+Uukuniemi uukuvirus,,,viral,,10245,NC_005221.1,is a known pathogen,,,1,1.0.0
+Vaccinia virus,,,viral,,10255,NC_006998.1,is a known pathogen,,,1,1.0.0
+Variola virus,,,viral,Smallpox,11036,NC_001611.1,is a known pathogen,,Yes,"1,2",1.0.0
+Venezuelan equine encephalitis virus,,,viral,,11276,NC_001449.1,is a known pathogen,,,1,1.0.0
+Vesicular stomatitis virus,,,viral,,11082,NC_001560.1,is a known pathogen,,,1,1.0.0
+Wesselsbron virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+West Nile virus,,,viral,West Nile Fever,11039,NC_001563.2,is a known pathogen,,Yes,"1,2",1.0.0
+Western equine encephalitis virus,Western equine encephalomyelitis viru,,viral,,38804,NC_003908.1,is a known pathogen,,,1,1.0.0
+Wesselsbron virus,,,viral,,11089,NC_005179.1,is a known pathogen,,,1,1.0.0
+Yaba monkey tumor virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Yellow fever virus,,,viral,Yellow Fever,186538,NC_002031.1,is a known pathogen,,Yes,"1,2",1.0.0
+Zaire ebolavirus,,,viral,viral haemorrhagic fever,64320,NC_002549.1,is a known pathogen,,Yes,"1,2",1.0.0
+Zika virus,,,viral,,694448,NC_012532.1,is a known pathogen,,Yes,"1,2",1.0.0
+unidentified human coronavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+1. CZ ID,,,,,,,,,,,
+2. NNDSS,,,,,,,,,,,
+3. CDC,,,,,,,,,,,
+4. Olsenella uli https://ann-clinmicrob.biomedcentral.com/articles/10.1186/s12941-022-00499-2,,,,,,,,,,,
+5. Lelliottia nimipressuralis https://www.sciencedirect.com/science/article/pii/S0732889321002303,,,,,,,,,,,
+6. Serratia marcesans https://www.jcdr.net/article_fulltext.asp?issn=0973-709x&year=2013&volume=7&issue=2&page=243&issn=0973-709x&id=2737,,,,,,,,,,,
+7. Citrobacter sp. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3836000/#ref3,,,,,,,,,,,
+8. Stenotrophomonas maltophilia https://www.frontiersin.org/articles/10.3389/fmicb.2017.02276/full,,,,,,,,,,,
+9. Enterococcus faecium https://aricjournal.biomedcentral.com/articles/10.1186/s13756-020-00770-1,,,,,,,,,,,
+10. Enterococcus avium https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9394533/,,,,,,,,,,,
+11. Rickettsia honei https://www.health.gov.au/sites/default/files/2022-11/australian-endemic-tick-borne-diseases-flinders-island-spotted-fever_0.pdf,,,,,,,,,,,
+12. Trichodysplasia spinulosa polyomavirus https://wwwnc.cdc.gov/eid/article/28/9/22-0856_article,,,,,,,,,,,
+13. Klebsiella oxytoca https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5192185/,,,,,,,,,,,
+14. Bordetella parapertussis,,,,,,,,,,,
+15. Bordetella holmesii https://doi.org/10.1016/j.pathol.2017.10.014,,,,,,,,,,,
+16. Bordetella hinzii https://doi.org/10.1016/j.pathol.2022.06.004,,,,,,,,,,,
+17. Providencia Rettgeri https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5535354/,,,,,,,,,,,
+18. Pythium insidiosum https://www.ncbi.nlm.nih.gov/pmc/articles/PMC516349/,,,,,,,,,,,
+19. Neoehrlichia mikurensis https://doi.org/10.1186%2Fs12879-021-06297-z,,,,,,,,,,,
+20. Chromoblastomycosis https://www.ncbi.nlm.nih.gov/books/NBK470253/,,,,,,,,,,,
+21. Chromobacterium violaceum https://doi.org/10.4103%2F2229-516X.96814,,,,,,,,,,,
+22. Bhanja virus https://doi.org/10.1128%2FJVI.02845-12,,,,,,,,,,,
+23. Legionella longbeachae https://doi.org/10.3201%2Feid1704.100446,,,,,,,,,,,
+24. Legionella feeleii https://doi.org/10.3389%2Ffmicb.2021.707187,,,,,,,,,,,
+25. Legionella micdadei https://doi.org/10.1155%2F2015%2F535012,,,,,,,,,,,
+26. Legionella anisa https://doi.org/10.1186/s12879-022-07475-3,,,,,,,,,,,
+27. Bacteroides fragilis https://doi.org/10.1128%2FCMR.00008-07,,,,,,,,,,,
+28. Streptococcus gallolyticus https://doi.org/10.3389%2Ffmicb.2018.00614,,,,,,,,,,,
+29. Clostridium ramosum https://doi.org/10.1093/ofid/ofx163.1446,,,,,,,,,,,
+30. Staphylococcus lugdunensis https://doi.org/10.1007%2Fs13555-017-0202-5,,,,,,,,,,,
+31. Bartonella vinsonii https://doi.org/10.1186/1756-3305-3-29,,,,,,,,,,,
+32. Rocio virus https://doi.org/10.3390%2Fv13112293,,,,,,,,,,,
+33. Ilheus virus https://doi.org/10.3201%2Feid1803.111486,,,,,,,,,,,
+34. Acinetobacter junii https://doi.org/10.1016/j.eucr.2020.101209,,,,,,,,,,,
+35. SV40 ,,,,,,,,,,,
+36. Gemella haemolysans https://onlinelibrary.wiley.com/doi/10.1002/jgf2.497,,,,,,,,,,,
+37. Cardiobacterium hominis https://link.springer.com/article/10.1007/s10096-006-0189-9,,,,,,,,,,,

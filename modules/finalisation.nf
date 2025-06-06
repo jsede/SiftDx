@@ -1,4 +1,5 @@
 include { merge_taxonomy } from './merge_taxonomy.nf'
+include { table_summary } from './table_summary.nf'
 
 workflow finalisation {
     take:
@@ -8,6 +9,10 @@ workflow finalisation {
         database
         taxdump
         output
+        entrez_email
+        entrez_api_key
+        table_template
+        
 
     main:
         taxonomy_data = merge_taxonomy (
@@ -15,7 +20,15 @@ workflow finalisation {
             preprocessing_data,
             tax_class_data,
             database,
-            taxdump
+            taxdump,
+            entrez_email,
+            entrez_api_key
+        )
+
+        table_summary (
+            pair_id,
+            taxonomy_data,
+            table_template
         )
 
     // emit:

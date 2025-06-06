@@ -2,6 +2,7 @@ import os
 import json
 import subprocess
 import sys
+import base64
 import logging
 import shutil
 import os.path
@@ -57,6 +58,13 @@ def check_folders(folder):
 
 def check_dependencies(cmd_exec):
     cmd_path = shutil.which(cmd_exec)
+
+def base64encode(file_path):
+    with open(file_path, "rb") as file:
+        file_data = file.read()
+        
+    base64file = base64.b64encode(file_data).decode("utf-8")
+    return base64file
 
 def copy_neg2model(name, tmp_path, neg_path, model_path):
     preprocessing_files = [
