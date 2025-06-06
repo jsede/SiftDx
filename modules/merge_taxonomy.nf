@@ -17,6 +17,8 @@ process merge_nt_nr {
             path(nt_alignments) //n t_alignments_sr_blast.tsv
         path database
         path taxdump
+        val entrez_email
+        val entrez_api_key
         
 
     output:
@@ -36,8 +38,8 @@ process merge_nt_nr {
     nt_alignments_sr_file ${nt_alignments}
     EOF
 
-    python ${baseDir}/scripts/merge_nt_nr.py ${database} ${taxdump} inputs.txt
-    rm input.txt
+    python ${baseDir}/scripts/merge_nt_nr.py ${database} ${taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
+    rm inputs.txt
     """
 }
 
@@ -48,13 +50,19 @@ workflow merge_taxonomy {
         tax_class_data
         database
         taxdump
+        entrez_email
+        entrez_api_key
     
     main:
         merge_data = merge_nt_nr(
             preprocessing_data,
             tax_class_data,
             database,
-            taxdump
+            taxdump,
+            entrez_email,
+            entrez_api_key
         )
 
+    emit:
+        merge_data
 }

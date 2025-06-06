@@ -19,7 +19,10 @@ workflow {
     def blast_db = params.blast_db // BLAST database
     def database = params.database // sql databases for accession2taxid 
     def taxdump = params.taxdump // Taxdump for taxidtools
-    
+    def entrez_email = params.entrez_email
+    def entrez_api_key = params.entrez_api_key
+    def table_summary = params.table_summary // the table summary html template
+
     // Call the preprocessing workflow
     preprocessing_data = preprocessing(
         pair_id,
@@ -50,7 +53,10 @@ workflow {
         tax_class_data,
         database,
         taxdump,
-        output
+        output,
+        entrez_email,
+        entrez_api_key,
+        table_summary
     )
 
 }
