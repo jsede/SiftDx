@@ -77,9 +77,9 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     loaded_cache = assists.load_cache_files(dirpath)
     minimap_df = pd.read_csv(
             file, sep="\t", header=None, 
-            names=[name, "accession", "pident", "alnlen", "evalue", "bitscore"], 
-            usecols=[0,1,2,3,10,11],
-            dtype = {"accession":str, "pident": float, "alnlen": int, "evalue": float, "bitscore": float}
+            names=[name, "accession", "pident", "alen", "evalue", "bitscore", "qlen"], 
+            usecols=[0,1,2,3,10,11,12],
+            dtype = {"accession":str, "pident": float, "alen": int, "evalue": float, "bitscore": float, "qlen": int}
         )
     accession_df = pd.read_csv(
             file, sep="\t", header=None, names=["accession"], usecols=[5], dtype=str
@@ -102,7 +102,7 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
     mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
     minimap_df['superkingdom'] = minimap_df['MM2_taxid'].map(mapping_dict)
-    
+    minimap_df["alnlen"] = minimap_df['alen']/minimap_df['qlen']
     bacteria_condition = (minimap_df['superkingdom'] == 'Bacteria') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 95)
     eukaryota_condition = (minimap_df['superkingdom'] == 'Eukaryota') | (minimap_df['superkingdom'] == 'Archaea') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 98)
     viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 75)
