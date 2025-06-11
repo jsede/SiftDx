@@ -8,13 +8,17 @@ import pandas as pd
 import acc2taxid as at
 import taxid2species as tl
 import decision_tree as dt
+import species2lineage as sl
 
 
 def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
+    # Load taxdump for TaxidTools
     node = taxdump + "/nodes.dmp"
     lineage = taxdump + "/rankedlineage.dmp"
     logging.info("Loading Taxdump")
     taxdump = taxidTools.read_taxdump(node, lineage)
+
+    # Assigning paths
     dirpath = os.path.dirname(os.path.abspath(input_file))
     input_paths = {}
     with open(input_file, 'r') as f:
@@ -75,7 +79,8 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     if os.path.isfile(minimap_lr) is True and os.stat(minimap_lr).st_size != 0:
         minimap_lr_df, full_mm2_reads_df = cleaners.minimap_cleanup(minimap_lr, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_reads_df = full_mm2_reads_df.rename(columns={"MM2_NT": "Fasta_Headers"})
-# Filter out empty or all-NA DataFrames before concatenation
+    
+    # Filter out empty or all-NA DataFrames before concatenation
     minimap_parts = [
         ("minimap_contigs_df", minimap_contigs_df),
         ("minimap_lr_df", minimap_lr_df),
@@ -232,11 +237,13 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     full_sample_df = full_sample_df.merge(
         all_hits_df, on="Fasta_Headers", how="left"
     )
-    full_sample_df = full_sample_df.drop(columns="taxid").fillna("-")
+    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids"]).fillna("-")
     full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
     full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
+
+    collapse_df = cleaners.collapse_same_species(full_sample_df, taxdump)
     zscore_input = dirpath + "/zscore_input.tsv"
-    sample_df.to_csv(zscore_input, sep="\t", index=None)
+    collapse_df.to_csv(zscore_input, sep="\t", index=None)
     return sample_df
 
 
