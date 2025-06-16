@@ -3,7 +3,7 @@ process kraken2 {
     
     input:
         val pair_id
-        tuple path(read1), path(read2), path(single1), path(single2), path(bad1), path(bad2)
+        tuple path(read1), path(read2), path(single1), path(single2), path(bad1), path(bad2), path(fqc_txt)
         path kdb
         val output
 
@@ -11,7 +11,8 @@ process kraken2 {
         tuple path("kraken2.nonhuman.report"),
         path("kraken2.nonhuman.output"),
         path("kraken2_nonhuman_1.fastq"),
-        path("kraken2_nonhuman_2.fastq")
+        path("kraken2_nonhuman_2.fastq"),
+        path("summary.txt")
 
     script:
     """
@@ -22,6 +23,8 @@ process kraken2 {
             --paired ${read1} ${read2} \
             --unclassified-out kraken2_nonhuman#.fastq
 
+    awk '{s++} END {printf "kraken2_human_depleted: %.0f\\n", (s/4)*2}' kraken2_nonhuman_1.fastq >> ${fqc_txt}
+
     """
 }
 
@@ -30,14 +33,15 @@ process bowtie2 {
 
     input:
         val pair_id
-        tuple path(kraken2report), path(kraken2output),path(read1), path(read2)
+        tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(fqc_txt)
         path bowtie2_index
         val output
 
     output:
         tuple path("bowtie2_host.sam"),
         path("kraken2_nonhuman_1.fastq.gz"),
-        path("kraken2_nonhuman_2.fastq.gz")
+        path("kraken2_nonhuman_2.fastq.gz"),
+        path(fqc_txt)
 
     script:
     """
@@ -71,13 +75,14 @@ process samtools {
 
     input:
         val pair_id
-        tuple path(bowtie2_output), path(read1), path(read2)
+        tuple path(bowtie2_output), path(read1), path(read2), path(fqc_txt)
         val output
     
     output:
         tuple path("host_depleted_1.fastq.gz"),
         path("host_depleted_2.fastq.gz"),
-        path("bowtie2_host_sorted.bam")
+        path("bowtie2_host_sorted.bam"),
+        path("summary.txt")
 
     
     script:
@@ -88,6 +93,7 @@ process samtools {
         -0 /dev/null -s /dev/null -n -f 13 \
         ${bowtie2_output}
     
+    awk '{s++} END {printf "bowtie2_human_depleted: %.0f\\n", (s/4)*2}' host_depleted_1.fastq >> ${fqc_txt}
     gzip host_depleted_1.fastq
     gzip host_depleted_2.fastq
 
@@ -97,11 +103,11 @@ process samtools {
 
 process ercc {
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
-    publishDir "${output}/${pair_id}/final_plots", mode: 'copy', pattern: "ercc_plot.png"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "ercc_plot.png"
     
     input:
         val pair_id
-        tuple path(read1), path(read2), path(bowtie2_sorted)
+        tuple path(read1), path(read2), path(bowtie2_sorted), path(fqc_txt)
         path ercc_config
         val output
     
@@ -123,6 +129,8 @@ process ercc {
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.ERCC_only.out.sam
     python scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.ERCC_only.out.sam ercc_coverage.txt
+    ercc_count=`cut -f 1 bowtie2_host_Aligned.ERCC_only.out.sam | sort -k 1 | uniq | wc -l`
+    echo "ercc_reads: \$ercc_count"
     """
 }
 
@@ -131,26 +139,30 @@ process sortmerna {
 
     input:
         val pair_id
-        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted) 
+        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(fqc_txt)
         path sortmerna_db
         val output
 
     output:
-        tuple path("host_depleted_1.fastq.gz"),
-        path("host_depleted_2.fastq.gz")
+        tuple path("fullyQc_1.fastq.gz"),
+        path("fullyQc_2.fastq.gz"),
+        path(fqc_txt)
 
     script:
     """
-    mkdir -p ${output}/preprocessing/${pair_id}/sortmerna
+    mkdir -p ${output}/${pair_id}/preprocessing/sortmerna
     sortmerna \
         --ref ${sortmerna_db} \
-        --aligned " + aligned +\
-        --other noRna \
+        --aligned ${output}/${pair_id}/aligned \
+        --other fullyQc \
         --fastx \
-        --reads host_depleted_1 --reads host_depleted_2 \
+        --reads ${host_depleted_1} --reads ${host_depleted_2} \
         --out2 TRUE \
         --paired_in TRUE \
-        --workdir ${output}/preprocessing/${pair_id}/sortmerna \
+        --workdir ${output}/${pair_id}/preprocessing/sortmerna
+
+
+    gzip fullyQc_*.fastq
     """
 }
 
@@ -159,17 +171,19 @@ process fullyqc {
 
     input:
         val pair_id
-        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted) 
+        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(fqc_txt)
         val output
 
     output:
         tuple path("fullyQc_1.fastq.gz"),
-        path("fullyQc_2.fastq.gz")
+        path("fullyQc_2.fastq.gz"),
+        path(fqc_txt)
 
     script:
     """
     cp ${host_depleted_1} fullyQc_1.fastq.gz
     cp ${host_depleted_2} fullyQc_2.fastq.gz
+    
     """
 }
 

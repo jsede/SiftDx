@@ -3,7 +3,7 @@ process megahit {
 
     input:
         val pair_id
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fqc_txt)
         val output
 
     output:
@@ -17,6 +17,15 @@ process megahit {
         -1 ${fullyQc_1} \
         -2 ${fullyQc_2} \
         -o megahit
+
+    line=\$(tail -n 2 megahit/log | head -n 1)
+    numContigs=\$(echo "\$line" | awk -F'[, ]+' '{for(i=1;i<=NF;i++) if(\$i=="contigs") print \$(i-1)}')
+    min=\$(echo "\$line" | awk -F'[, ]+' '{for(i=1;i<=NF;i++) if(\$i=="min") print \$(i+1)}')
+    max=\$(echo "\$line" | awk -F'[, ]+' '{for(i=1;i<=NF;i++) if(\$i=="max") print \$(i+1)}')
+    avg=\$(echo "\$line" | awk -F'[, ]+' '{for(i=1;i<=NF;i++) if(\$i=="avg") print \$(i+1)}')
+    n50=\$(echo "\$line" | awk -F'[, ]+' '{for(i=1;i<=NF;i++) if(\$i=="N50") print \$(i+1)}')
+
+    echo -e "number_of_contigs: \$numContigs\nshortest_contig: \$min\nlongest_contig: \$max\navg_contig_length: \$avg\nn50: \$n50" >> ${fqc_txt}
     """
 }
 
@@ -27,13 +36,14 @@ process unassembled_reads {
     input:
         val pair_id
         path megahit_contigs
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fqc_txt)
         val output
 
     output:
         tuple path("unassembled_reads_fwd.fq.gz"),
             path("unassembled_reads_rev.fq.gz"),
-            path("reads_mapped_to_contigs.cov_stats")
+            path("reads_mapped_to_contigs.cov_stats"),
+            path(fqc_txt)
         path("final.contigs.fq")
     
     
@@ -53,6 +63,7 @@ process unassembled_reads {
     samtools coverage reads_mapped_to_contigs.sorted.bam > reads_mapped_to_contigs.cov_stats
     seqtk seq -F '#' ${megahit_contigs} > final.contigs.fq
 
+    awk '{s++} END {printf "total_unassembled_reads: %.0f\\n", (s/4)*2}' unassembled_reads_fwd.fq >> ${fqc_txt}
     gzip unassembled_reads_*.fq
     """
 }
@@ -64,14 +75,15 @@ process megahit_fail {
     input:
         val pair_id
         path megahit_contigs
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fqc_txt)
         val cov_stats
         val output
 
     output:
         tuple path("unassembled_reads_fwd.fq.gz"),
             path("unassembled_reads_rev.fq.gz"),
-            path("reads_mapped_to_contigs.cov_stats")
+            path("reads_mapped_to_contigs.cov_stats"),
+            path(fqc_txt)
 
     script:
     """
@@ -89,7 +101,8 @@ process alignment_prep {
         path megahit_contigs
         tuple path(unassembled_reads_fwd), 
             path(unassembled_reads_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         val output
 
     output:
@@ -100,10 +113,9 @@ process alignment_prep {
             path("combined_reads_contigs_file.fa"),
             path("unassembled_reads_longer_fwd.fq"),
             path("unassembled_reads_longer_rev.fq"),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
 
-    
-    
     script:
     """
     python ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_fwd} unassembled_reads_longer_fwd.fq unassembled_reads_shorter_fwd.fq
@@ -115,6 +127,10 @@ process alignment_prep {
     seqtk mergepe ${unassembled_reads_fwd} ${unassembled_reads_rev} > merged_reads.fq
     cat megahit_contigs.fq merged_reads.fq > combined_reads_contigs_file.fq
     seqtk seq -a combined_reads_contigs_file.fq > combined_reads_contigs_file.fa
+
+    awk '{s++} END {printf "total_unassembled_shorter_reads: %.0f\\n", (s/4)}' combined_sr_file.fq >> ${fqc_txt}
+    awk '{s++} END {printf "total_unassembled_longer_reads: %.0f\\n", (s/4)*2}' unassembled_reads_longer_fwd.fq >> ${fqc_txt}
+    awk 'NR > 1 {sum += \$(NF-5)} END {printf "total_assembled_reads: %d\\n", sum}' reads_mapped_to_contigs.cov_stats >> ${fqc_txt}
     """
 }
 

@@ -9,7 +9,8 @@ process fastp {
     output:
         tuple path("fastp_1.fastq.gz"), 
         path("fastp_2.fastq.gz"), 
-        path("fastp.json")    
+        path("fastp.json"),
+        path("summary.txt")    
 
     script:
     """
@@ -29,6 +30,12 @@ process fastp {
     
     gzip fastp_1.fastq
     gzip fastp_2.fastq
+    grep '"total_reads"' fastp.json | sed -n '1p;2p' | awk -F: '
+        NR==1 {gsub(/[ ,]/, "", \$2); print "fastp_before_total_reads: " \$2}
+        NR==2 {gsub(/[ ,]/, "", \$2); print "fastp_after_total_reads: " \$2}
+    ' > summary.txt
+    grep '"rate"' fastp.json | head -n1 | awk -F: '{gsub(/[ ,]/, "", \$2); print "duplication_rate: " \$2}' >> summary.txt
+    grep '"low_quality_reads"' fastp.json | head -n1 | awk -F: '{gsub(/[ ,]/, "", \$2); print "low_quality_reads: " \$2}' >> summary.txt
     """
 }
 
@@ -37,7 +44,7 @@ process prinseq {
 
     input:
         val pair_id
-        tuple path(read1), path(read2), path(json)
+        tuple path(read1), path(read2), path(json), path(fqc_txt)
         val output
 
     output:
@@ -46,7 +53,8 @@ process prinseq {
         path("prinseq_lc_single_out_R1.fastq.gz"),
         path("prinseq_lc_single_out_R2.fastq.gz"),
         path("prinseq_lc_bad_out_R1.fastq.gz"),
-        path("prinseq_lc_bad_out_R2.fastq.gz")
+        path("prinseq_lc_bad_out_R2.fastq.gz"),
+        path("summary.txt")
 
     script:
     """
@@ -56,8 +64,19 @@ process prinseq {
         -lc_dust 0.07 \
         -out_name prinseq_lc
 
+    awk '{s++} END {printf "prinseq_good: %.0f\\n", (s/4)*2}' prinseq_lc_good_out_R1.fastq >> summary.txt
+
+    # Extract values
+    after_reads=\$(grep 'fastp_after_total_reads' summary.txt | cut -d':' -f2 | tr -d ' ')
+    prinseq_reads=\$(grep 'prinseq_good' summary.txt | cut -d':' -f2 | tr -d ' ')
+
+    # Calculate lc_reads
+    lc_reads=\$((after_reads - prinseq_reads))
+    echo "lc_reads: \$lc_reads" >> summary.txt
+
     gzip prinseq*.fastq
-    """
+
+"""
 }
 
 workflow qc{

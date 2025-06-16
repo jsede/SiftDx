@@ -10,7 +10,8 @@ process minimap2_contigs {
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         path mm2_index
         val output
     
@@ -37,7 +38,8 @@ process minimap2_reads {
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         path mm2_index
         val output
     
@@ -65,7 +67,8 @@ process k2_pluspf {
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         val output
     
     output:
@@ -91,7 +94,8 @@ process diamond {
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         val output
 
     output:
@@ -121,13 +125,13 @@ process blast{
             path(combined_lr_contigs_fa),
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
-            path(cov_stats)
+            path(cov_stats),
+            path(fqc_txt)
         val output
     
     output:
-        path "nt_alignments_sr_blast.tsv"
-
-    
+        tuple path("nt_alignments_sr_blast.tsv"),
+            path(fqc_txt)
 
     script:
     """
