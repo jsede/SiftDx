@@ -172,6 +172,7 @@ Nocardia nova,,,bacterial,,,,is a known pathogen,,,1,1.0.1
 Nocardia otitidiscaviarum,,,bacterial,,,,is a known pathogen,,,1,1.0.1
 Olsenella uli,,,bacterial,,633147,,has been reported in case reports,Oral Cavity; Gastrointestinal Tract,,4,1.0.0
 Orientia tsutsugamushi,,,bacterial,Scrub typhus,784,,is a known pathogen,,,1,1.0.0
+Pandoraea nosoerga,,,bacterial,,2508296,,is a known pathogen,,,38,1.0.2
 Paraclostridium bifermentans,,,bacterial,,1490,,is a known pathogen,,,1,1.0.0
 Parvimonas micra,,,bacterial,,33033,,is a known pathogen,Oral Cavity; Upper Respiratory Tract; Lower Respiratory Tract; Gastrointestinal Tract; Female Urogenital Tract,,1,1.0.0
 Pasteurella multocida,,,bacterial,Pasteurellosis,747,,is a known pathogen,,,1,1.0.0
@@ -750,3 +751,4 @@ unidentified human coronavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
 35. SV40 ,,,,,,,,,,,
 36. Gemella haemolysans https://onlinelibrary.wiley.com/doi/10.1002/jgf2.497,,,,,,,,,,,
 37. Cardiobacterium hominis https://link.springer.com/article/10.1007/s10096-006-0189-9,,,,,,,,,,,
+38. Pandoraea nosoerga https://doi.org/10.1007/s10096-021-04235-0,,,,,,,,,,,
