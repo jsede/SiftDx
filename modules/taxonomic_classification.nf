@@ -130,8 +130,7 @@ process blast{
         val output
     
     output:
-        tuple path("nt_alignments_sr_blast.tsv"),
-            path(fqc_txt)
+        path "nt_alignments_sr_blast.tsv"
 
     script:
     """
