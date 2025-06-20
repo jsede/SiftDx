@@ -6,7 +6,7 @@ import entrez_search as es
 import assists
 import json
 
-def decision(species_df, taxdump, dirpath):
+def decision(species_df, taxdump, dirpath, entrez_cred):
     """
     After all the contigs and unassembled reads have been annotated using the different software
     We need to create a final column that decides what the species is
@@ -20,7 +20,9 @@ def decision(species_df, taxdump, dirpath):
 
     # apply the determine final species function for every row.
     species_df[["final", "final_taxid"]] = species_df.apply(
-        determine_final_species, axis=1, result_type="expand"
+        lambda row: determine_final_species(row, taxdump, entrez_cred),
+        axis=1,
+        result_type="expand"
     )
     logging.info(f"Determining best match species hit for unmatching species...")
     
@@ -46,7 +48,7 @@ def decision(species_df, taxdump, dirpath):
         result_type="expand"
     )
     full_stacked_df = stacked_df[['Fasta_Headers', 'Seq_Length', 'numreads', 'Kraken_Species', 'NT_Species', 'NR_Species', 'final', 'final_taxid']]
-    full_stacked_df.to_csv(dirpath + "/final_decisions.csv", index=None)
+    full_stacked_df.to_csv(dirpath + "/final_decisions.tsv",sep="\t", index=None)
     stacked_df = stacked_df[['Fasta_Headers', 'Seq_Length', 'numreads', 'final', 'final_taxid']]
 
     
@@ -61,10 +63,10 @@ def decision(species_df, taxdump, dirpath):
     return stacked_df, full_stacked_df
 
 
-def determine_final_species(row):
-    kraken_genus = cleaners.extract_genus(row["Kraken_Species"])
-    nr_genus = cleaners.extract_genus(row["NR_Species"])
-    nt_genus = cleaners.extract_genus(row["NT_Species"])
+def determine_final_species(row, taxdump, entrez_cred):
+    kraken_genus = cleaners.extract_genus(row, 'Kraken_taxid', 'Kraken_Species', taxdump, entrez_cred)
+    nr_genus = cleaners.extract_genus(row, 'MM2_taxid', 'NT_Species', taxdump, entrez_cred)
+    nt_genus = cleaners.extract_genus(row, 'NR_taxid', 'NR_Species', taxdump, entrez_cred)
     kraken_species = cleaners.extract_species(row["Kraken_Species"])
     nr_species = cleaners.extract_species(row["NR_Species"])
     nt_species = cleaners.extract_species(row["NT_Species"])

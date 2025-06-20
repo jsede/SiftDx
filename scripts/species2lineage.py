@@ -2,14 +2,14 @@ import logging
 import entrez_search as es
 import taxidTools
 
-def get_taxon_rank(row, taxdump):
+def get_taxon_rank(row, taxid_name, taxdump):
     rank = None
     taxonomy_levels = [
         'subspecies', 'species', 'genus', 'family', 'order',
         'class', 'phylum', 'kingdom', 'superkingdom'
     ]
     try:
-        taxid = row['final_taxid']
+        taxid = row[taxid_name]
         if taxid != '-':
             rank = taxdump.getRank(int(float(taxid)))
     except (KeyError, ValueError, TypeError) as exc:

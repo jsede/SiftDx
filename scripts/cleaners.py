@@ -6,6 +6,7 @@ import assists
 import logging
 import species2lineage as sl
 import acc2taxid as at
+import entrez_search as es
 
 exc_kingdom = [
     "Bacteria",
@@ -82,7 +83,7 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
             dtype = {"accession":str, "pident": float, "alen": int, "evalue": float, "bitscore": float, "qlen": int}
         )
     accession_df = pd.read_csv(
-            file, sep="\t", header=None, names=["accession"], usecols=[5], dtype=str
+            file, sep="\t", header=None, names=["accession"], usecols=[1], dtype=str
         )
     accession_df.drop_duplicates(subset="accession", keep="first", inplace=True)
     mm2_accession_list = accession_df["accession"].dropna().to_list()
@@ -222,8 +223,29 @@ def remove_num_str(text):
     result = re.sub(pattern, "", text)
     return result.strip()
 
-def extract_genus(species):
-    return species.split()[0] if species != "-" else None
+def extract_genus(row, colname, name, taxdump, entrez_cred):
+    result_dict = {}
+    result = row[name]  # default fallback
+
+    try:
+        rank = sl.get_taxon_rank(row, colname, taxdump)
+
+        if rank != 'no rank':
+            if rank in ['species', 'subspecies']:
+                parent = taxdump.getAncestry(row[colname])
+                lineage = [node for node in parent if node.rank == 'genus']
+                if lineage:
+                    result = lineage[0].name
+                else:
+                    logging.warning(f"No genus found in lineage for {row[colname]}")
+                    result_dict = es.search_lineage(row[colname], entrez_cred)
+                    result = result_dict.get('genus', row[name])
+
+            
+    except Exception as e:
+        logging.error(f"Error extracting genus for taxon {row[colname]}: {e}")
+
+    return result
 
 def extract_species(species):
     return " ".join(species.split()[:2]) if species != "-" else None
@@ -304,7 +326,7 @@ def collapse_same_species(df, taxdump):
     collapsed_df.rename(columns={'final': 'taxon', 'Seq_length': 'avgseqlen'}, inplace=True)
     collapsed_df['taxon'] = collapsed_df['taxon'].replace('-', 'Unclassified')
     collapsed_df['rank'] = collapsed_df.apply(
-        lambda row: sl.get_taxon_rank(row, taxdump),
+        lambda row: sl.get_taxon_rank(row, 'final_taxid', taxdump),
         axis=1,
         result_type="expand"
     )

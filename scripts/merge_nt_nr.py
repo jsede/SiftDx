@@ -64,19 +64,19 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     # clean up the blast_sr file by dropping duplicates
     blast_sr_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species"])
     full_blast_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species", "staxids", "pident", "alnlen", "evalue", "bitscore"])
-    if os.path.isfile(blast_sr_file) is True and os.stat(blast_sr_file).st_size != 0:
+    if os.path.isfile(blast_sr_file) is True and os.path.getsize(os.path.realpath(blast_sr_file)) != 0:
         blast_sr_df, full_blast_df = cleaners.blast_cleanup(blast_sr_file, "NT", 14, taxdump, dirpath, entrez_cred)
     full_blast_df = full_blast_df.rename(columns={"NT": "Fasta_Headers", "BLAST_Species": "sscinames"})
     logging.info("Cleaned up BLAST output and ready to merge")
     # clean up minimap, join them together and merge it with
     minimap_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
     full_mm2_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
-    if os.path.isfile(minimap_contigs) is True and os.stat(minimap_contigs).st_size != 0:
+    if os.path.isfile(minimap_contigs) is True and os.path.getsize(os.path.realpath(minimap_contigs)) != 0:
         minimap_contigs_df, full_mm2_contigs_df = cleaners.minimap_cleanup(minimap_contigs, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_contigs_df = full_mm2_contigs_df.rename(columns={"MM2_NT": "Fasta_Headers"})
     minimap_lr_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
     full_mm2_reads_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
-    if os.path.isfile(minimap_lr) is True and os.stat(minimap_lr).st_size != 0:
+    if os.path.isfile(minimap_lr) is True and os.path.getsize(os.path.realpath(minimap_lr)) != 0:
         minimap_lr_df, full_mm2_reads_df = cleaners.minimap_cleanup(minimap_lr, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_reads_df = full_mm2_reads_df.rename(columns={"MM2_NT": "Fasta_Headers"})
     
@@ -103,7 +103,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     # clean up diamond
     diamond_df = pd.DataFrame(columns = ["NR", "accession"])
     full_diamond_df = pd.DataFrame(columns = ["NR", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
-    if os.path.isfile(diamond_file) is True and os.stat(diamond_file).st_size != 0:
+    if os.path.isfile(diamond_file) is True and os.path.getsize(os.path.realpath(diamond_file)) != 0:
         diamond_df, full_diamond_df = cleaners.diamond_cleanup(diamond_file, "NR", taxdump, database, dirpath, entrez_cred) # filtering the percentage identity to above 75.
     full_diamond_df = full_diamond_df.rename(columns={"NR": "Fasta_Headers"})
     diamond_acc_list = diamond_df["accession"].dropna().to_list()
@@ -207,7 +207,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     merged_df = merged_df[merged_df['Fasta_Headers'] != '-']
 
     logging.info(f"Kraken, NT & NR merge complete")
-    sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath)
+    sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath, entrez_cred)
     dataframes = [full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df]
     non_empty_dataframes = [df for df in dataframes if not df.empty and not df.isna().all().all()]
     all_hits_df = pd.concat(non_empty_dataframes)
@@ -229,18 +229,33 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     for col in desired_cols:
         if col not in lineage_df.columns:
             lineage_df[col] = ""
-    lineage_df = lineage_df[desired_cols].dropna(how='all')
-    lineage_df = lineage_df
-    all_hits_df = all_hits_df.merge(
-        lineage_df, left_on="staxids", right_on="taxid", how='left'
+    lineage_df = lineage_df[desired_cols].dropna(how='all').drop_duplicates(subset='taxid')
+    lineage_df['taxid'] = (
+    lineage_df['taxid']
+        .astype(str)
+        .str.replace('.0', '', regex=False)
+    )
+    full_sample_df['final_taxid'] = (
+        full_sample_df['final_taxid']
+        .astype(str)
+        .str.replace('.0', '', regex=False)
     )
     full_sample_df = full_sample_df.merge(
-        all_hits_df, on="Fasta_Headers", how="left"
+        all_hits_df, left_on="Fasta_Headers", right_on="Fasta_Headers", how='left'
     )
+    full_sample_df = full_sample_df.merge(
+        lineage_df, left_on="final_taxid", right_on='taxid', how='left'
+    )   
     full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids"]).fillna("-")
+    
     full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
     full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
-
+    missing_lineage = full_sample_df[
+        (full_sample_df['final_taxid'] != '-') & 
+        (full_sample_df['final_taxid'] != '1') &
+        (full_sample_df['superkingdom'] == '-')
+    ]
+    print(f"Rows with missing lineage: {len(missing_lineage)}")
     collapse_df = cleaners.collapse_same_species(full_sample_df, taxdump)
     zscore_input = dirpath + "/zscore_input.tsv"
     collapse_df.to_csv(zscore_input, sep="\t", index=None)
