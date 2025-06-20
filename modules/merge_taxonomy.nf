@@ -1,5 +1,11 @@
 process merge_nt_nr {
+    publishDir "${output}/${pair_id}/summary", mode: 'copy', pattern: "summary.txt"
+    publishDir "${output}/${pair_id}/analysis", mode: 'copy', pattern: "final_decisions.tsv"
+    publishDir "${output}/${pair_id}/analysis", mode: 'copy', pattern: "full_read_contig_info.tsv"
+    publishDir "${output}/${pair_id}/analysis", mode: 'copy', pattern: "zscore_input.tsv"
+
     input:
+        val pair_id
         tuple path(megahit_contigs),
             path(combined_sr_fq),
             path(combined_sr_fa),
@@ -8,25 +14,26 @@ process merge_nt_nr {
             path(unassembled_reads_longer_fwd),
             path(unassembled_reads_longer_rev),
             path(cov_stats),
-            path(useless_txt)
+            path(fqc_txt)
         tuple path(mm2_contigs), // minimap2_contig_out.paf
             path(mm2_contigs_m8), // minimap2_contig_out_frompaf.m8
             path(mm2_reads), // minimap2_reads_out.paf
             path(mm2_reads_m8), // minimap2_reads_out_frompaf.m8
             path(k2_pluspf), // combined_rc.kraken.txt
             path(nr_alignments), // nr_alignments_file.tsv
-            path(nt_alignments), //n t_alignments_sr_blast.tsv
-            path(fqc_txt)
+            path(nt_alignments) //n t_alignments_sr_blast.tsv
         path database
         path taxdump
         val entrez_email
         val entrez_api_key
+        val output
         
 
     output:
-        tuple path("final_decisions.csv"),
+        tuple path("final_decisions.tsv"),
         path("full_read_contig_info.tsv"),
-        path("zscore_input.tsv")
+        path("zscore_input.tsv"),
+        path(fqc_txt)
 
     script:
     """
@@ -101,15 +108,18 @@ workflow merge_taxonomy {
         taxdump
         entrez_email
         entrez_api_key
+        output
     
     main:
         merge_data = merge_nt_nr(
+            pair_id,
             preprocessing_data,
             tax_class_data,
             database,
             taxdump,
             entrez_email,
-            entrez_api_key
+            entrez_api_key,
+            output
         )
 
     emit:
