@@ -1,0 +1,182 @@
+import os
+import sys
+import math
+import pandas as pd
+import numpy as np
+
+pathogen_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/pathogen_list.csv"), header = 0)
+contam_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/known_contaminants.csv"), header = 0)
+
+synthetic_list = [
+    "shuttle vector",
+    "synthetic construct",
+    "cloning vector",
+    "expression vector",
+    "transformation vector",
+    "reporter vector",
+    "homo sapiens",
+    "unclassified",
+    "root"
+]
+
+phylum_exclusion = [
+    "chordata", # vertebraes
+    "arthropoda", # bugs
+    "cnidaria", # aquatic animals
+    "mollusca", # molluscs
+    "ctenophora", # marine invertebraes
+    "placozoa", # marine blobs
+    "porifera", # sea sponges
+    "rotifera", # microscopic wheel animals
+    "echinodermata" #starfish
+    "annelida" # seaworms
+    ]
+
+final_column_order = [
+    "taxon",
+    "numreads",
+    "final_taxid",
+    "accession",
+    "pident",
+    "alnlen",
+    "evalue",	
+    "bitscore",
+    "rpm_sample",
+    "rpm_ctrl",
+    "zscore",
+    "rank",
+    "superkingdom",
+    "kingdom",
+    "phylum",
+    "class",
+    "order",
+    "family",
+    "genus",
+    "species",
+    "subspecies",
+]
+
+def calc_total_reads(summary_input):
+    with open(summary_input, 'r') as f:
+        for line in f:
+            if line.startswith('fastp_before_total_reads:'):
+                total_reads = int(line.strip().split(':')[1].replace(',', ''))
+                break
+    return total_reads
+
+def set_zscore(row):
+    for word in synthetic_list:
+        if word in row['taxon'].lower():  # Convert both to lowercase for case-insensitive matching
+            return 0
+    for word in phylum_exclusion:
+        if row['phylum'] is not np.nan:
+            if word in row['phylum'].lower(): # remove chordata and arthropoda
+                return 0
+        else:
+            return row['zscore']
+    if row['kingdom'] is not np.nan:
+        if "Viridiplantae" in row['kingdom']: # remove plant kingdom
+            return 0
+    return row['zscore']
+
+def zscore_calculation(sample_input, negative_folder, summary_input):
+    # dirpath
+    dirpath = os.path.dirname(os.path.abspath(sample_input))
+
+
+    # nav-ing to the summary file in the negative
+    negative_input = os.path.join(os.path.abspath(negative_folder), "analysis/zscore_input.tsv")
+    neg_summary_input = os.path.join(os.path.abspath(negative_folder), "summary/summary.txt")
+    
+    # calculate the total reads
+    sample_tr = calc_total_reads(summary_input)
+    negative_tr = calc_total_reads(neg_summary_input)
+    
+    # calculate the scale factor for RPM
+    taxon_sum = sample_tr/1000000
+    neg_sum = negative_tr/1000000
+    
+    # read in the zscore_input files.
+    taxon_counts = pd.read_csv(sample_input, sep="\t", header=0)
+    neg_counts = pd.read_csv(negative_input, sep="\t", header=0)
+
+    # calculate the RPM for sample and negative
+    taxon_counts['rpm_sample'] = taxon_counts['numreads']/taxon_sum
+    neg_counts['rpm_ctrl'] = neg_counts['numreads']/neg_sum
+
+    # calculate zscore for everything that it can (which is only the samples with both rpm_sample and rpm_ctrl)
+    zscore_df = pd.merge(taxon_counts, neg_counts, on='taxon', how='inner')
+    zscore_df = zscore_df[['taxon', 'rpm_sample', 'rpm_ctrl']]
+    zscore_df['zscore'] = (zscore_df['rpm_sample'] - zscore_df['rpm_ctrl'].mean())/zscore_df['rpm_ctrl'].std()
+    zscored = pd.merge(zscore_df, taxon_counts, on='taxon', how='inner').drop(columns="rpm_sample_y").rename(columns={'rpm_sample_x': 'rpm_sample'})
+
+    # need to check if the zscore calculations get rescaled if the numbers are too high.
+    zscore_max = zscore_df['zscore'].max()
+    zscore_min = zscore_df['zscore'].min()
+    if zscore_max >= 99 and zscore_min != zscore_max:
+        zscore_df['zscore'] = (
+            (zscore_df['zscore'] - zscore_min) / (zscore_max - zscore_min) * (99 - 1) + 1
+        )
+        zscore_max = zscore_df['zscore'].max()
+        zscore_min = zscore_df['zscore'].min()
+    elif zscore_max >= 99 and zscore_min == zscore_max:
+        zscore_df['zscore'] = 99
+
+    # grabbing only the taxon that are not in each other
+    sample_only = taxon_counts[~taxon_counts['taxon'].isin(neg_counts['taxon'])].dropna(subset=['taxon']).reset_index(drop=True)
+    sample_only['rpm_ctrl'] = np.nan
+    neg_only = neg_counts[~neg_counts['taxon'].isin(taxon_counts['taxon'])].dropna(subset=['taxon']).reset_index(drop=True)
+    neg_only['rpm_sample'] = np.nan
+    
+    # if taxon is not in negative, then score is immediately 100
+    sample_only['zscore'] = 100
+
+    # if taxon is in negative ONLY, then score is immediately -100
+    neg_only['zscore'] = -100
+    
+    # clean up the basefile to be merged.
+    sample_only = sample_only[final_column_order]
+    neg_only = neg_only[final_column_order]
+    zscored = zscored[final_column_order]
+
+    # stack the files, and merge the final zscores in
+    combined_counts = pd.concat([sample_only, neg_only, zscored], ignore_index=True)
+
+    # separate the sample only & negative only 
+    hundo_only = combined_counts[combined_counts['zscore'] == 100].copy()
+    
+    # Get RPM bounds from 100-zscore group
+    hundo_rpm_max = hundo_only['rpm_sample'].max()
+    hundo_rpm_min = hundo_only['rpm_sample'].min()
+
+    # set zscore_max to 1 if <1
+    if zscore_max <= 1:
+        zscore_max = 1
+        
+    # Rescale to be between zscore_max → 100
+    if hundo_rpm_max != hundo_rpm_min:
+        hundo_only['zscore'] = (
+            (hundo_only['rpm_sample'] - hundo_rpm_min) /
+            (hundo_rpm_max - hundo_rpm_min) *
+            (100 - zscore_max) + zscore_max
+        )
+    else:
+        hundo_only['zscore'] = 100
+    
+    # apply the new scores
+    combined_counts.update(hundo_only)
+    for col in combined_counts.select_dtypes(include='object').columns:
+        combined_counts = combined_counts.fillna('-')
+    combined_counts['zscore'] = combined_counts.apply(set_zscore, axis=1)
+    zscore_output = dirpath + "/zscore.tsv"
+    combined_counts.to_csv(zscore_output, sep="\t", index=None)
+
+    # extract detected pathogens list
+    known_pgs = dirpath + "/detected_pathogens.tsv"
+    pathogen_db_list = pathogen_db['Species'].to_list() + pathogen_db['AltNames'].to_list()
+    match_species = taxon_counts[taxon_counts['species'].isin(pathogen_db_list) | taxon_counts['taxon'].isin(pathogen_db_list)]
+    match_species = match_species[(match_species['taxon'] != 'No Hit')] # remove the No hit because z-score of no hit is never 0
+    match_species.to_csv(known_pgs, sep="\t", index=None)
+
+if __name__ == "__main__":
+    zscore_calculation(sys.argv[1], sys.argv[2], sys.argv[3])
