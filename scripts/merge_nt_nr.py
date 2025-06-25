@@ -220,12 +220,16 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     all_hits_df.sort_values(by=["Fasta_Headers", "evalue", "bitscore"], ascending=[True, True, False], inplace=True)
     all_hits_df = all_hits_df.drop_duplicates(subset="Fasta_Headers", keep="first")
     all_hits_list = all_hits_df["staxids"].dropna().to_list()
+    final_taxid_list = full_sample_df[
+        (full_sample_df["final_taxid"].notna()) & (full_sample_df["final_taxid"] != "-")
+    ]["final_taxid"].to_list()
+    all_hits_list = final_taxid_list + all_hits_list
     all_hits_list = list(dict.fromkeys(all_hits_list))
     cleaners.get_lineage(all_hits_list, taxdump, dirpath, entrez_cred)
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
-    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    lineage_df['rank'] = lineage_df['no rank'].replace('no rank', 'root')
     for col in desired_cols:
         if col not in lineage_df.columns:
             lineage_df[col] = ""
@@ -255,10 +259,16 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         (full_sample_df['final_taxid'] != '1') &
         (full_sample_df['superkingdom'] == '-')
     ]
-    print(f"Rows with missing lineage: {len(missing_lineage)}")
+    logging.info(f"Rows with missing lineage: {len(missing_lineage)}")
     collapse_df = cleaners.collapse_same_species(full_sample_df, taxdump)
+    collapse_df['rank'] = collapse_df.apply(
+        lambda row: sl.get_taxon_rank(row, 'final_taxid', taxdump),
+        axis=1,
+        result_type="expand"
+    )
     zscore_input = dirpath + "/zscore_input.tsv"
     collapse_df.to_csv(zscore_input, sep="\t", index=None)
+    
     return sample_df
 
 

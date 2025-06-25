@@ -1,5 +1,6 @@
 import logging
 import entrez_search as es
+import pandas as pd
 import taxidTools
 
 def get_taxon_rank(row, taxid_name, taxdump):
@@ -10,20 +11,20 @@ def get_taxon_rank(row, taxid_name, taxdump):
     ]
     try:
         taxid = row[taxid_name]
-        if taxid != '-':
+        if taxid not in ['-', '1', '0']:
             rank = taxdump.getRank(int(float(taxid)))
+        else:
+            rank = "Not assigned"
     except (KeyError, ValueError, TypeError) as exc:
         logging.error("Generated an exception: %s", exc)
     
     # Infer rank if not assigned or is 'no rank'
-    if rank == 'no rank':
+    if rank is None:
         for level in taxonomy_levels:
             val = row.get(level, '')
-            if isinstance(val, str) and val.strip() != '':
+            if pd.notna(val) and str(val).strip() != '-':
                 rank = level
                 break
-    if rank is None:
-        rank = "Not assigned"
     
     return rank
 
