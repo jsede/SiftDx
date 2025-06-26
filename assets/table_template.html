@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" id="html">
+<meta charset="UTF-8">
 <head>
     <title>SiftDx Table Summary</title>
     <style>
@@ -141,7 +142,7 @@
     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 10px 20px; box-sizing: border-box;">
         <!-- Left side: Search bar + button -->
         <div style="display: flex; gap: 5px; flex-grow: 1; max-width: 400px;">
-            <input type="text" id="accordionSearch" placeholder="Search species" style="padding: 5px; width: 100%;">
+            <input type="text" id="accordionSearch" placeholder="Search taxa" style="padding: 5px; width: 100%;">
             <button onclick="searchAccordions()">Search</button>
         </div>
 
@@ -220,9 +221,16 @@
         }
 
         window.addEventListener("DOMContentLoaded", function () {
+            // Set up accordion toggle behavior
             var acc = document.getElementsByClassName("accordion");
             for (var i = 0; i < acc.length; i++) {
                 acc[i].addEventListener("click", toggleAccordion);
+            }
+
+            // Open the Bacteria tab by default
+            var defaultTabButton = document.querySelector(".tab-link[onclick*='bacteria_tab']");
+            if (defaultTabButton) {
+                openTab({ currentTarget: defaultTabButton }, 'bacteria_tab');
             }
         });
 
@@ -246,29 +254,41 @@
     </script>
     <script>
         document.getElementById("accordionSearch").addEventListener("input", function () {
-        var query = this.value.toLowerCase();
-        var accordions = document.getElementsByClassName("accordion");
+            var query = this.value.toLowerCase();
+            var accordions = document.getElementsByClassName("accordion");
+            var tabOpened = false;
 
-        for (var i = 0; i < accordions.length; i++) {
-            var acc = accordions[i];
-            var panel = acc.nextElementSibling;
-            var text = acc.textContent.toLowerCase();
+            for (var i = 0; i < accordions.length; i++) {
+                var acc = accordions[i];
+                var panel = acc.nextElementSibling;
+                var text = acc.textContent.toLowerCase();
+                var tabContainer = acc.closest(".tab"); // find parent tab (bacteria_tab, etc.)
 
-            if (text.includes(query) && query.length > 0) {
-                acc.style.backgroundColor = "#ffffcc"; // yellow highlight
-                panel.style.maxHeight = panel.scrollHeight + "px";
-                acc.classList.add("active-accordion");
-                acc.style.display = ""; // show
-            } else {
-                acc.style.backgroundColor = ""; // reset color
-                panel.style.maxHeight = null;
-                acc.classList.remove("active-accordion");
-                if (query.length > 0) {
-                    acc.style.display = "none"; // hide unmatched (optional)
+                if (text.includes(query) && query.length > 0) {
+                    // Open the tab only once
+                    if (!tabOpened) {
+                        var tabId = tabContainer.id;
+                        var tabButton = document.querySelector(`.tab-link[onclick*="${tabId}"]`);
+                        if (tabButton) {
+                            openTab({ currentTarget: tabButton }, tabId);
+                            tabOpened = true;
+                        }
+                    }
+
+                    acc.style.backgroundColor = "#ffffcc"; // highlight
+                    acc.classList.add("active-accordion");
+                    acc.style.display = "";
+                    panel.style.maxHeight = panel.scrollHeight + "px"; // expand
                 } else {
-                    acc.style.display = ""; // show all if query is empty
+                    acc.style.backgroundColor = "";
+                    acc.classList.remove("active-accordion");
+                    panel.style.maxHeight = null;
+                    if (query.length > 0) {
+                        acc.style.display = "none";
+                    } else {
+                        acc.style.display = "";
+                    }
                 }
             }
-        }
-    });
+        });
     </script>
