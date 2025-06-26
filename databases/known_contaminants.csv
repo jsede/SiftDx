@@ -1,0 +1,15 @@
+Species,Statement,Reason
+Naegleria fowleri,is a known contaminant,caused by misalignment of human genome reads and/or contigs to the Naegleria fowleri
+Pseudomonas fluorescens,is a known contaminant,of water.
+Pseudomonas yamanorum,is a known contaminant,of water.
+Cutibacterium acnes,is considered as background species,.
+Ralstonia pickettii,is a known contaminant,of Illumina library preparation kits
+Xanthomonas campestris,is considered as background species,because it is a known skin commensal
+Malassezia restricta,is considered as background species,because it is a known skin commensal
+Malassezia globosa,is considered as background species,because it is a known skin commensal
+Corynebacterium segmentosum,is considered as background species,because it is a known skin commensal
+Alcaligenes faecalis,is considered as background species,because it is a known skin commensal
+Staphylococcus capitis,is considered as background species,because it is a known skin commensal
+Staphylococcus hominis,is considered as background species,because it is a known skin commensal
+Pseudomonas stutzeri,is considered as background species,because it is a known skin commensal
+Acinetobacter baumannii,is considered as background species,because it is a known skin commensal
