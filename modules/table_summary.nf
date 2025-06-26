@@ -3,9 +3,7 @@ process gen_table {
     
     input:
         val pair_id
-        tuple path(final_decisions),
-            path(full_read_contig_info),
-            path(zscore_input)
+        path zscore
         path table_template
         val output
 
@@ -14,7 +12,7 @@ process gen_table {
 
     script:
     """
-    python ${baseDir}/scripts/gen_table_summary.py ${full_read_contig_info} ${table_template}
+    python ${baseDir}/scripts/gen_table_summary.py ${zscore} ${table_template}
     """
 }
 

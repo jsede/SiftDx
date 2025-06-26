@@ -7,6 +7,7 @@ import logging
 import shutil
 import os.path
 import species2lineage as sl
+import pandas as pd
 
 
 def run_cmd(command):
@@ -166,4 +167,99 @@ def load_cache_files(dirpath):
         prev_failed_lineage #13
     )
 
+def taxon_split(zscore_df, taxon, header):
+    taxon_df = zscore_df[zscore_df[header] == taxon]
+    return taxon_df
 
+def get_parasites(zscore_df, parasite_list):
+    parasite_df = zscore_df[zscore_df['species'].isin(parasite_list['#Organism/Name'])]
+    return parasite_df
+
+def flag_pathogens(row, pathogen_db, contam_db):
+    taxon = row['taxon']
+    match_species = pathogen_db[(pathogen_db['Species'].str.lower() == taxon.lower()) | (pathogen_db['AltNames'].str.lower() == taxon.lower())]
+    contam_species = contam_db[(contam_db['Species'] == taxon.lower())]
+    if not contam_species.empty:
+            taxon = f"{taxon}"
+            if contam_species['Reason'].isna().all() is True:
+                contam_status = contam_status.iloc[0]['Statement']
+            else:
+                contam_status = ". " + taxon + " " + contam_species.iloc[0]['Statement'] + " " + contam_species.iloc[0]['Reason']
+    else:
+        contam_status = ""
+
+    if not match_species.empty:
+        taxon = f"{taxon} \u2757"
+        status = match_species.iloc[0]['Status']
+        additions = []
+        if not pd.isnull(match_species.iloc[0]['Disease_type']):
+            additions.append(" causing a " + str(match_species.iloc[0]['Disease_type']) + " infection")
+        if not pd.isnull(match_species.iloc[0]['Disease_Name']):
+            additions.append(" called " + str(match_species.iloc[0]['Disease_Name']))
+        if not pd.isnull(match_species.iloc[0]['Commensal']):
+            commensal_locations = match_species.iloc[0]['Commensal'].split('; ')
+            if len(commensal_locations) > 1:
+                commensal_locations[-2] += " and " + commensal_locations[-1]
+                commensal_locations = commensal_locations[:-1]
+            additions.append(". " + match_species.iloc[0]['Species'] + " is a commensal microbe found in the " + ', '.join(commensal_locations))
+        if not pd.isnull(match_species.iloc[0]['NNDSS_Notifiable']):
+            additions.append(", it is also a notifiable disease in NSW")
+        if additions:
+            status += "".join(additions)
+    elif taxon == "-":
+        status = ""
+    else:
+        status = " is not a known pathogen"
+
+    return taxon, status
+
+def html_loop(taxon_df):
+    html_output = []
+    # sort the taxon_df by zscore
+    taxon_df = taxon_df.sort_values(by='zscore', ascending=False)
+
+    #loop the taxon to apply the data to the html
+    for _, row in taxon_df.iterrows():
+        # combine the lineage info into one line.
+        lineage_cols = [
+            'superkingdom', 'kingdom', 'phylum', 'class',
+            'order', 'family', 'genus', 'species', 'subspecies'
+        ]
+        lineage_parts = []
+        for col in lineage_cols:
+            val = row.get(col, '')
+            if pd.isna(val) or val == '-':
+                continue  # skip this level but keep going
+            lineage_parts.append(val)
+        lineage = ' > '.join(lineage_parts)
+
+        # modify the percentage identity
+        try:
+            pident_val = float(row['pident'])
+            pident_str = f"{pident_val:.2f}%"
+        except (ValueError, TypeError):
+            pident_str = '-'
+
+        accordion_html = f"""
+        <button class="accordion">
+            <span class="button-content">
+                <span class="taxon">{row['taxon_label']}</span>
+                <span class="zscore">Z-score: {row['zscore']}</span>
+            </span>
+        </button>
+        <div class="panel">
+            <p>
+                {row['taxon']} {row['taxon_status']}<br>
+                Closest NCBI Taxonomy ID: {row['final_taxid']}<br>
+                Closest NCBI Accession: {row['accession']}<br>
+                Percentage Identity: {pident_str}<br>
+                Average Alignment Length: {row['alnlen']}<br>
+                E-Value: {row['evalue']}<br>
+                Bitscore: {row['bitscore']}<br>
+                RPM in Sample: {row['rpm_sample']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RPM in NegCtrl: {row['rpm_ctrl']}<br>
+                Lineage: {lineage}<br>
+            </p>
+        </div>
+        """
+        html_output.append(accordion_html)
+    return html_output

@@ -1,12 +1,19 @@
 import os
 import sys
 import assists
+import pandas as pd
+
+pathogen_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/pathogen_list.csv"), header = 0)
+contam_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/known_contaminants.csv"), header = 0)
+parasite_list = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/parasites.txt"), sep="\t",header = 0)
 
 def gen_table_summary(full_info):
-    # Encode all the set images
+    # file set-up    
     dirpath = os.path.dirname(os.path.abspath(full_info))
     workdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_html = workdir + "/assets/table_template.html"
+    
+    # Encode all the set images
     img_names = [
         "bacteria.png", 
         "virus.png", 
@@ -28,29 +35,48 @@ def gen_table_summary(full_info):
         "py_fungi_icon_ph": locals()[base64_images[2]],
         "py_parasite_icon_ph": locals()[base64_images[3]],
     }
+    # load the sample data
+    zscore_df = pd.read_csv(full_info, sep="\t", header=0)
 
+    # apply all the labels.
+    zscore_df[['taxon_label', "taxon_status"]] = zscore_df.apply(
+        lambda row: assists.flag_pathogens(row, pathogen_db, contam_db),
+        axis=1,
+        result_type='expand'
+    )
+    # grab bacterial info
+    bacteria_data = assists.taxon_split(zscore_df, "Bacteria", "superkingdom")
+    bacteria_html = assists.html_loop(bacteria_data)
+    replace_dict["py_bacteria_ph"] = bacteria_html
+
+    # grab viral info
+    viral_data = assists.taxon_split(zscore_df, "Viruses", "superkingdom")
+    viral_html = assists.html_loop(viral_data)
+    replace_dict["py_virus_ph"] = viral_html
+    
+    # grab fungal info
+    fungal_data = assists.taxon_split(zscore_df, "Fungi", "kingdom")
+    fungal_html = assists.html_loop(fungal_data)
+    replace_dict["py_fungi_ph"] = fungal_html
+
+    # grab parasite info
+    parasite_data = assists.get_parasites(zscore_df, parasite_list)
+    parasite_html = assists.html_loop(parasite_data)
+    replace_dict["py_parasite_ph"] = parasite_html
+
+    # update the html with new rows for each pathogen etc.
     with open(template_html, "r") as html_template:
         template = html_template.read()
 
     for key, value in replace_dict.items():
         print(f"Replacing {key} to {value} in the HTML")
-        template = template.replace(key, str(value))
+        template = template.replace(key, '\n'.join(value))
 
     output_file = dirpath + "/table_summary.html"
     with open(output_file, "w") as outfile:
         outfile.write(template)
 
-"""
-<button class="accordion">py_species1_ph</button>
-    <div class="panel">
-        <p>
-            py_species1status_ph
-        </p>
-        <p style="padding-bottom: 10px;">
-            py_species1zscore_ph
-        </p>
-    </div>
-"""
+
 
 if __name__ == "__main__":
     gen_table_summary(sys.argv[1])
