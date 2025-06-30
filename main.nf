@@ -25,6 +25,7 @@ workflow {
     def entrez_email = params.entrez_email
     def entrez_api_key = params.entrez_api_key
     def table_summary = params.table_summary // the table summary html template
+    def pipeline_template = params.pipeline_template // the pipeline summary html template
 
     // Call the preprocessing workflow
     preprocessing_data = preprocessing(
@@ -67,6 +68,7 @@ workflow {
             negative,
             finalisation_data,
             table_summary,
+            pipeline_template,
             output
         )
     }

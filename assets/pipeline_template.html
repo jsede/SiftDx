@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<meta charset="UTF-8">
+    <head>
+        <title>Pipeline Steps</title>
+        <style>
+            body {
+                display: flex;
+                font-family: Arial;
+                margin: 0;
+                flex-direction: column;
+                min-height: 100%; /* to ensure we fill the remaining space*/
+            }
+
+            .title {
+                border: 5px;
+                width: 100%;
+                border-bottom: 1px gray;
+            }
+            
+            .title_text {
+                position: relative;
+                left:15px;
+            }
+
+            .code_style {
+                background: grey;
+                box-sizing: border-box;
+                padding: 10px;
+                filter: brightness(182%);
+            }
+
+            .main_body {
+                background: grey;
+                filter: brightness(182%);
+                width: 100%;
+                height: 50%;
+                overflow: auto;
+                white-space: nowrap;
+                display:flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                flex-grow: 1; /* used to fill the remaining space in the body */
+            }
+
+            .box {
+                background: rgba(64, 224, 208, 1.0);
+                border-radius: 25px; /* for the curved borders */
+                filter: brightness(50%);
+                width: 200px;
+                height: 100px;
+                margin: 50px;
+                flex-shrink: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center; /* although it doesnt appear so flex is good for positioning stuff in the center */
+            }
+
+            .bigger_box {
+                background: rgba(252, 155, 171, 0.15);
+                border-radius: 25px; /* for the curved borders */
+                width: 300px;
+                height: 400px;
+                margin: 50px;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center; /* although it doesnt appear so flex is good for positioning stuff in the center */
+            }
+
+            .box_text {
+                color: white;
+                position: relative;
+                right: 0px;
+                font-size: 25;
+                text-align: center; /* so the text does not overflow to the right */
+                white-space: initial;
+                cursor: default; /* keep mouse cursor normal */
+            }
+
+            .box:hover {
+                filter: brightness(40%);
+            }
+
+            .box:not(#nt_alignment):not(#nr_alignment):not(:last-child):after {
+                content: "";
+                height: 1px;
+                background: black;
+                width: 90px;
+                position: absolute;
+                right: -90px;
+                top: 50%;
+            }
+
+            .box:not(#nt_alignment):not(#nr_alignment):not(:last-child):before {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                top: 50%;
+                border-style: solid;
+                border-width: 7px 0 7px 20px;
+                border-color: transparent transparent transparent black;
+                right: -100px;
+                transform: translateY(-50%);
+            }
+
+            .bigger_box_line {
+                content: "";
+                height: 1px;
+                background: black;
+                width: 90px;
+                position: absolute;
+                left: -100px;
+                top: 50%;
+            }
+
+            .bigger_box_arrow {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                top: 50%;
+                border-style: solid;
+                border-width: 7px 0 7px 20px;
+                border-color: transparent transparent transparent black;
+                transform: translateY(-50%);
+                left: -20px;
+                z-index: 10;
+            }
+
+            .popup_container {
+                background: white;
+                position: absolute;
+                width: 50%;
+                height: 100vh;
+                left: -50%;
+                overflow: auto;
+                transition: transform 1s;
+            }
+
+            .popup_text {
+                position: absolute;
+                background: white;
+                width: 100%;
+                height: 100vh;
+                text-align: left;
+                box-sizing: border-box;
+                padding: 20px;
+            }
+
+            .info {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="title">
+            <div class="title_text">
+                <h1>Pipeline Steps</h1>
+            </div>
+        </div>
+
+        <div class="main_body">
+            <div class="box" id="start">
+                <div class="box_text">
+                    Start
+                </div>
+            </div>
+            <div class="box" id="qc">
+                <div class="box_text">
+                    QC
+                </div>
+            </div>
+            <div class="box" id="human_subtraction">
+                <div class="box_text">
+                    Human Subtraction
+                </div>
+            </div>
+            <div class="box" id="rrna_depletion">
+                <div class="box_text">
+                    rRNA Depletion
+                </div>
+            </div>
+            <div class="box" id="assembly">
+                <div class="box_text">
+                    Assembly
+                </div>
+            </div>
+            <div class="bigger_box" id="alignments">
+                <div class="box" id="nt_alignment">
+                    <div class="box_text">
+                        NT Alignment
+                    </div>
+                </div>
+                <div class="box" id="nr_alignment">
+                    <div class="box_text">
+                        NR Alignment
+                    </div>
+                </div>
+            </div>
+            <div class="box" id="decision_tree">
+                <div class="bigger_box_line"></div>
+                <div class="bigger_box_arrow"></div>
+                <div class="box_text">
+                    Decision Tree
+                </div>
+            </div>
+            <div class="box" id="zscore">
+                <div class="box_text">
+                    Z-Score
+                </div>
+            </div>
+        </div>
+        <div class="popup_container">
+            <div class="popup_text">
+                Lorem Ipsum
+            </div>
+        </div>
+        <script>
+            var popup_container = document.getElementsByClassName("popup_container")[0]
+            var popup = document.getElementsByClassName("popup_text")[0]
+            var boxes = document.getElementsByClassName("box")
+
+            function clicked({ target }) {
+                elem_id = target.id;
+                if (target.className === "box_text") {
+                    elem_id = target.parentNode.id
+                }
+                popup_container.style.transform = "translateX(100%)";
+                var elem = document.getElementById(elem_id + "_info");
+                popup.innerHTML = elem.innerHTML;
+            }
+
+            /* from: https://htmldom.dev/check-if-an-element-is-a-descendant-of-another/ */
+
+            const isDescendant = function (parent, child) {
+                let node = child.parentNode;
+                while (node) {
+                    if (node === parent) {
+                        return true;
+                    }
+                    // Traverse up to the parent
+                    node = node.parentNode;
+                }
+                // Go up until the root but couldn't find the `parent`
+                return false;
+            };
+
+            window.addEventListener("click", ({ target }) => {
+                if (target.matches(".box") || target.matches(".box_text")) return; // checking item classname
+
+                if (target.isEqualNode(popup_container) === true || isDescendant(popup_container, target) === true) return;
+                popup_container.style.transform = "translateX(-100%)";
+            });
+
+            for (let i = 0; i < boxes.length; i++) {
+                boxes[i].addEventListener("click", clicked)
+            }
+        </script>
+    </body>
+    <div class="info" id="start_info">
+        <h1 style="text-align: center;">Start</h1> <br />
+        <b>Number of Reads at Start: py_prefastp_ph</b> <br />
+    </div>
+    <div class="info" id="qc_info">
+        <h1 style="text-align: center;">Quality Control</h1>
+        <p>
+            <b>Description:</b> This step uses Fastp to remove reads that have low quality, low complexity or are too short (less than 50bp). It also strips away the adapters and any duplicate read pairs. In addition, it uses prinseq++ to remove additional low complexity sequences via the dust algorithm as the fastp algorithm for removing low complexity sequences is too basic.
+        </p>
+        <b>Number of Reads After Fastq:</b> py_fastp_after_ph <br>
+        <b>Number of Low Quality Reads:</b> py_low_quality_reads_ph <br>
+        <b>Duplication Rate:</b> py_duplication_rate_ph <br>
+        <b>Number of Reads After Prinseq:</b> py_prinseq_good_ph <br>
+        <b>Number of Low Complexity Reads Removed Via Prinseq:</b> py_lc_reads_ph <br>
+        <b>Outputs:</b> fastp_1.fastq, fastp_2.fastq, prinseq_lc_good_out_R1.fastq, prinseq_lc_good_out_R2.fastq<br> <br>
+        <div class="code_style">
+            <code>
+                # FASTP
+                fastp --in1 input1.fastq.gz --in2 input2.fastq.gz \​ <br>
+                --out1 fastp_1.fastq --out2 fastp_1.fastq \​ <br>
+                -b 100 -B 100 \​ <br>
+                --dedup \​ <br>
+                --qualified_quality_phred 15 \​ <br>
+                --unqualified_percent_limit 45 \​ <br>
+                --length_required 50 \​ <br>
+                --low_complexity_filter \​ <br>
+                --detect_adapter_for_pe \​ <br>
+                --thread N <br>
+
+                # PRINSEQ
+                prinseq++ \​ <br>
+                -fastq fastp_1.fastq \​ <br>
+                -fastq2 fastp_2.fastq \​ <br>
+                -lc_dust 0.07 \​ <br>
+                -out_name prinseq_lc
+            </code>
+        </div>
+        <p>
+            <b>Explanation of Code:</b> -b and -B will ensure both pairs will not have more than 100 bases by trimming away any excess bases. --qualified_qualifty_phred is the quality value (Q) that a base must have for it to be "qualified". 15 means we want a quality score of 15 (i.e. Q15). If the percentage of unqualified bases in a read exceeds --unqualified_percent_limit, the read will be discarded.
+        </p>
+    </div>
+    <div class="info" id="human_subtraction_info">
+        <h1 style="text-align: center;">Human Subtraction</h1>
+        <b>Description:</b> This step removes human sequences from the library. It uses Kraken2 to align the library against the HPRC index to remove as many reads as possible for the next step which is more intensive. Bowtie2 then removes any remaining nonhuman reads with an index built from the T2T reference and the HLA reference plus the ERCC library to remove as ERCC reads as well. <br> <br>
+        <b>Number of Reads Remaining After Kraken2 Command:</b> py_kraken2_human_depleted_ph <br>
+        <b>Number of Reads Remaining After Bowtie2 Command:</b> py_bowtie2_human_depleted_ph <br>
+        py_ercc_ph
+        <b>Inputs:</b> prinseq_lc_good_out_R1.fastq, prinseq_lc_good_out_R2.fastq <br>
+        <b>Outputs:</b> host_depleted_1.fastq, host_depleted_2.fastq <br> <br>
+        <div class="code_style">
+            <code>
+                # Kraken2 <br> <br>
+                kraken2 --db kraken2_host_db \​ <br>
+                --report kraken2.nonhuman.report \​ <br>
+                --output kraken2.nonhuman.output \​ <br>
+                --use-mpa-style \​ <br>
+                --paired fastp_1.fastq fastp_2.fastq \​ <br>
+                --unclassified-out kraken2_nonhuman_#.fastq \​ <br>
+                --threads N <br> <br>
+
+                # BOWTIE2 ALIGNMENT <br>
+                bowtie2 -x bowtie2_host_index \ <br>
+                --very-sensitive-local -p NUM_THREADS \ <br>
+                -1 kraken2_nonhuman_1.fastq \ <br>
+                -2 kraken2_nonhuman_2.fastq \ <br>
+                -q -S bowtie2_host.sam <br> <br>
+
+                # Still need to extract the unaligned reads after the Bowtie2 step <br>
+                samtools fastq \ <br>
+                -1 host_depleted_1.fastq \ <br>
+                -2 host_depleted_2.fastq \ <br>
+                -0 /dev/null -s /dev/null -n -f 13 bowtie2_host.sam <br> <br>
+            </code>
+        </div>
+    </div>
+    <div class="info" id="rrna_depletion_info">
+        <h1 style="text-align: center;">rRNA Depletion</h1>
+        <b>Description:</b> This step removed any rRNA reads from the library by aligning them against the "default" sortmerna database available from <a href="https://github.com/sortmerna/sortmerna/releases">here</a>. It is important to run this step after the human read depletion step as sortmerna is very slow and RAM hungry, hence removing as much reads as possible prior to this step will increase performance. <br> <br>
+        py_sortmerna_ph
+        <b>Inputs:</b> host_depleted_1.fastq, host_depleted_2.fastq  <br>
+        <b>Outputs:</b> fullyQc_fwd.fq, fullyQc_rev.fq <br> <br>
+        <div class="code_style">
+            <code>
+                sortmerna --ref (sortmerna_rrna_database) \​ <br>
+                --fastx \​ <br>
+                --aligned aligned \​ <br>
+                --other fullyQc \​ <br>
+                --reads host_depleted_1.fastq --reads host_depleted_2.fastq \​ <br>             
+                --out2 TRUE \​ <br>
+                --paired_in TRUE \​ <br>
+                --threads N \ <br>
+            </code>
+        </div>
+    </div>
+    <div class="info" id="assembly_info">
+        <h1 style="text-align: center;">Assembly</h1>
+        <p>
+            <b>Description:</b> Assemble our reads using megahit and identify unassembled/assembled reads.
+        </p>
+        <b>Number of Contigs Assembled:</b> py_number_of_contigs_ph <br>
+        <b>Number of Reads Assembled into Contigs:</b> py_total_assembled_reads_ph<br>
+        <b>Number of Reads Unassembled:</b> py_total_unassembled_reads_ph<br>
+        <b>Shortest Contig:</b> py_shortest_contig_ph <br>
+        <b>Longest Contig:</b> py_longest_contig_ph <br>
+        <b>Average Contig Length:</b> py_avg_contig_length_ph <br>
+        <b>N50 Score:</b> py_n50_ph <br>
+        <b>Number of Unassembled Short Reads:</b> py_total_unassembled_shorter_reads_ph <br>
+        <b>Number of Unassembled Long Reads:</b> py_total_unassembled_longer_reads_ph <br>
+        <b>Inputs:</b> fullyQc_fwd.fq, fullyQc_rev.fq <br>
+        <b>Outputs:</b> megahit_out/final_contigs.fa, unassembled_reads_fwd.fq, unassembled_reads_rev.fq, reads_belonging_to_contigs.txt <br> <br>
+        <div class="code_style">
+            <code>
+                megahit -1 fullyQc_fwd.fq -2 fullyQc_rev.fq \​ <br>
+                -o + megahit_out -t N <br> <br> 
+
+                # map reads onto the assembly again (megahit does not provide this)​ <br>
+                bbwrap.sh ref=megahit_out/final_contigs.fa \​ <br>
+                in=fullyQc_fwd.fq in2=fullyQc_rev.fq \​ <br>
+                -out=reads_mapped_to_contigs.sam <br> <br>
+
+                # use identical command to the human mapping step to retreive unaligned reads <br>
+                samtools fastq -f 12 \​ <br>
+                -1 unassembled_reads_fwd.fq -2 unassembled_reads_rev.fq \​ <br>
+                reads_mapped_to_contigs.sam <br> <br>
+
+                # aside from the above, we also go through reads_mapped_to_contigs.sam once again to extract the assembled reads. <br>
+                # for each query, we select the hit with the lowest edit distance but if multiple hits share this value, we select the hit among these with the highest bitscore. <br>
+                # the reads_belonging_to_contigs.txt file contains the read name and its corresponding contig, sorted by contig name. <br>
+            </code>
+        </div>
+    </div>
+    <div class="info" id="nt_alignment_info">
+        <h1 style="text-align: center;">NT BLAST Alignment</h1>
+        <p>
+            <b>Description:</b> Aligns the unassembled reads and contigs against the NCBI NT database using BLAST.
+        </p>
+        <b>Number of NT hits:</b> py_number_of_nt_assigned_taxa_ph <br>
+        <b>Inputs:</b> unassembled_reads_fwd.fq, unassembled_reads_rev.fq, megahit_out/final_contigs.fq (as combined_file.fa where the paired end reads are interleaved)  <br>
+        <b>Outputs:</b> nt_alignments_file.tsv <br> <br>
+        <div class="code_style">
+            <code>
+                blastn –task megablast \ <br> 
+                -query combined_file.fa \ <br> 
+                -db nt \ <br> 
+                -out nt_alignments_file.tsv \​ <br>
+                -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen" \ <br>
+                -max_target_seqs 10 \ <br>
+                -num_threads N <br>
+            </code>
+        </div>
+    </div>
+    <div class="info" id="nr_alignment_info">
+        <h1 style="text-align: center;">NR BLAST Alignment</h1>
+        <p>
+            <b>Description:</b> Use diamond to align the unassembled reads and contigs against an index of the NCBI NR database built using diamond.
+        </p>
+        <b>Number of Diamond NR Hits: py_number_of_nr_assigned_taxa_ph</b> <br>
+        <b>Inputs:</b> unassembled_reads_fwd.fq, unassembled_reads_rev.fq, megahit_out/final_contigs.fq (as combined_file.fq where the paired end reads are interleaved)  <br>
+        <b>Outputs:</b> nr_alignments_file.tsv <br> <br>
+        <div class="code_style">
+            <code>
+                diamond blastx \ <br>
+                --db nr_index \ <br>
+                --query combined_file.fq \ <br>
+                --out nr_alignments_file.tsv \​ <br>
+                --mid-sensitive \ <br>
+                --max-target-seqs 10 \ <br> 
+                --masking 0 –c 1 –b 6 \​ <br>
+                --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen \ <br>
+                --threads N <br>
+            </code>
+        </div>
+        <p>
+            <b>Explanation of Code:</b> --mid-sensitive refers to the sensitivity option, --masking 0 disables repeat masking of the query and reference sequences, -b refers to the number of sequence letters to load in memory at any one time (in billions) and -c refers to the number of chunks to divide each seed index when processing it.
+        </p>
+    </div>
+    <div class="info" id="decision_tree_info">
+        <h1 style="text-align: center;">Decision Tree</h1>
+        <p>
+            <b>Description:</b> Decide final species and taxid based on custom decision tree
+        </p>
+        <b>Number of Contigs with a Taxid:</b> py_number_of_contigs_assigned_ph<br>
+        <b>Number of Contigs unassigned to a taxid:</b> py_number_of_contigs_unassigned_ph<br>
+        <b>Number of Reads with a Taxid:</b> py_number_of_reads_assigned_ph<br>
+        <b>Number of Reads unassigned to a taxid:</b> py_number_of_reads_unassigned_ph<br>
+        <b>Inputs:</b> combined_rc.kraken.txt, minimap2_contig_out_frompaf.m8, minimap2_lr_out_frompaf.m8, nr_alignments_file.tsv and nt_alignments_sr_blast.tsv <br>
+        <b>Outputs:</b> final_decisions.tsv <br>
+        <p>
+            <b>Explanation of Step:</b> Final species are called by string matches across the 3 outputs of each database: Kraken2 PlusPF (K2), NCBI Core NT (NT) and NCBI NR (NR). The basic decision flow is as follows: <br>
+            If any of the 2 columns are the same, the final species is the shared species <br>
+            If there is only one species within the 3 columns, the final species is the only detected species <br>
+            If any of them are different, it will string match with genus level, and final taxa is the genus <br>
+            If all else fails, the final species is determined by the closest common ancestor <br>
+        </p>
+    </div>
+
+    <div class="info" id="zscore_info">
+        <h1 style="text-align: center;">Zscore Calculation</h1>
+        <p>
+            <b>Description:</b> Calculate Zscores from the final decisions.
+        </p>
+        <b>Total Taxa Identified: py_taxa_id_total_ph</b> <br>
+        <b>Taxa identified in Sample Only: py_taxa_id_sample_ph</b> <br>
+        <b>Taxa identified in Negative Only: taxa_id_negative</b> <br>
+        <b>Taxa identified in both Sample and Negative: taxa_id_sample_and_negative</b> <br>
+        <b>Inputs:</b> final_decisions.tsv <br>
+        <b>Outputs:</b> zscore.tsv detected_pathogens.tsv <br>
+        <p>
+            <b>Explanation of Step: </b> https://github.com/jsede/SiftDx/wiki/Z%E2%80%90Score-Interpretation
+        </p>
+    </div>
+</html>

@@ -1,9 +1,10 @@
 process gen_table {
-    publishDir "${output}/${pair_id}/summary", mode: 'copy'
+    publishDir "${output}/${pair_id}/summary", mode: 'copy', pattern: "table_summary.html"
     
     input:
         val pair_id
-        path zscore
+        tuple path(zscore),
+            path(detected_pathogens)
         path table_template
         val output
 
