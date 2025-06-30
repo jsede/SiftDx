@@ -20,6 +20,7 @@ def gen_table_summary(full_info):
         "fungi.png", 
         "parasite.png"
         ]
+    
     base64_images = []
 
     for img in img_names:
@@ -70,7 +71,10 @@ def gen_table_summary(full_info):
 
     for key, value in replace_dict.items():
         print(f"Replacing {key} to {value} in the HTML")
-        template = template.replace(key, '\n'.join(value))
+        if isinstance(value, list):  # for HTML fragments like pathogen rows
+            template = template.replace(key, '\n'.join(value))
+        else:  # for base64 strings
+            template = template.replace(key, value)
 
     output_file = dirpath + "/table_summary.html"
     with open(output_file, "w") as outfile:
