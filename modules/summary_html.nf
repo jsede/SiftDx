@@ -14,7 +14,10 @@ process gen_summary {
         val output
 
     output:
-        path "pipeline_summary.html"
+        tuple path("pipeline_summary.html"),
+            path(fqc_txt)
+
+
 
     script:
     """
