@@ -1,5 +1,5 @@
 process kraken2 {
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2.nonhuman.*"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2.nonhost.*"
     
     input:
         val pair_id
@@ -8,28 +8,28 @@ process kraken2 {
         val output
 
     output:
-        tuple path("kraken2.nonhuman.report"),
-        path("kraken2.nonhuman.output"),
-        path("kraken2_nonhuman_1.fastq"),
-        path("kraken2_nonhuman_2.fastq"),
+        tuple path("kraken2.nonhost.report"),
+        path("kraken2.nonhost.output"),
+        path("kraken2_nonhost_1.fastq"),
+        path("kraken2_nonhost_2.fastq"),
         path("summary.txt")
 
     script:
     """
     kraken2 --db ${kdb} \
-            --report kraken2.nonhuman.report \
-            --output kraken2.nonhuman.output \
+            --report kraken2.nonhost.report \
+            --output kraken2.nonhost.output \
             --use-mpa-style \
             --paired ${read1} ${read2} \
-            --unclassified-out kraken2_nonhuman#.fastq
+            --unclassified-out kraken2_nonhost#.fastq
 
-    awk '{s++} END {printf "kraken2_human_depleted: %.0f\\n", (s/4)*2}' kraken2_nonhuman_1.fastq >> ${fqc_txt}
+    awk '{s++} END {printf "kraken2_host_depleted: %.0f\\n", (s/4)*2}' kraken2_nonhost_1.fastq >> ${fqc_txt}
 
     """
 }
 
 process bowtie2 {
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2_nonhuman_*"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2_nonhost_*"
 
     input:
         val pair_id
@@ -39,8 +39,8 @@ process bowtie2 {
 
     output:
         tuple path("bowtie2_host.sam"),
-        path("kraken2_nonhuman_1.fastq.gz"),
-        path("kraken2_nonhuman_2.fastq.gz"),
+        path("kraken2_nonhost_1.fastq.gz"),
+        path("kraken2_nonhost_2.fastq.gz"),
         path(fqc_txt)
 
     script:
@@ -58,7 +58,7 @@ process bowtie2 {
             -q -S bowtie2_host.sam
 
     # Move the files to the current directory
-    rm kraken2_nonhuman_*.fastq
+    rm kraken2_nonhost_*.fastq
     mv \${read1_resolved} .
     mv \${read2_resolved} .
 
@@ -93,7 +93,7 @@ process samtools {
         -0 /dev/null -s /dev/null -n -f 13 \
         ${bowtie2_output}
     
-    awk '{s++} END {printf "bowtie2_human_depleted: %.0f\\n", (s/4)*2}' host_depleted_1.fastq >> ${fqc_txt}
+    awk '{s++} END {printf "bowtie2_host_depleted: %.0f\\n", (s/4)*2}' host_depleted_1.fastq >> ${fqc_txt}
     gzip host_depleted_1.fastq
     gzip host_depleted_2.fastq
 
@@ -187,7 +187,7 @@ process fullyqc {
     """
 }
 
-workflow human_depletion {
+workflow host_depletion {
     take:
         pair_id
         prinseq_data  // the list of reads (R1 and R2)

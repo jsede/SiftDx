@@ -1,5 +1,5 @@
 include { qc } from './qc.nf'
-include { human_depletion } from './human_depletion.nf'
+include { host_depletion } from './host_depletion.nf'
 include { assembly } from './assembly.nf'
 
 workflow preprocessing {
@@ -20,7 +20,7 @@ workflow preprocessing {
             output
         )
         
-        human_depletion_data = human_depletion(
+        host_depletion_data = host_depletion(
             pair_id,
             qc_data,
             kdb,
@@ -33,7 +33,7 @@ workflow preprocessing {
 
         assembly_data = assembly(
             pair_id,
-            human_depletion_data,
+            host_depletion_data,
             cov_stats,
             output
         )
