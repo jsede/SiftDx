@@ -9,6 +9,7 @@ workflow preprocessing {
         kdb    // Kraken2 database
         bowtie2_index  // Bowtie2 index
         ercc_config  // ERCC configuration file (optional)
+        sequins_config // Sequins configuration file (optional)
         sortmerna_db  // SortMeRNA database
         cov_stats // Coverage statistics file
         output  // the output directory
@@ -26,6 +27,7 @@ workflow preprocessing {
             kdb,
             bowtie2_index,
             ercc_config,
+            sequins_config,
             sortmerna_db,
             cov_stats,
             output

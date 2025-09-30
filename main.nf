@@ -12,8 +12,9 @@ workflow {
     def reads = [file(params.r1), file(params.r2)]
     def negative = params.ndata ?: null
     def kdb = params.kraken2_db // Kraken2 HUMAN database
-    def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : params.bowtie2_index // if ERCC is flag provided, set bowtie2_index to params.bowtie2_index_ercc, else params.bowtie2_index
+    def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : (params.sequins ? params.bowtie2_index_sequins : params.bowtie2_index) // if ERCC/Sequins is flag provided, set bowtie2_index to params.bowtie2_index_ercc, else params.bowtie2_index
     def ercc_config = params.ercc ? params.ercc_config : null // if ERCC is flag provided, set ercc_config to params.ercc_config, else null
+    def sequins_config = params.sequins ? params.sequins_config : null // if the sequins flag is provided, set sequis config to params.sequins_config
     def sortmerna_db = params.na == 'RNA' ? params.sortmerna_db : null //if NA is RNA, set sortmerna_db to params.sortmerna_db, else null
     def cov_stats = params.cov_stats
     def mm2_index = params.mm2_index
@@ -34,6 +35,7 @@ workflow {
         kdb,
         bowtie2_index,
         ercc_config,
+        sequins_config,
         sortmerna_db,
         cov_stats,
         output

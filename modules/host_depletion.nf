@@ -134,6 +134,39 @@ process ercc {
     """
 }
 
+process sequins {
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sequins_plot.png"
+    
+    input:
+        val pair_id
+        tuple path(read1), path(read2), path(bowtie2_sorted), path(fqc_txt)
+        path sequins_config
+        val output
+    
+    output:
+        tuple path("bowtie2_coverage.txt"),
+        path("sequins_coverage.txt"),
+        path("sequins_plot.png")
+
+    
+    script:
+    """
+    pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx8g secondary=false
+    egrep -e "^Sequins" bowtie2_coverage.txt > sequins_coverage.txt
+    samtools index ${bowtie2_sorted}
+    regions=()
+    while IFS=\$'\t' read -r region _; do
+        regions+=("\$region")
+    done < sequins_coverage.txt
+    region_list=\$(IFS=','; echo "\${regions[*]}")
+    samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.sequins_only.out.sam
+    python scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.sequins_only.out.sam sequins_coverage.txt
+    sequins_count=`cut -f 1 bowtie2_host_Aligned.sequins_only.out.sam | sort -k 1 | uniq | wc -l`
+    echo "sequins_reads: \$sequins_count"
+    """
+}
+
 process sortmerna {
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sortmerna_output"
 
@@ -194,6 +227,7 @@ workflow host_depletion {
         kdb    // Kraken2 database
         bowtie2_index  // Bowtie2 index
         ercc_config  // ERCC configuration file (optional)
+        sequins_config // Sequins configuration file (optional)
         sortmerna_db  // SortMeRNA database
         cov_stats // Coverage statistics file
         output  // the output directory
@@ -209,6 +243,7 @@ workflow host_depletion {
         log.info "Kraken2 database: ${kdb}"
         log.info "Bowtie2 index: ${bowtie2_index}"
         log.info "ERCC config: ${ercc_config}"
+        log.info "Sequins config: ${sequins_config}"
         
 
         // Call Kraken2
@@ -240,10 +275,18 @@ workflow host_depletion {
                 pair_id,
                 samtools_data,
                 ercc_config,
-                output // Added missing comma here
+                output
+            )
+        } else if (sequins_config) {
+            // Call Sequins
+            sequins_data = sequins(
+                pair_id,
+                samtools_data,
+                sequins_config,
+                output
             )
         } else {
-            log.info "Skipping ERCC process as --ercc is not provided."
+            log.info "Skipping ERCC/Sequins process as neither --ercc nor --sequins is provided."
         }
         
         if (params.na?.toUpperCase() == 'RNA') {
