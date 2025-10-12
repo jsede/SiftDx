@@ -22,7 +22,7 @@ process minimap2_contigs {
     script:
     """
     minimap2 -c --split-prefix mm2_contigs ${mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
-    python ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
+    python3 ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
     """
 }
 
@@ -49,8 +49,8 @@ process minimap2_reads {
 
     script:
     """
-    minimap2 -c --split-prefix mm2_reads ${mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
-    python ${baseDir}/scripts/paf2blast6.py minimap2_reads_out.paf
+    minimap2 -c -x sr --split-prefix mm2_reads ${mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
+    python3 ${baseDir}/scripts/paf2blast6.py minimap2_reads_out.paf
     """
 }
 
@@ -140,6 +140,7 @@ process blast{
     blastn -task megablast \\
         -query "${combined_sr_fa}" \\
         -db "\${idx_base}" \\
+        -max_target_seqs 10 \\
         -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids sscinames" \\
         -out nt_alignments_sr_blast.tsv
     """
