@@ -128,7 +128,7 @@ process ercc {
     done < ercc_coverage.txt
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.ERCC_only.out.sam
-    python scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.ERCC_only.out.sam ercc_coverage.txt
+    python3 scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.ERCC_only.out.sam ercc_coverage.txt
     ercc_count=`cut -f 1 bowtie2_host_Aligned.ERCC_only.out.sam | sort -k 1 | uniq | wc -l`
     echo "ercc_reads: \$ercc_count"
     """
@@ -161,7 +161,7 @@ process sequins {
     done < sequins_coverage.txt
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.sequins_only.out.sam
-    python scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.sequins_only.out.sam sequins_coverage.txt
+    python3 scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.sequins_only.out.sam sequins_coverage.txt
     sequins_count=`cut -f 1 bowtie2_host_Aligned.sequins_only.out.sam | sort -k 1 | uniq | wc -l`
     echo "sequins_reads: \$sequins_count"
     """

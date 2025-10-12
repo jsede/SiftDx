@@ -21,7 +21,7 @@ process gen_summary {
 
     script:
     """
-    python ${baseDir}/scripts/gen_summary_html.py ${fqc_txt} ${pipeline_template}
+    python3 ${baseDir}/scripts/gen_summary_html.py ${fqc_txt} ${pipeline_template}
     """
 }
 

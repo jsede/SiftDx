@@ -13,7 +13,7 @@ process gen_table {
 
     script:
     """
-    python ${baseDir}/scripts/gen_table_summary.py ${zscore} ${table_template}
+    python3 ${baseDir}/scripts/gen_table_summary.py ${zscore} ${table_template}
     """
 }
 

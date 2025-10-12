@@ -47,7 +47,7 @@ process merge_nt_nr {
     nt_alignments_sr_file ${nt_alignments}
     EOF
 
-    python ${baseDir}/scripts/merge_nt_nr.py ${database} ${taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
+    python3 ${baseDir}/scripts/merge_nt_nr.py ${database} ${taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
 
     awk 'NR > 1 && \$1 != "Unclassified" { count++ } END { print "number_of_identified_taxa:", count }' zscore_input.tsv >> ${fqc_txt}
     awk -F'\\t' 'NR == 1 {for (i=1; i<=NF; i++) if (\$i=="Fasta_Headers") h=i; else if (\$i=="final") f=i}

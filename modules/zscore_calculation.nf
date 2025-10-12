@@ -19,7 +19,7 @@ process gen_zscore {
 
     script:
     """
-    python ${baseDir}/scripts/zscore.py ${zscore_input} ${negative} ${fqc_txt}
+    python3 ${baseDir}/scripts/zscore.py ${zscore_input} ${negative} ${fqc_txt}
     awk -F'\t' '
         NR == 1 { next }  # skip header
         { total++ }
