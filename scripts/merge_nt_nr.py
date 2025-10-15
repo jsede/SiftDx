@@ -62,13 +62,16 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
 
     
     # clean up the blast_sr file by dropping duplicates
+    logging.info("Starting to clean up BLAST output")
     blast_sr_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species"])
     full_blast_df = pd.DataFrame(columns = ["NT", "accession", "BLAST_Species", "staxids", "pident", "alnlen", "evalue", "bitscore"])
     if os.path.isfile(blast_sr_file) is True and os.path.getsize(os.path.realpath(blast_sr_file)) != 0:
-        blast_sr_df, full_blast_df = cleaners.blast_cleanup(blast_sr_file, "NT", 14, taxdump, dirpath, entrez_cred)
-    full_blast_df = full_blast_df.rename(columns={"NT": "Fasta_Headers", "BLAST_Species": "sscinames"})
+        blast_sr_df, full_blast_df = cleaners.blast_cleanup(blast_sr_file, "NT", taxdump, dirpath, entrez_cred)
+    full_blast_df = full_blast_df.rename(columns={"NT": "Fasta_Headers"})
     logging.info("Cleaned up BLAST output and ready to merge")
+
     # clean up minimap, join them together and merge it with
+    logging.info("Starting to clean up Minimap2 output")
     minimap_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
     full_mm2_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
     if os.path.isfile(minimap_contigs) is True and os.path.getsize(os.path.realpath(minimap_contigs)) != 0:
@@ -101,6 +104,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     at.nucl_accession_search(database, mm2_accession_list, dirpath, entrez_cred)
     
     # clean up diamond
+    logging.info("Starting to clean up Diamond output")
     diamond_df = pd.DataFrame(columns = ["NR", "accession"])
     full_diamond_df = pd.DataFrame(columns = ["NR", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
     if os.path.isfile(diamond_file) is True and os.path.getsize(os.path.realpath(diamond_file)) != 0:
