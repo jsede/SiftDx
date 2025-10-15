@@ -105,7 +105,7 @@ process diamond {
     """
     diamond blastx --db ${diamond_db} \
         --query ${combined_lr_contigs_fq} --mid-sensitive --max-target-seqs 1 \
-        --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids sscinames\
+        --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids\
         --masking 0 -c 1 -b 6 \
         --out nr_alignments_file.tsv
     """
@@ -141,7 +141,7 @@ process blast{
         -query "${combined_sr_fa}" \\
         -db "\${idx_base}" \\
         -max_target_seqs 10 \\
-        -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids sscinames" \\
+        -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids" \\
         -out nt_alignments_sr_blast.tsv
     """
 }
