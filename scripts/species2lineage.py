@@ -16,7 +16,7 @@ def get_taxon_rank(row, taxid_name, taxdump):
         else:
             rank = "Not assigned"
     except (KeyError, ValueError, TypeError) as exc:
-        logging.error("Generated an exception: %s", exc)
+        logging.error(f"Could not find rank for {taxid_name}: %s", exc)
     
     # Infer rank if not assigned or is 'no rank'
     if rank is None:
@@ -45,6 +45,7 @@ def get_taxon_lineage(taxid, taxdump, entrez_cred):
             logging.error("The Rank and Taxonomy are different")
             
     except Exception as exc:
-        logging.error("Generated an exception: %s", exc)
+        logging.error("Could not find lineage via Taxdump: %s", exc)
+        logging.info("Attempting to find lineage via Entrez")
         result_dict = es.search_lineage(taxid, entrez_cred)
     return result_dict
