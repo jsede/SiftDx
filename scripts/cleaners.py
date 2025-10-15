@@ -20,7 +20,7 @@ def read_csv(file, name, col):
     )
     return clean_df
 
-def blast_cleanup(file, name, col, taxdump, dirpath, entrez_cred):
+def blast_cleanup(file, name, taxdump, dirpath, entrez_cred):
     loaded_cache = assists.load_cache_files(dirpath)
     blast_df = pd.read_csv(
             file, sep="\t", 
@@ -33,10 +33,9 @@ def blast_cleanup(file, name, col, taxdump, dirpath, entrez_cred):
                 "evalue",
                 "bitscore",
                 "qlen",
-                "staxids", 
-                "BLAST_Species"
+                "staxids"
                 ], 
-                usecols=[0,1,2,3,10,11,12,13, col],
+                usecols=[0,1,2,3,10,11,12,13],
                 dtype = {
                     'accession': str,
                     'length': int, 
@@ -49,16 +48,31 @@ def blast_cleanup(file, name, col, taxdump, dirpath, entrez_cred):
     taxid_df = pd.read_csv(
             file, sep="\t", header=None, names=["taxid"], usecols=[13], dtype=str
         )
-    taxid_df.drop_duplicates(subset="taxid", keep="first", inplace=True)
-    taxids = taxid_df['taxid'].to_list()
+    
+    # Split semicolon-separated values and flatten into a single Series
+    taxid_series = (
+        taxid_df['taxid']
+        .dropna()
+        .str.split(';')
+        .explode()
+        .str.strip() 
+    )
+    taxids = taxid_series.drop_duplicates().tolist()
     get_lineage(taxids, taxdump, dirpath, entrez_cred)
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
+
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
     lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
-    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
-    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
-    blast_df['superkingdom'] = blast_df['staxids'].map(mapping_dict)
+
+    lineage_df = lineage_df[['taxid', 'superkingdom', 'species']].dropna(how='all')
+    lineage_df = lineage_df.astype(str).apply(lambda x: x.str.strip()) # convert all to string and strip whitespace
+    taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
+    taxid_to_species = dict(zip(lineage_df["taxid"], lineage_df["species"]))
+
+    blast_df["superkingdom"] = blast_df["staxids"].map(taxid_to_kingdom)
+    blast_df["BLAST_Species"] = blast_df["staxids"].map(taxid_to_species)
+
     blast_df['alnlen'] = blast_df['length']/blast_df['qlen']
     
     bacteria_condition = (blast_df['superkingdom'] == 'Bacteria') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 95)
@@ -119,16 +133,17 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     loaded_cache = assists.load_cache_files(dirpath)
     diamond_df = pd.read_csv(
             file, sep="\t", header=None, 
-            names=[name, "accession", "pident", "length", "evalue", "bitscore", "qlen", "staxids", "sscinames"], 
-            usecols=[0,1,2,3,10,11,12,13,14], 
+            names=[name, "accession", "pident", "length", "evalue", "bitscore", "qlen", "staxids"], 
+            usecols=[0,1,2,3,10,11,12,13], 
             dtype = {"pident":float, "length":int, "evalue": float, "bitscore": float, "qlen":int}
         )
-    accession_df = pd.read_csv(
-            file, sep="\t", header=None, names=["accession"], usecols=[1], dtype=str
-        )
-    accession_df.drop_duplicates(subset="accession", keep="first", inplace=True)
-    diamond_list = accession_df["accession"].dropna().to_list()
-    at.prot_accession_search(database, diamond_list, dirpath, entrez_cred)
+    # accession_df = pd.read_csv(
+    #         file, sep="\t", header=None, names=["accession"], usecols=[1], dtype=str
+    #     )
+    
+    # accession_df.drop_duplicates(subset="accession", keep="first", inplace=True)
+    # diamond_list = accession_df["accession"].dropna().to_list()
+    # at.prot_accession_search(database, diamond_list, dirpath, entrez_cred)
 
     loaded_cache = assists.load_cache_files(dirpath)
     taxid_dict = loaded_cache[3]
@@ -140,10 +155,16 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
-    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
-    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
-    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
-    diamond_df['superkingdom'] = diamond_df['NR_taxid'].map(mapping_dict)
+
+    lineage_df["no rank"] = lineage_df["no rank"].replace("no rank", "root")
+    lineage_df = lineage_df[["taxid", "superkingdom", "species"]].dropna(how="all").astype(str)
+
+    taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
+    taxid_to_species = dict(zip(lineage_df["taxid"], lineage_df["species"]))
+    
+    diamond_df["superkingdom"] = diamond_df["staxids"].map(taxid_to_kingdom)
+    diamond_df["sscinames"] = diamond_df["staxids"].map(taxid_to_species)
+    
     diamond_df['alnlen'] = (diamond_df['length']*3)/diamond_df['qlen']
 
     bacteria_condition = (diamond_df['superkingdom'] == 'Bacteria') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 95)
@@ -159,11 +180,12 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
 
 
 def get_lineage(taxon_list, taxdump, dirpath, entrez_cred):
+    loaded_cache = assists.load_cache_files(dirpath)
+    taxid_dict, prev_failed = loaded_cache[11], loaded_cache[13]
+    taxid_lookup = {entry['taxid']: entry for entry in taxid_dict}
+    taxid_lookup = {str(k): v for k, v in taxid_lookup.items()}
+    
     for taxon in taxon_list:
-        loaded_cache = assists.load_cache_files(dirpath)
-        taxid_dict, prev_failed = loaded_cache[11], loaded_cache[13]
-        taxid_lookup = {entry['taxid']: entry for entry in taxid_dict}
-
         if taxon in taxid_lookup:
             logging.info(f"Taxid {taxon} with lineage already found in JSON file.")
             continue
@@ -180,6 +202,7 @@ def get_lineage(taxon_list, taxdump, dirpath, entrez_cred):
             with open(loaded_cache[10], "a") as file:
                 json.dump(result, file)
                 file.write("\n")
+            taxid_lookup[taxon] = result
         else:
             logging.info(f"{taxon} not found, writing to failed_lineage.json")
             with open(loaded_cache[12], "a") as file:
