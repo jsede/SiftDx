@@ -2,7 +2,7 @@ import os
 import sys
 
 def gen_pipeline_summary(summary_file):
-    dirpath = os.path.dirname(os.path.abspath(summary_file))
+    #dirpath = os.path.dirname(os.path.abspath(summary_file))
     workdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_html = workdir + "/assets/pipeline_template.html"
     summary_data = {}
@@ -77,7 +77,7 @@ def gen_pipeline_summary(summary_file):
         html_content = html_content.replace(placeholder, value)
 
     # Write the updated HTML
-    output_file = dirpath + "/pipeline_summary.html"
+    output_file = "./pipeline_summary.html"
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_content)
 

@@ -12,7 +12,6 @@ process minimap2_contigs {
             path(unassembled_reads_longer_rev),
             path(cov_stats),
             path(fqc_txt)
-        path mm2_index
         val output
     
     output:
@@ -21,8 +20,8 @@ process minimap2_contigs {
     
     script:
     """
-    minimap2 -c --split-prefix mm2_contigs ${mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
-    python3 ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
+    minimap2 -c --split-prefix mm2_contigs ${params.mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
+    ${params.python} ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
     """
 }
 
@@ -40,7 +39,6 @@ process minimap2_reads {
             path(unassembled_reads_longer_rev),
             path(cov_stats),
             path(fqc_txt)
-        path mm2_index
         val output
     
     output:
@@ -49,8 +47,8 @@ process minimap2_reads {
 
     script:
     """
-    minimap2 -c -x sr --split-prefix mm2_reads ${mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
-    python3 ${baseDir}/scripts/paf2blast6.py minimap2_reads_out.paf
+    minimap2 -c -x sr --split-prefix mm2_reads ${params.mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
+    ${params.python} ${baseDir}/scripts/paf2blast6.py minimap2_reads_out.paf
     """
 }
 
@@ -59,7 +57,6 @@ process k2_pluspf {
 
     input:
         val pair_id
-        path pluspf_db
         tuple path(megahit_contigs),
             path(combined_sr_fq),
             path(combined_sr_fa),
@@ -77,7 +74,7 @@ process k2_pluspf {
     script:
     """
     cat ${combined_lr_contigs_fa} ${combined_sr_fa} > combined_rc.fa
-    kraken2 --db ${pluspf_db} --use-names --threads 8 combined_rc.fa > combined_rc.kraken.txt
+    kraken2 --db ${params.pluspf_db} --use-names --threads 8 combined_rc.fa > combined_rc.kraken.txt
     """
 }
 
@@ -86,7 +83,6 @@ process diamond {
 
     input:
         val pair_id
-        path diamond_db
         tuple path(megahit_contigs),
             path(combined_sr_fq),
             path(combined_sr_fa),
@@ -103,7 +99,7 @@ process diamond {
     
     script:
     """
-    diamond blastx --db ${diamond_db} \
+    diamond blastx --db ${params.diamond_db} \
         --query ${combined_lr_contigs_fq} --mid-sensitive --max-target-seqs 1 \
         --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids\
         --masking 0 -c 1 -b 6 \
@@ -117,7 +113,6 @@ process blast{
 
     input:
         val pair_id
-        path blast_db
         tuple path(megahit_contigs),
             path(combined_sr_fq),
             path(combined_sr_fa),
@@ -134,12 +129,9 @@ process blast{
 
     script:
     """
-    idx_base=\$(readlink -f "${blast_db}")
-    echo "Blast Database: \${idx_base}"
-
     blastn -task megablast \\
         -query "${combined_sr_fa}" \\
-        -db "\${idx_base}" \\
+        -db "${params.blast_db}" \\
         -max_target_seqs 10 \\
         -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids" \\
         -out nt_alignments_sr_blast.tsv
@@ -150,10 +142,6 @@ workflow taxonomic_classification {
     take:
         pair_id
         preprocessing_data
-        mm2_index
-        pluspf_db
-        diamond_db
-        blast_db
         output
 
     main:
@@ -162,7 +150,6 @@ workflow taxonomic_classification {
         mm2_contigs = minimap2_contigs(
             pair_id,
             preprocessing_data,
-            mm2_index,
             output
         )
         
@@ -170,14 +157,12 @@ workflow taxonomic_classification {
         mm2_reads = minimap2_reads(
             pair_id,
             preprocessing_data,
-            mm2_index,
             output
         )
         
         // Call Kraken2 with the PlusPF database
         k2_pluspf_data = k2_pluspf(
             pair_id,
-            pluspf_db,
             preprocessing_data,
             output
         )
@@ -185,7 +170,6 @@ workflow taxonomic_classification {
         // Call Diamond on the combined contigs and longer reads.
         diamond_data = diamond(
             pair_id,
-            diamond_db,
             preprocessing_data,
             output
         )
@@ -193,7 +177,6 @@ workflow taxonomic_classification {
         // Call Blast on the shorter reads.
         blast_data = blast(
             pair_id,
-            blast_db,
             preprocessing_data,
             output
         )

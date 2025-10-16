@@ -4,40 +4,34 @@ process gen_summary {
 
     input:
         val pair_id
-        tuple path(final_decisions),
-            path(full_read_contig_info),
-            path(zscore_input),
-            path(fqc_txt)
-        tuple path(zscore),
-            path(detected_pathogens)
+        val summary_data
         val pipeline_template
         val output
 
     output:
         tuple path("pipeline_summary.html"),
-            path(fqc_txt)
+            path("summary.txt")
 
 
 
     script:
     """
-    python3 ${baseDir}/scripts/gen_summary_html.py ${fqc_txt} ${pipeline_template}
+    python3 ${baseDir}/scripts/gen_summary_html.py ${summary_data}
+    cp ${summary_data} .
     """
 }
 
 workflow pipeline_summary {
     take:
         pair_id
-        finalisation_data
-        zscore_data
+        summary_data
         pipeline_template
         output
 
     main:
         gen_summary(
             pair_id,
-            finalisation_data,
-            zscore_data,
+            summary_data,
             pipeline_template,
             output
         )

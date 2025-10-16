@@ -7,7 +7,7 @@ pathogen_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.d
 contam_db = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/known_contaminants.csv"), header = 0)
 parasite_list = pd.read_csv(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "databases/parasites.txt"), sep="\t",header = 0)
 
-def gen_table_summary(full_info):
+def gen_table_summary(full_info, negative):
     # file set-up    
     dirpath = os.path.dirname(os.path.abspath(full_info))
     workdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -47,22 +47,22 @@ def gen_table_summary(full_info):
     )
     # grab bacterial info
     bacteria_data = assists.taxon_split(zscore_df, "Bacteria", "superkingdom")
-    bacteria_html = assists.html_loop(bacteria_data)
+    bacteria_html = assists.html_loop(bacteria_data, negative)
     replace_dict["py_bacteria_ph"] = bacteria_html
 
     # grab viral info
     viral_data = assists.taxon_split(zscore_df, "Viruses", "superkingdom")
-    viral_html = assists.html_loop(viral_data)
+    viral_html = assists.html_loop(viral_data, negative)
     replace_dict["py_virus_ph"] = viral_html
     
     # grab fungal info
     fungal_data = assists.taxon_split(zscore_df, "Fungi", "kingdom")
-    fungal_html = assists.html_loop(fungal_data)
+    fungal_html = assists.html_loop(fungal_data, negative)
     replace_dict["py_fungi_ph"] = fungal_html
 
     # grab parasite info
     parasite_data = assists.get_parasites(zscore_df, parasite_list)
-    parasite_html = assists.html_loop(parasite_data)
+    parasite_html = assists.html_loop(parasite_data, negative)
     replace_dict["py_parasite_ph"] = parasite_html
 
     # update the html with new rows for each pathogen etc.
@@ -83,4 +83,4 @@ def gen_table_summary(full_info):
 
 
 if __name__ == "__main__":
-    gen_table_summary(sys.argv[1])
+    gen_table_summary(sys.argv[1], sys.argv[2])

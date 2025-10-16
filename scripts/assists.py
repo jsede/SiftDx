@@ -213,10 +213,13 @@ def flag_pathogens(row, pathogen_db, contam_db):
 
     return taxon, status
 
-def html_loop(taxon_df):
+def html_loop(taxon_df, negative):
     html_output = []
-    # sort the taxon_df by zscore
-    taxon_df = taxon_df.sort_values(by='zscore', ascending=False)
+    # sort the taxon_df by zscore or rpm
+    if negative != "None":
+        taxon_df = taxon_df.sort_values(by='zscore', ascending=False)
+    else:
+        taxon_df = taxon_df.sort_values(by='rpm_sample', ascending=False)
 
     #loop the taxon to apply the data to the html
     for _, row in taxon_df.iterrows():
@@ -239,27 +242,48 @@ def html_loop(taxon_df):
             pident_str = f"{pident_val:.2f}%"
         except (ValueError, TypeError):
             pident_str = '-'
-
-        accordion_html = f"""
-        <button class="accordion">
-            <span class="button-content">
-                <span class="taxon">{row['taxon_label']}</span>
-                <span class="zscore">Z-score: {row['zscore']}</span>
-            </span>
-        </button>
-        <div class="panel">
-            <p>
-                {row['taxon']} {row['taxon_status']}<br>
-                Closest NCBI Taxonomy ID: {row['final_taxid']}<br>
-                Closest NCBI Accession: {row['accession']}<br>
-                Percentage Identity: {pident_str}<br>
-                Average Alignment Length: {row['alnlen']}<br>
-                E-Value: {row['evalue']}<br>
-                Bitscore: {row['bitscore']}<br>
-                RPM in Sample: {row['rpm_sample']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RPM in NegCtrl: {row['rpm_ctrl']}<br>
-                Lineage: {lineage}<br>
-            </p>
-        </div>
-        """
+        if negative != "None":
+            accordion_html = f"""
+            <button class="accordion">
+                <span class="button-content">
+                    <span class="taxon">{row['taxon_label']}</span>
+                    <span class="zscore">Z-score: {row['zscore']}</span>
+                </span>
+            </button>
+            <div class="panel">
+                <p>
+                    {row['taxon']} {row['taxon_status']}<br>
+                    Closest NCBI Taxonomy ID: {row['final_taxid']}<br>
+                    Closest NCBI Accession: {row['accession']}<br>
+                    Percentage Identity: {pident_str}<br>
+                    Average Alignment Length: {row['alnlen']}<br>
+                    E-Value: {row['evalue']}<br>
+                    Bitscore: {row['bitscore']}<br>
+                    RPM in Sample: {row['rpm_sample']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RPM in NegCtrl: {row['rpm_ctrl']}<br>
+                    Lineage: {lineage}<br>
+                </p>
+            </div>
+            """
+        else:
+            accordion_html = f"""
+            <button class="accordion">
+                <span class="button-content">
+                    <span class="taxon">{row['taxon_label']}</span>
+                    <span class="zscore">RPM: {row['rpm_sample']}</span>
+                </span>
+            </button>
+            <div class="panel">
+                <p>
+                    {row['taxon']} {row['taxon_status']}<br>
+                    Closest NCBI Taxonomy ID: {row['final_taxid']}<br>
+                    Closest NCBI Accession: {row['accession']}<br>
+                    Percentage Identity: {pident_str}<br>
+                    Average Alignment Length: {row['alnlen']}<br>
+                    E-Value: {row['evalue']}<br>
+                    Bitscore: {row['bitscore']}<br>
+                    Lineage: {lineage}<br>
+                </p>
+            </div>
+            """
         html_output.append(accordion_html)
     return html_output
