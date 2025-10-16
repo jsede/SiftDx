@@ -22,8 +22,6 @@ process merge_nt_nr {
             path(k2_pluspf), // combined_rc.kraken.txt
             path(nr_alignments), // nr_alignments_file.tsv
             path(nt_alignments) //n t_alignments_sr_blast.tsv
-        path database
-        path taxdump
         val entrez_email
         val entrez_api_key
         val output
@@ -33,7 +31,7 @@ process merge_nt_nr {
         tuple path("final_decisions.tsv"),
         path("full_read_contig_info.tsv"),
         path("zscore_input.tsv"),
-        path(fqc_txt)
+        path("merge_nt_nr_summary.txt")
 
     script:
     """
@@ -47,9 +45,9 @@ process merge_nt_nr {
     nt_alignments_sr_file ${nt_alignments}
     EOF
 
-    python3 ${baseDir}/scripts/merge_nt_nr.py ${database} ${taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
+    ${params.python} ${baseDir}/scripts/merge_nt_nr.py ${params.database} ${params.taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
 
-    awk 'NR > 1 && \$1 != "Unclassified" { count++ } END { print "number_of_identified_taxa:", count }' zscore_input.tsv >> ${fqc_txt}
+    awk 'NR > 1 && \$1 != "Unclassified" { count++ } END { print "number_of_identified_taxa:", count }' zscore_input.tsv > temp_id_taxa.txt
     awk -F'\\t' 'NR == 1 {for (i=1; i<=NF; i++) if (\$i=="Fasta_Headers") h=i; else if (\$i=="final") f=i}
         NR > 1 && \$h ~ /^k14/ {
             if (\$f == "-") unassigned++;
@@ -58,7 +56,7 @@ process merge_nt_nr {
         END {
             print "number_of_contigs_unassigned:", unassigned ? unassigned : 0;
             print "number_of_contigs_assigned:", assigned ? assigned : 0;
-        }' full_read_contig_info.tsv >> ${fqc_txt}
+        }' full_read_contig_info.tsv > temp_contig_stats.txt
     awk -F'\\t' '
     NR == 1 {
         for (i = 1; i <= NF; i++) {
@@ -73,7 +71,7 @@ process merge_nt_nr {
     END {
         print "number_of_reads_unassigned:", unassigned ? unassigned : 0;
         print "number_of_reads_assigned:", assigned ? assigned : 0;
-    }' full_read_contig_info.tsv >> ${fqc_txt}
+    }' full_read_contig_info.tsv > temp_read_stats.txt
     awk -F'\\t' '
     NR==1 {
         for (i=1; i<=NF; i++) {
@@ -93,9 +91,9 @@ process merge_nt_nr {
         printf "number_of_nt_assigned_taxa: %d\\n", length(nt)
         printf "number_of_nr_assigned_taxa: %d\\n", length(nr)
     }
-    ' full_read_contig_info.tsv >> ${fqc_txt}
+    ' full_read_contig_info.tsv > temp_tc_stats.txt
 
-    #rm inputs.txt
+    cat temp_id_taxa.txt temp_contig_stats.txt temp_read_stats.txt temp_tc_stats.txt > merge_nt_nr_summary.txt
     """
 }
 
@@ -104,8 +102,6 @@ workflow merge_taxonomy {
         pair_id
         preprocessing_data
         tax_class_data
-        database
-        taxdump
         entrez_email
         entrez_api_key
         output
@@ -115,8 +111,6 @@ workflow merge_taxonomy {
             pair_id,
             preprocessing_data,
             tax_class_data,
-            database,
-            taxdump,
             entrez_email,
             entrez_api_key,
             output

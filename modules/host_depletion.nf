@@ -1,4 +1,5 @@
 process kraken2 {
+    cache 'lenient'
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "kraken2.nonhost.*"
     
     input:
@@ -12,7 +13,7 @@ process kraken2 {
         path("kraken2.nonhost.output"),
         path("kraken2_nonhost_1.fastq"),
         path("kraken2_nonhost_2.fastq"),
-        path("summary.txt")
+        path("kraken2_summary.txt")
 
     script:
     """
@@ -23,7 +24,7 @@ process kraken2 {
             --paired ${read1} ${read2} \
             --unclassified-out kraken2_nonhost#.fastq
 
-    awk '{s++} END {printf "kraken2_host_depleted: %.0f\\n", (s/4)*2}' kraken2_nonhost_1.fastq >> ${fqc_txt}
+    awk '{s++} END {printf "kraken2_host_depleted: %.0f\\n", (s/4)*2}' kraken2_nonhost_1.fastq > kraken2_summary.txt
 
     """
 }
@@ -40,8 +41,7 @@ process bowtie2 {
     output:
         tuple path("bowtie2_host.sam"),
         path("kraken2_nonhost_1.fastq.gz"),
-        path("kraken2_nonhost_2.fastq.gz"),
-        path(fqc_txt)
+        path("kraken2_nonhost_2.fastq.gz")
 
     script:
     """
@@ -59,8 +59,8 @@ process bowtie2 {
 
     # Move the files to the current directory
     rm kraken2_nonhost_*.fastq
-    mv \${read1_resolved} .
-    mv \${read2_resolved} .
+    cp -i \${read1_resolved} .
+    cp -i \${read2_resolved} .
 
     # Gzip the original files
     gzip \$(basename \${read1_resolved})
@@ -70,19 +70,19 @@ process bowtie2 {
 }
 
 process samtools {
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "host_depleted*"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "bowtie2_host_sorted.bam"
+    cache 'lenient'
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "{host_depleted*,bowtie2_host_sorted.bam}"
 
     input:
         val pair_id
-        tuple path(bowtie2_output), path(read1), path(read2), path(fqc_txt)
+        tuple path(bowtie2_output), path(read1), path(read2)
         val output
     
     output:
         tuple path("host_depleted_1.fastq.gz"),
         path("host_depleted_2.fastq.gz"),
         path("bowtie2_host_sorted.bam"),
-        path("summary.txt")
+        path("bowtie2_summary.txt")
 
     
     script:
@@ -93,7 +93,7 @@ process samtools {
         -0 /dev/null -s /dev/null -n -f 13 \
         ${bowtie2_output}
     
-    awk '{s++} END {printf "bowtie2_host_depleted: %.0f\\n", (s/4)*2}' host_depleted_1.fastq >> ${fqc_txt}
+    awk '{s++} END {printf "bowtie2_host_depleted: %.0f\\n", (s/4)*2}' host_depleted_1.fastq > bowtie2_summary.txt
     gzip host_depleted_1.fastq
     gzip host_depleted_2.fastq
 
@@ -102,8 +102,8 @@ process samtools {
 }
 
 process ercc {
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "ercc_plot.png"
+    cache 'lenient'
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt, ercc_plot.png"
     
     input:
         val pair_id
@@ -135,8 +135,8 @@ process ercc {
 }
 
 process sequins {
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt"
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sequins_plot.png"
+    cache 'lenient'
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "*.txt, sequins_plot.png"
     
     input:
         val pair_id
@@ -168,6 +168,7 @@ process sequins {
 }
 
 process sortmerna {
+    cache 'lenient'
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "sortmerna_output"
 
     input:
@@ -178,8 +179,7 @@ process sortmerna {
 
     output:
         tuple path("fullyQc_1.fastq.gz"),
-        path("fullyQc_2.fastq.gz"),
-        path(fqc_txt)
+        path("fullyQc_2.fastq.gz")
 
     script:
     """
@@ -200,6 +200,7 @@ process sortmerna {
 }
 
 process fullyqc {
+    cache 'lenient'
     publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_output"
 
     input:
@@ -209,8 +210,7 @@ process fullyqc {
 
     output:
         tuple path("fullyQc_1.fastq.gz"),
-        path("fullyQc_2.fastq.gz"),
-        path(fqc_txt)
+        path("fullyQc_2.fastq.gz")
 
     script:
     """
@@ -220,10 +220,25 @@ process fullyqc {
     """
 }
 
+process merged_hd_summaries {
+    input:
+        tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(kraken2_summary)
+        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(bowtie2_summary)
+
+    output:
+        path "host_depletion_summary.txt"
+
+    script:
+    """
+    cat ${kraken2_summary} ${bowtie2_summary} > host_depletion_summary.txt
+    """
+}
+
 workflow host_depletion {
     take:
         pair_id
         prinseq_data  // the list of reads (R1 and R2)
+        qc_summary // the qc summary file
         kdb    // Kraken2 database
         bowtie2_index  // Bowtie2 index
         ercc_config  // ERCC configuration file (optional)
@@ -305,6 +320,13 @@ workflow host_depletion {
                 output
             )
         }
+
+        merge_hd_summaries = merged_hd_summaries(
+            kraken2_data,
+            samtools_data
+        )
     emit:
-        fullyqc_data
+        fullyqc_data = fullyqc_data
+        qc_summary = qc_summary
+        hd_summary = merge_hd_summaries
 }
