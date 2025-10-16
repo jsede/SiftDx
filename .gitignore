@@ -2,3 +2,4 @@
 .vscode/
 local.config
 __pycache__
+trace*.txt
