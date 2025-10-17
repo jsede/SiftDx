@@ -211,13 +211,6 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     merged_df = merged_df[merged_df['Fasta_Headers'] != '-']
 
     logging.info(f"Kraken, NT & NR merge complete")
-    # First, convert to numeric to coerce invalid entries to NaN
-    sample_df["staxids"] = pd.to_numeric(sample_df["staxids"], errors='coerce')
-    full_sample_df["staxids"] = pd.to_numeric(full_sample_df["staxids"], errors='coerce')
-
-    # Then convert to string, removing .0
-    sample_df["final_taxid"] = sample_df["final_taxid"].apply(lambda x: str(int(x)) if pd.notna(x) else "")
-    full_sample_df["final_taxid"] = full_sample_df["final_taxid"].apply(lambda x: str(int(x)) if pd.notna(x) else "")
     sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath, entrez_cred)
     dataframes = [full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df]
     non_empty_dataframes = [df for df in dataframes if not df.empty and not df.isna().all().all()]
