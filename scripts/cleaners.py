@@ -335,8 +335,8 @@ def collapse_same_species(df, taxdump):
         'alnlen': 'mean',
         'evalue': 'mean',
         'bitscore': 'mean',
-        'final_taxid': lambda x: ','.join(sorted(set(map(str, x)))),
-        'accession': lambda x: ','.join(sorted(set(map(str, x))))
+        'final_taxid': lambda x: ';'.join(sorted({str(v) for v in x if str(v) != '-'})),
+        'accession': lambda x: ';'.join(sorted({str(v) for v in x if str(v) != '-'}))
     }
 
         # First, find rows with duplicate 'final' entries
