@@ -335,7 +335,7 @@ def collapse_same_species(df, taxdump):
         'alnlen': 'mean',
         'evalue': 'mean',
         'bitscore': 'mean',
-        'final_taxid': lambda x: ';'.join(sorted({str(v) for v in x if str(v) != '-'})),
+        'final_taxid': lambda x: ';'.join(sorted({str(a) for a in x if a != '-' and pd.notna(a)})) or 'None',
         'accession': lambda x: ';'.join(sorted({str(v) for v in x if str(v) != '-'}))
     }
 
