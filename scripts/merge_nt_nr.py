@@ -260,7 +260,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     full_sample_df = full_sample_df.merge(
         lineage_df, left_on="final_taxid", right_on='taxid', how='left'
     )   
-    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids"]).fillna("-")
+    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids", "BLAST_Species"]).fillna("-")
     
     full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
     full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
