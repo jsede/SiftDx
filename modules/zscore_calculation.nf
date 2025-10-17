@@ -1,5 +1,5 @@
 process gen_zscore {
-    publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "zscore.tsv"
+    publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "*.tsv"
     
     input:
         val pair_id
@@ -37,6 +37,7 @@ process gen_zscore {
     }
 
 process no_negative {
+    publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "*.tsv"
     input:
         val pair_id
         tuple path(final_decisions),
