@@ -67,11 +67,12 @@ def blast_cleanup(file, name, taxdump, dirpath, entrez_cred):
 
     # Create 'superkingdom' column based on 'domain' and 'acellular root', occurs in the newer versions of taxdump
     if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None  # start fresh
-        if "domain" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["acellular root"]
-        if "acellular root" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        lineage_df["superkingdom"] = None
+    if "acellular root" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+    if "domain" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+
     lineage_df = lineage_df[['taxid', 'superkingdom', 'species']].dropna(how='all')
     lineage_df = lineage_df.astype(str).apply(lambda x: x.str.strip()) # convert all to string and strip whitespace
     taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
@@ -121,12 +122,14 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
     lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+
     if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None  # start fresh
-        if "domain" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["acellular root"]
-        if "acellular root" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        lineage_df["superkingdom"] = None
+    if "acellular root" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+    if "domain" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+
     lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
     mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
     minimap_df['superkingdom'] = minimap_df['MM2_taxid'].map(mapping_dict)
@@ -171,11 +174,12 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     lineage_df["no rank"] = lineage_df["no rank"].replace("no rank", "root")
     
     if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None  # start fresh
-        if "domain" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["acellular root"]
-        if "acellular root" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        lineage_df["superkingdom"] = None
+    if "acellular root" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+    if "domain" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        
     lineage_df = lineage_df[["taxid", "superkingdom", "species"]].dropna(how="all").astype(str)
 
     taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))

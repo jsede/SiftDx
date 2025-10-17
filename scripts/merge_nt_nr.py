@@ -234,12 +234,15 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
     lineage_df['rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    # check if superkingdom column exists, if not create it based on domain and acellular root
+    # this seems to be an issue with newer taxdump versions, but the one we test on was from 2023.
     if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None  # start fresh
-        if "domain" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["acellular root"]
-        if "acellular root" in lineage_df.columns:
-            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        lineage_df["superkingdom"] = None
+    if "acellular root" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+    if "domain" in lineage_df.columns:
+        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+
     for col in desired_cols:
         if col not in lineage_df.columns:
             lineage_df[col] = ""
