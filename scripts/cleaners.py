@@ -179,7 +179,7 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
         lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
     if "domain" in lineage_df.columns:
         lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
-        
+
     lineage_df = lineage_df[["taxid", "superkingdom", "species"]].dropna(how="all").astype(str)
 
     taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
@@ -323,6 +323,11 @@ def collapse_same_species(df, taxdump):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
+    df["final"] = df.apply(
+            lambda row: row["species"] if pd.notna(row["species"]) and str(row["species"]).strip() != "-" else row["final"],
+            axis=1
+        )
+    
     agg_dict = {
         'numreads': 'sum',
         'Seq_Length': 'mean',
