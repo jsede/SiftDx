@@ -124,7 +124,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         names=["ID", "Kraken_Species"],
         usecols=[1, 2],
     )
-    kraken_df["Kraken_taxid"] = kraken_df["Kraken_Species"].apply(cleaners.get_taxid)
+    kraken_df["Kraken_taxid"] = kraken_df["Kraken_Species"].apply(cleaners.get_taxid).astype(int)
     kraken_df["Kraken_Species"] = kraken_df["Kraken_Species"].apply(
         cleaners.remove_brackets
     )
@@ -211,6 +211,13 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     merged_df = merged_df[merged_df['Fasta_Headers'] != '-']
 
     logging.info(f"Kraken, NT & NR merge complete")
+    # First, convert to numeric to coerce invalid entries to NaN
+    sample_df["staxids"] = pd.to_numeric(sample_df["staxids"], errors='coerce')
+    full_sample_df["staxids"] = pd.to_numeric(full_sample_df["staxids"], errors='coerce')
+
+    # Then convert to string, removing .0
+    sample_df["final_taxid"] = sample_df["final_taxid"].apply(lambda x: str(int(x)) if pd.notna(x) else "")
+    full_sample_df["final_taxid"] = full_sample_df["final_taxid"].apply(lambda x: str(int(x)) if pd.notna(x) else "")
     sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath, entrez_cred)
     dataframes = [full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df]
     non_empty_dataframes = [df for df in dataframes if not df.empty and not df.isna().all().all()]
@@ -234,6 +241,12 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
     lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
     lineage_df['rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    if "superkingdom" not in lineage_df.columns:
+        lineage_df["superkingdom"] = None  # start fresh
+        if "domain" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["acellular root"]
+        if "acellular root" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
     for col in desired_cols:
         if col not in lineage_df.columns:
             lineage_df[col] = ""
