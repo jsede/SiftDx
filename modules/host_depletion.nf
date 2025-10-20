@@ -181,16 +181,15 @@ process sortmerna {
 
     script:
     """
-    mkdir -p ${output}/${pair_id}/preprocessing/sortmerna
     sortmerna \
         --ref ${params.sortmerna_db} \
-        --aligned . \
+        --aligned ./sortmerna \
         --other fullyQc \
         --fastx \
         --reads ${host_depleted_1} --reads ${host_depleted_2} \
         --out2 TRUE \
         --paired_in TRUE \
-        --workdir ${output}/${pair_id}/preprocessing/sortmerna
+        --workdir ./sortmerna
     """
 }
 
