@@ -191,9 +191,6 @@ process sortmerna {
         --out2 TRUE \
         --paired_in TRUE \
         --workdir ${output}/${pair_id}/preprocessing/sortmerna
-
-
-    gzip fullyQc_*.fastq
     """
 }
 
