@@ -20,11 +20,9 @@ workflow preprocessing {
     take:
         pair_id
         reads  // the list of reads (R1 and R2)
-        kdb    // Kraken2 database
-        bowtie2_index  // Bowtie2 index
+        bowtie2_index // bowtie2 index for host depletion
         ercc_config  // ERCC configuration file (optional)
         sequins_config // Sequins configuration file (optional)
-        sortmerna_db  // SortMeRNA database
         cov_stats // Coverage statistics file
         output  // the output directory
 
@@ -39,12 +37,9 @@ workflow preprocessing {
             pair_id,
             qc_data.prinseq_data, // Use prinseq_data output from qc
             qc_data.qc_summary, // Use qc_summary output from qc
-            kdb,
             bowtie2_index,
             ercc_config,
             sequins_config,
-            sortmerna_db,
-            cov_stats,
             output
         )
 

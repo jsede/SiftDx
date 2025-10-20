@@ -11,14 +11,10 @@ workflow {
     def pair_id = new File(params.r1).name.split('_')[0]
     def reads = [file(params.r1), file(params.r2)]
     def negative = params.ndata ?: null
-    def kdb = params.kraken2_db // Kraken2 HUMAN database
-    def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : (params.sequins ? params.bowtie2_index_sequins : params.bowtie2_index) // if ERCC/Sequins is flag provided, set bowtie2_index to params.bowtie2_index_ercc, else params.bowtie2_index
+    def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : (params.sequins ? params.bowtie2_index_sequins : params.bowtie2_index) // if ERCC/Sequins is flag provided, set bowtie2_index
     def ercc_config = params.ercc ? params.ercc_config : null // if ERCC is flag provided, set ercc_config to params.ercc_config, else null
     def sequins_config = params.sequins ? params.sequins_config : null // if the sequins flag is provided, set sequis config to params.sequins_config
-    def sortmerna_db = params.na == 'RNA' ? params.sortmerna_db : null //if NA is RNA, set sortmerna_db to params.sortmerna_db, else null
     def cov_stats = params.cov_stats
-    def database = params.database // sql databases for accession2taxid 
-    def taxdump = params.taxdump // Taxdump for taxidtools
     def entrez_email = params.entrez_email
     def entrez_api_key = params.entrez_api_key
     def table_summary = params.table_summary // the table summary html template
@@ -28,11 +24,9 @@ workflow {
     preprocessing_data = preprocessing(
         pair_id,
         reads,
-        kdb,
         bowtie2_index,
         ercc_config,
         sequins_config,
-        sortmerna_db,
         cov_stats,
         output
     )
