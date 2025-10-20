@@ -89,14 +89,20 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         ("minimap_lr_df", minimap_lr_df),
     ]
     minimap_parts = [(k, df) for k, df in minimap_parts if not df.empty and not df.isna().all().all()]
-    minimap_df = pd.concat([df for _, df in minimap_parts], keys=[k for k, _ in minimap_parts])
+    if minimap_parts:
+        minimap_df = pd.concat([df for _, df in minimap_parts], keys=[k for k, _ in minimap_parts])
+    else:
+        minimap_df = pd.DataFrame(columns=["MM2_NT", "accession"])
 
     full_mm2_parts = [
         ("full_mm2_contigs_df", full_mm2_contigs_df),
         ("full_mm2_reads_df", full_mm2_reads_df),
     ]
     full_mm2_parts = [(k, df) for k, df in full_mm2_parts if not df.empty and not df.isna().all().all()]
-    full_minimap_df = pd.concat([df for _, df in full_mm2_parts], keys=[k for k, _ in full_mm2_parts])
+    if full_mm2_parts:
+        full_minimap_df = pd.concat([df for _, df in full_mm2_parts], keys=[k for k, _ in full_mm2_parts])
+    else:
+        full_minimap_df = pd.DataFrame(columns=["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
     mm2_accession_list = minimap_df["accession"].dropna().to_list()
     mm2_accession_list = list(dict.fromkeys(mm2_accession_list))
     logging.info("Merged and cleaned up Minimap output and ready to assign taxonomy")
@@ -172,10 +178,11 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     ]
 
     for df, species_col, taxid_col in df_map:
+        if df.empty or "accession" not in df.columns:
+            continue
         df[species_col] = df['accession'].map(species_dict)
         df[taxid_col] = df['accession'].map(taxid_dict)
     full_minimap_df = full_minimap_df.rename(columns={"MM2_Species": "sscinames", "MM2_taxid": "staxids"})
-    
 
     # merge blast short reads dataframe with fasta headers + kraken
     blast_sr_df = blast_sr_df[["NT", "BLAST_Species"]]
@@ -196,6 +203,10 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     merged_df = merged_df.fillna("-").drop(
         columns=["NT", "ID", "accession", "NR", "MM2_NT"]
     ) # drop the unnecessary columns from the merge and fill blank spaces with dashes.
+    if "BLAST_Species" not in merged_df.columns:
+        merged_df["BLAST_Species"] = "-"
+    if "MM2_Species" not in merged_df.columns:
+        merged_df["MM2_Species"] = "-"
     merged_df["NT_Species"] = merged_df.apply(
         lambda row: row["BLAST_Species"]
         if row["MM2_Species"] == "-"
@@ -207,8 +218,16 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     # clean up the columns again make sure everything is a string.
     col_list = ["NT_Species", "NR_Species"]
     for col in col_list:
-        merged_df[col] = merged_df[col].apply(cleaners.remove_num_str)
+        if col in merged_df.columns:
+            merged_df[col] = merged_df[col].apply(cleaners.remove_num_str)
     merged_df = merged_df[merged_df['Fasta_Headers'] != '-']
+    required_cols = [
+        'Fasta_Headers', 'Seq_Length', '#rname', 'numreads', 'Kraken_Species',
+        'Kraken_taxid', 'MM2_taxid', 'NR_Species', 'NR_taxid', 'NT_Species'
+    ]
+    for col in required_cols:
+        if col not in merged_df.columns:
+            merged_df[col] = "-"
 
     logging.info(f"Kraken, NT & NR merge complete")
     sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath, entrez_cred)
@@ -263,7 +282,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     full_sample_df = full_sample_df.merge(
         lineage_df, left_on="final_taxid", right_on='taxid', how='left'
     )   
-    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids", "BLAST_Species"]).fillna("-")
+    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids"]).fillna("-")
     
     full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
     full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
@@ -274,10 +293,9 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     ]
     logging.info(f"Rows with missing lineage: {len(missing_lineage)}")
     collapse_df = cleaners.collapse_same_species(full_sample_df, taxdump)
-    collapse_df['rank'] = collapse_df.apply(
-        lambda row: sl.get_taxon_rank(row, 'final_taxid', taxdump),
+    collapse_df["rank"] = collapse_df.apply(
+        lambda row: assists.get_first_taxid_rank(row, taxdump),
         axis=1,
-        result_type="expand"
     )
     zscore_input = dirpath + "/zscore_input.tsv"
     collapse_df.to_csv(zscore_input, sep="\t", index=None)

@@ -287,3 +287,19 @@ def html_loop(taxon_df, negative):
             """
         html_output.append(accordion_html)
     return html_output
+
+def get_first_taxid_rank(row, taxdump):
+    taxid_field = row.get("final_taxid", "")
+    if pd.isna(taxid_field) or str(taxid_field).strip() in ["-", "", "None"]:
+        return "-"
+    
+    # Split on ";" and take the first non-empty taxid
+    first_taxid = str(taxid_field).split(";")[0].strip()
+    if not first_taxid:
+        return "-"
+    
+    # Replace the row's 'final_taxid' temporarily
+    temp_row = row.copy()
+    temp_row["final_taxid"] = first_taxid
+    
+    return sl.get_taxon_rank(temp_row, "final_taxid", taxdump)

@@ -64,12 +64,29 @@ def decision(species_df, taxdump, dirpath, entrez_cred):
 
 
 def determine_final_species(row, taxdump, entrez_cred):
-    kraken_genus = cleaners.extract_genus(row, 'Kraken_taxid', 'Kraken_Species', taxdump, entrez_cred)
-    nr_genus = cleaners.extract_genus(row, 'MM2_taxid', 'NT_Species', taxdump, entrez_cred)
-    nt_genus = cleaners.extract_genus(row, 'NR_taxid', 'NR_Species', taxdump, entrez_cred)
-    kraken_species = cleaners.extract_species(row["Kraken_Species"])
-    nr_species = cleaners.extract_species(row["NR_Species"])
-    nt_species = cleaners.extract_species(row["NT_Species"])
+    sources = [
+        ("kraken", "Kraken_taxid", "Kraken_Species"),
+        ("nr", "MM2_taxid", "NT_Species"),
+        ("nt", "NR_taxid", "NR_Species"),
+    ]
+
+    results = {}
+
+    # Loop through and process only if both columns exist
+    for prefix, taxid_col, species_col in sources:
+        if taxid_col in row.index and species_col in row.index:
+            results[f"{prefix}_genus"] = cleaners.extract_genus(row, taxid_col, species_col, taxdump, entrez_cred)
+            results[f"{prefix}_species"] = cleaners.extract_species(row[species_col])
+        else:
+            results[f"{prefix}_genus"] = "-"
+            results[f"{prefix}_species"] = "-"
+
+    kraken_genus = results.get("kraken_genus", "-")
+    nr_genus = results.get("nr_genus", "-")
+    nt_genus = results.get("nt_genus", "-")
+    kraken_species = results.get("kraken_species", "-")
+    nr_species = results.get("nr_species", "-")
+    nt_species = results.get("nt_species", "-")
 
     primate_genus_list = [
         "Pan",
