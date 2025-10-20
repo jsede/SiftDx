@@ -184,7 +184,7 @@ process sortmerna {
     mkdir -p ${output}/${pair_id}/preprocessing/sortmerna
     sortmerna \
         --ref ${params.sortmerna_db} \
-        --aligned ${output}/${pair_id}/aligned \
+        --aligned . \
         --other fullyQc \
         --fastx \
         --reads ${host_depleted_1} --reads ${host_depleted_2} \
