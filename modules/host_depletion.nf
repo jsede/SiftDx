@@ -5,7 +5,6 @@ process kraken2 {
     input:
         val pair_id
         tuple path(read1), path(read2), path(single1), path(single2), path(bad1), path(bad2), path(fqc_txt)
-        path kdb
         val output
 
     output:
@@ -17,7 +16,7 @@ process kraken2 {
 
     script:
     """
-    kraken2 --db ${kdb} \
+    kraken2 --db ${params.kraken2_db} \
             --report kraken2.nonhost.report \
             --output kraken2.nonhost.output \
             --use-mpa-style \
@@ -108,13 +107,13 @@ process ercc {
     input:
         val pair_id
         tuple path(read1), path(read2), path(bowtie2_sorted), path(fqc_txt)
-        path ercc_config
         val output
     
     output:
         tuple path("bowtie2_coverage.txt"),
         path("ercc_coverage.txt"),
-        path("ercc_plot.png")
+        path("ercc_plot.png"),
+        path("spikein_summary.txt")
 
     
     script:
@@ -128,9 +127,9 @@ process ercc {
     done < ercc_coverage.txt
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.ERCC_only.out.sam
-    python3 scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.ERCC_only.out.sam ercc_coverage.txt
+    ${params.python} ${baseDir}/scripts/ercc_plot.py ercc_plot.png ${params.ercc_config} ercc_coverage.txt
     ercc_count=`cut -f 1 bowtie2_host_Aligned.ERCC_only.out.sam | sort -k 1 | uniq | wc -l`
-    echo "ercc_reads: \$ercc_count"
+    echo "ercc_reads: \$ercc_count" > spikein_summary.txt
     """
 }
 
@@ -141,13 +140,13 @@ process sequins {
     input:
         val pair_id
         tuple path(read1), path(read2), path(bowtie2_sorted), path(fqc_txt)
-        path sequins_config
         val output
     
     output:
         tuple path("bowtie2_coverage.txt"),
         path("sequins_coverage.txt"),
-        path("sequins_plot.png")
+        path("sequins_plot.png"),
+        path("spikein_summary.txt")
 
     
     script:
@@ -161,9 +160,9 @@ process sequins {
     done < sequins_coverage.txt
     region_list=\$(IFS=','; echo "\${regions[*]}")
     samtools view -F 260 ${bowtie2_sorted} \${region_list} -o bowtie2_host_Aligned.sequins_only.out.sam
-    python3 scripts/ercc_plot.py \${PWD} bowtie2_host_Aligned.sequins_only.out.sam sequins_coverage.txt
+    ${params.python} ${baseDir}/scripts/ercc_plot.py sequins_plot.png ${params.sequins_config} sequins_coverage.txt
     sequins_count=`cut -f 1 bowtie2_host_Aligned.sequins_only.out.sam | sort -k 1 | uniq | wc -l`
-    echo "sequins_reads: \$sequins_count"
+    echo "sequins_reads: \$sequins_count" > spikein_summary.txt
     """
 }
 
@@ -174,7 +173,6 @@ process sortmerna {
     input:
         val pair_id
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(fqc_txt)
-        path sortmerna_db
         val output
 
     output:
@@ -185,7 +183,7 @@ process sortmerna {
     """
     mkdir -p ${output}/${pair_id}/preprocessing/sortmerna
     sortmerna \
-        --ref ${sortmerna_db} \
+        --ref ${params.sortmerna_db} \
         --aligned ${output}/${pair_id}/aligned \
         --other fullyQc \
         --fastx \
@@ -234,17 +232,29 @@ process merged_hd_summaries {
     """
 }
 
+process merged_hd_ercc_summaries {
+    input:
+        tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(kraken2_summary)
+        tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(bowtie2_summary)
+        tuple path(bowtie2_coverage), path(ercc_coverage), path(ercc_plot), path(spikein_summary)
+
+    output:
+        path "host_depletion_summary.txt"
+
+    script:
+    """
+    cat ${kraken2_summary} ${bowtie2_summary} ${spikein_summary}> host_depletion_summary.txt
+    """
+}
+
 workflow host_depletion {
     take:
         pair_id
         prinseq_data  // the list of reads (R1 and R2)
         qc_summary // the qc summary file
-        kdb    // Kraken2 database
-        bowtie2_index  // Bowtie2 index
+        bowtie2_index // bowtie2 index for host depletion
         ercc_config  // ERCC configuration file (optional)
         sequins_config // Sequins configuration file (optional)
-        sortmerna_db  // SortMeRNA database
-        cov_stats // Coverage statistics file
         output  // the output directory
 
     main:
@@ -255,17 +265,16 @@ workflow host_depletion {
         log.info "Starting preprocessing:"
         log.info "Pair ID: ${pair_id}"
         log.info "Output: ${output}"
-        log.info "Kraken2 database: ${kdb}"
+        log.info "Kraken2 database: ${params.kraken2_db}"
         log.info "Bowtie2 index: ${bowtie2_index}"
-        log.info "ERCC config: ${ercc_config}"
-        log.info "Sequins config: ${sequins_config}"
+        log.info "ERCC config: ${params.ercc_config}"
+        log.info "Sequins config: ${params.sequins_config}"
         
 
         // Call Kraken2
         kraken2_data = kraken2(
             pair_id,
             prinseq_data,
-            kdb,
             output
         )
 
@@ -286,30 +295,34 @@ workflow host_depletion {
         
         if (ercc_config) {
             // Call ERCC
-            ercc_data = ercc(
+            spikein_data = ercc(
                 pair_id,
                 samtools_data,
-                ercc_config,
                 output
             )
         } else if (sequins_config) {
             // Call Sequins
-            sequins_data = sequins(
+            spikein_data = sequins(
                 pair_id,
                 samtools_data,
-                sequins_config,
                 output
             )
         } else {
             log.info "Skipping ERCC/Sequins process as neither --ercc nor --sequins is provided."
+            spikein_data = Channel.empty()
         }
         
         if (params.na?.toUpperCase() == 'RNA') {
             // Call SortMeRNA
-            fullyqc_data = sortmerna(
+            log.info "Temporarily skipping Sortmerna as software for macos is not available."
+            // fullyqc_data = sortmerna(
+            //     pair_id,
+            //     samtools_data,
+            //     output
+            // )
+            fullyqc_data = fullyqc(
                 pair_id,
                 samtools_data,
-                sortmerna_db,
                 output
             )
         } else {
@@ -321,12 +334,26 @@ workflow host_depletion {
             )
         }
 
-        merge_hd_summaries = merged_hd_summaries(
-            kraken2_data,
-            samtools_data
-        )
+        if (ercc_config || sequins_config) {
+            merge_hd_summaries = merged_hd_ercc_summaries(
+                kraken2_data,
+                samtools_data,
+                spikein_data
+            )
+        } else {
+            merge_hd_summaries = merged_hd_summaries(
+                kraken2_data,
+                samtools_data
+            )
+        }
+        
+        
+
+
     emit:
         fullyqc_data = fullyqc_data
         qc_summary = qc_summary
         hd_summary = merge_hd_summaries
+        spikein_data = spikein_data
+        
 }

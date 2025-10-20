@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 def ercc_plot(args):
     ercc_counts = {}
-    dirpath = args[0]
 
     # sort the ercc_expected_concentration file just in case, such that our ercc_coverage.txt file can be compared simultaneously
     with open(args[1]) as f:
@@ -22,7 +21,7 @@ def ercc_plot(args):
             ercc_counts[curr[0]] = [math.log(float(curr[1]), 10)]
 
     # now do the same but for the actual read counts
-    with open(dirpath + "/ercc_coverage.txt") as f:
+    with open(args[2]) as f:
         for line in f:
             if line == "\n":
                 continue
@@ -81,8 +80,7 @@ def ercc_plot(args):
         # we have got the above from: https://www.statology.org/line-of-best-fit-python/
         plt.xlabel("Log10 ERCC spike-in concentration")
         plt.ylabel("Log10 coverage per gene")
-        plt.savefig(dirpath + '/ercc_plot.png', dpi=300) # dpi to control resolution
+        plt.savefig(args[0], dpi=300) # dpi to control resolution
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    ercc_plot(args)
+    ercc_plot(sys.argv[1:])
