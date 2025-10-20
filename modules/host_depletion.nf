@@ -176,8 +176,8 @@ process sortmerna {
         val output
 
     output:
-        tuple path("fullyQc_1.fastq.gz"),
-        path("fullyQc_2.fastq.gz")
+        tuple path("fullyQc_fwd.fq.gz"),
+        path("fullyQc_rev.fq.gz")
 
     script:
     """
@@ -203,13 +203,13 @@ process fullyqc {
         val output
 
     output:
-        tuple path("fullyQc_1.fastq.gz"),
-        path("fullyQc_2.fastq.gz")
+        tuple path("fullyQc_fwd.fq.gz"),
+        path("fullyQc_rev.fq.gz")
 
     script:
     """
-    cp ${host_depleted_1} fullyQc_1.fastq.gz
-    cp ${host_depleted_2} fullyQc_2.fastq.gz
+    cp ${host_depleted_1} fullyQc_fwd.fq.gz
+    cp ${host_depleted_2} fullyQc_rev.fq.gz
     
     """
 }
