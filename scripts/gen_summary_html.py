@@ -22,13 +22,13 @@ def gen_pipeline_summary(summary_file):
     ercc_html = "-"
     if ercc_found:
         ercc_html = f"""
-            <b>Number of ERCC Reads Removed: {summary_data.get("ercc_reads", "N/A")},</b> <br>
+            <b>Number of ERCC Reads Removed:</b> {summary_data.get("ercc_reads", "N/A")} <br>
         """
     
     sortmerna_html = "DNA mode activated, this step was skipped. <br>"
     if sortmerna_found:
         sortmerna_html = f"""
-            <b>Number of Sortmerna rRNA Reads Removed: {summary_data.get("sortmerna", "N/A")}</b> <br>
+            <b>Number of Sortmerna rRNA Reads Removed:</b> {summary_data.get("sortmerna", "N/A")} <br>
         """
 
     # Read HTML template
