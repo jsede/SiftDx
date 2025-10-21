@@ -307,6 +307,7 @@
         <b>Description:</b> This step removes human sequences from the library. It uses Kraken2 to align the library against the HPRC index to remove as many reads as possible for the next step which is more intensive. Bowtie2 then removes any remaining nonhuman reads with an index built from the T2T reference and the HLA reference plus the ERCC library to remove as ERCC reads as well. <br> <br>
         <b>Number of Reads Remaining After Kraken2 Command:</b> py_kraken2_human_depleted_ph <br>
         <b>Number of Reads Remaining After Bowtie2 Command:</b> py_bowtie2_human_depleted_ph <br>
+        <b>Final Read Count:</b> py_fullyqc_reads_ph <br>
         py_ercc_ph
         <b>Inputs:</b> prinseq_lc_good_out_R1.fastq, prinseq_lc_good_out_R2.fastq <br>
         <b>Outputs:</b> host_depleted_1.fastq, host_depleted_2.fastq <br> <br>

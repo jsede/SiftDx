@@ -23,14 +23,12 @@ def gen_pipeline_summary(summary_file):
     if ercc_found:
         ercc_html = f"""
             <b>Number of ERCC Reads Removed: {summary_data.get("ercc_reads", "N/A")},</b> <br>
-            <b>Number of non-ERCC Host Reads: {summary_data.get("non-ercc_reads", "N/A")}</b> <br>
         """
     
     sortmerna_html = "DNA mode activated, this step was skipped. <br>"
     if sortmerna_found:
         sortmerna_html = f"""
-            <b>Number of Reads After rRNA Depletion: {summary_data.get("rrna_reads_post_depletion", "N/A")}</b> <br>
-            <b>Number of Non-host rRNA Reads: {summary_data.get("non_host_rrna_reads", "N/A")}</b> <br>
+            <b>Number of Sortmerna rRNA Reads Removed: {summary_data.get("sortmerna", "N/A")}</b> <br>
         """
 
     # Read HTML template
@@ -49,6 +47,7 @@ def gen_pipeline_summary(summary_file):
         "py_bowtie2_human_depleted_ph": summary_data.get("bowtie2_human_depleted", "N/A"),
         "py_ercc_ph": ercc_html,
         "py_sortmerna_ph": sortmerna_html,
+        "py_fullyqc_reads_ph": summary_data.get("fullyqc_reads", "N/A"),
         "py_number_of_contigs_ph": summary_data.get("number_of_contigs", "N/A"),
         "py_shortest_contig_ph": summary_data.get("shortest_contig", "N/A"),
         "py_longest_contig_ph": summary_data.get("longest_contig", "N/A"),
