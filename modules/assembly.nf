@@ -4,7 +4,7 @@ process megahit {
 
     input:
         val pair_id
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fullyqc_summary)
         val output
 
     output:
@@ -36,7 +36,7 @@ process unassembled_reads {
     input:
         val pair_id
         tuple path (megahit_contigs), path(assembly_summary)
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fullyqc_summary)
         val output
 
     output:
@@ -76,7 +76,7 @@ process megahit_fail {
     input:
         val pair_id
         tuple path (megahit_contigs), path(assembly_summary)
-        tuple path(fullyQc_1), path(fullyQc_2)
+        tuple path(fullyQc_1), path(fullyQc_2), path(fullyqc_summary)
         val cov_stats
         val output
 

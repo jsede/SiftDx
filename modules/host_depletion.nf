@@ -177,7 +177,8 @@ process sortmerna {
 
     output:
         tuple path("fullyQc_fwd.fq.gz"),
-        path("fullyQc_rev.fq.gz")
+        path("fullyQc_rev.fq.gz"),
+        path("fullyqc_summary.txt")
 
     script:
     """
@@ -190,6 +191,14 @@ process sortmerna {
         --out2 TRUE \
         --paired_in TRUE \
         --workdir ./sortmerna
+
+    hd_reads=\$(zcat ${host_depleted_1} | awk 'END {print (NR/4)*2}')
+    fullyqc_reads=\$(zcat fullyQc_fwd.fq.gz | awk 'END {print (NR/4)*2}')
+    sortmerna_reads=\$((hd_reads - fullyqc_reads))
+    {
+      echo "fullyqc_reads: \$fullyqc_reads"
+      echo "sortmerna: \$sortmerna_reads"
+    } > fullyqc_summary.txt
     """
 }
 
@@ -204,13 +213,15 @@ process fullyqc {
 
     output:
         tuple path("fullyQc_fwd.fq.gz"),
-        path("fullyQc_rev.fq.gz")
+        path("fullyQc_rev.fq.gz"),
+        path("fullyqc_summary.txt")
 
     script:
     """
     cp ${host_depleted_1} fullyQc_fwd.fq.gz
     cp ${host_depleted_2} fullyQc_rev.fq.gz
-    
+    fullyqc_reads=\$(zcat fullyQc_fwd.fq.gz | awk 'END {print (NR/4)*2}')
+    echo fullyqc_reads: \$fullyqc_reads > fullyqc_summary.txt
     """
 }
 
@@ -218,13 +229,14 @@ process merged_hd_summaries {
     input:
         tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(kraken2_summary)
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(bowtie2_summary)
+        tuple path(fullyqc_1), path(fullyqc_2), path(fullyqc_summary)
 
     output:
         path "host_depletion_summary.txt"
 
     script:
     """
-    cat ${kraken2_summary} ${bowtie2_summary} > host_depletion_summary.txt
+    cat ${kraken2_summary} ${bowtie2_summary} ${fullyqc_summary} > host_depletion_summary.txt
     """
 }
 
@@ -232,6 +244,7 @@ process merged_hd_ercc_summaries {
     input:
         tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(kraken2_summary)
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(bowtie2_summary)
+        tuple path(fullyqc_1), path(fullyqc_2), path(fullyqc_summary)
         tuple path(bowtie2_coverage), path(ercc_coverage), path(ercc_plot), path(spikein_summary)
 
     output:
@@ -239,7 +252,7 @@ process merged_hd_ercc_summaries {
 
     script:
     """
-    cat ${kraken2_summary} ${bowtie2_summary} ${spikein_summary}> host_depletion_summary.txt
+    cat ${kraken2_summary} ${bowtie2_summary} ${fullyqc_summary} ${spikein_summary}> host_depletion_summary.txt
     """
 }
 
@@ -329,18 +342,17 @@ workflow host_depletion {
             merge_hd_summaries = merged_hd_ercc_summaries(
                 kraken2_data,
                 samtools_data,
+                fullyqc_data,
                 spikein_data
             )
         } else {
             merge_hd_summaries = merged_hd_summaries(
                 kraken2_data,
-                samtools_data
+                samtools_data,
+                fullyqc_data
             )
         }
         
-        
-
-
     emit:
         fullyqc_data = fullyqc_data
         qc_summary = qc_summary
