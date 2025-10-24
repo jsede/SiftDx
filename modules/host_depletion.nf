@@ -112,7 +112,6 @@ process ercc {
     output:
         tuple path("bowtie2_coverage.txt"),
         path("ercc_coverage.txt"),
-        path("ercc_plot.png"),
         path("spikein_summary.txt")
 
     
@@ -148,7 +147,6 @@ process sequins {
     output:
         tuple path("bowtie2_coverage.txt"),
         path("sequins_coverage.txt"),
-        path("sequins_plot.png"),
         path("spikein_summary.txt")
 
     
@@ -251,7 +249,7 @@ process merged_hd_ercc_summaries {
         tuple path(kraken2report), path(kraken2output),path(read1), path(read2), path(kraken2_summary)
         tuple path(host_depleted_1), path(host_depleted_2), path(bowtie2_sorted), path(bowtie2_summary)
         tuple path(fullyqc_1), path(fullyqc_2), path(fullyqc_summary)
-        tuple path(bowtie2_coverage), path(ercc_coverage), path(ercc_plot), path(spikein_summary)
+        tuple path(bowtie2_coverage), path(ercc_coverage), path(spikein_summary)
 
     output:
         path "host_depletion_summary.txt"
