@@ -153,6 +153,7 @@ process sequins {
     """
     MEM_G=\$(echo ${task.memory.toGiga()} | cut -d'.' -f1)
     RAM=\${MEM_G}g
+    echo "Using RAM: \${RAM}"
     pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx\${RAM} secondary=false
     egrep -e "^Sequins" bowtie2_coverage.txt > sequins_coverage.txt
     samtools index ${bowtie2_sorted}
