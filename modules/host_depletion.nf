@@ -329,7 +329,7 @@ workflow host_depletion {
         
         if (params.na?.toUpperCase() == 'RNA') {
             // Call SortMeRNA
-            log.info "Temporarily skipping Sortmerna as software for macos is not available."
+            log.info "RNA mode active, performing SortMeRNA."
             fullyqc_data = sortmerna(
                 pair_id,
                 samtools_data,
