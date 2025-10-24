@@ -118,7 +118,10 @@ process ercc {
     
     script:
     """
-    pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx8g secondary=false
+    MEM_G=\$(echo ${task.memory.toGiga()} | cut -d'.' -f1)
+    RAM=\${MEM_G}g
+    echo "Using RAM: \${RAM}"
+    pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx\${RAM} secondary=false
     egrep -e "^ERCC" bowtie2_coverage.txt > ercc_coverage.txt
     samtools index ${bowtie2_sorted}
     regions=()
