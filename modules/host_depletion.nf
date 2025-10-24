@@ -151,7 +151,9 @@ process sequins {
     
     script:
     """
-    pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx8g secondary=false
+    MEM_G=$(echo ${task.memory.toGiga()} | cut -d'.' -f1)
+    RAM=\${MEM_G}g
+    pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx\${RAM} secondary=false
     egrep -e "^Sequins" bowtie2_coverage.txt > sequins_coverage.txt
     samtools index ${bowtie2_sorted}
     regions=()
