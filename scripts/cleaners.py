@@ -374,7 +374,7 @@ def collapse_same_species(df, taxdump):
 
     collapsed_df.drop(columns=[col for col in columns_to_drop if col in collapsed_df.columns], inplace=True)
     collapsed_df = collapsed_df.fillna('-')
-    collapsed_df.rename(columns={'final': 'taxon', 'Seq_length': 'avgseqlen'}, inplace=True)
+    collapsed_df.rename(columns={'final': 'taxon', 'Seq_Length': 'avgseqlen'}, inplace=True)
     collapsed_df['taxon'] = collapsed_df['taxon'].replace('-', 'Unclassified')
     collapsed_df['rank'] = collapsed_df.apply(
         lambda row: sl.get_taxon_rank(row, 'final_taxid', taxdump),
