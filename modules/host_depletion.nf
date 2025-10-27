@@ -322,11 +322,12 @@ workflow host_depletion {
             )
         } else {
             log.info "Skipping ERCC/Sequins process as neither --ercc nor --sequins is provided."
-            spikein_data = Channel.from([
-                file("NO_FILE"),
-                file("NO_FILE"),
-                file("NO_FILE")
-            ])
+            spikein_data = Channel.of(
+                tuple(file("NO_FILE1"), 
+                file("NO_FILE2"), 
+                file("NO_FILE3")
+                )
+            )
         }
         
         if (params.na?.toUpperCase() == 'RNA') {

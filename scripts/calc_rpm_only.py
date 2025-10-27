@@ -112,7 +112,15 @@ def calc_rpm_only(sample_input, summary_input, spikein_input):
     # calculate ERCC/Sequins RPM scale factor if applicable
     if sample_pg > 0:
         if os.path.isfile(os.path.abspath(spikein_input)) is True and os.stat(os.path.abspath(spikein_input)).st_size != 0:
-            scaled_pg = pg_calculation(sample_tr, sample_fr, spikein_input)
+            ercc_info = pd.read_csv(
+                spikein_input, 
+                sep="\t", 
+                header = None, 
+                names=["plus_reads", "minus_reads"],
+                usecols=[6,7],
+                dtype="int64"
+                )
+            scaled_pg = pg_calculation(sample_tr, sample_fr, ercc_info)
         else:
             scaled_pg = 0
         taxon_counts['scale_factor'] = taxon_counts['numreads']/sample_fr
