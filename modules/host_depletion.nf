@@ -117,7 +117,7 @@ process ercc {
     
     script:
     """
-    MEM_G=\$(echo ${task.memory.toGiga()} | cut -d'.' -f1)
+    MEM_G=\$(echo ${task.memory?.toGiga() ?: 8} | cut -d'.' -f1)
     RAM=\${MEM_G}g
     echo "Using RAM: \${RAM}"
     pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx\${RAM} secondary=false
@@ -152,7 +152,7 @@ process sequins {
     
     script:
     """
-    MEM_G=\$(echo ${task.memory.toGiga()} | cut -d'.' -f1)
+    MEM_G=\$(echo ${task.memory?.toGiga() ?: 8} | cut -d'.' -f1)
     RAM=\${MEM_G}g
     echo "Using RAM: \${RAM}"
     pileup.sh in=${bowtie2_sorted} out=bowtie2_coverage.txt -Xmx\${RAM} secondary=false
