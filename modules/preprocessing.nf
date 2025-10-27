@@ -59,4 +59,5 @@ workflow preprocessing {
     emit:
         aln_prep_data = assembly_data.aln_prep_data
         preprocessing_summary = preprocessing_summary
+        spikein_data = host_depletion_data.spikein_data
 }

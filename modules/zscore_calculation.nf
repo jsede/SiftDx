@@ -4,6 +4,9 @@ process gen_zscore {
     input:
         val pair_id
         path (negative, stageAs: 'negative')
+        tuple path(bowtie2), 
+            path(spikein), 
+            path(spikein_summary)
         tuple path(final_decisions),
             path(full_read_contig_info),
             path(zscore_input),
@@ -18,7 +21,7 @@ process gen_zscore {
 
     script:
     """
-    ${params.python} ${baseDir}/scripts/zscore.py ${zscore_input} ${negative} ${preprocessing_summary}
+    ${params.python} ${baseDir}/scripts/zscore.py ${zscore_input} ${negative} ${preprocessing_summary} ${spikein}
     awk -F'\t' '
         NR == 1 { next }  # skip header
         { total++ }
@@ -40,6 +43,9 @@ process no_negative {
     publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "*.tsv"
     input:
         val pair_id
+        tuple path(bowtie2), 
+            path(spikein), 
+            path(spikein_summary)
         tuple path(final_decisions),
             path(full_read_contig_info),
             path(zscore_input),
@@ -54,7 +60,7 @@ process no_negative {
     
     script:
     """
-    ${params.python} ${baseDir}/scripts/calc_rpm_only.py ${zscore_input} ${preprocessing_summary}
+    ${params.python} ${baseDir}/scripts/calc_rpm_only.py ${zscore_input} ${preprocessing_summary} ${spikein}
     awk -F'\t' '
         NR == 1 { next }
         { total++ }
@@ -72,6 +78,7 @@ workflow zscore_calculation {
     take:
         pair_id
         negative
+        spikein_data
         finalisation_data
         preprocessing_summary
         output
@@ -81,6 +88,7 @@ workflow zscore_calculation {
             zscore_data = gen_zscore(
                 pair_id,
                 negative,
+                spikein_data,
                 finalisation_data,
                 preprocessing_summary,
                 output
@@ -88,6 +96,7 @@ workflow zscore_calculation {
         } else {
             zscore_data = no_negative (
                 pair_id,
+                spikein_data,
                 finalisation_data,
                 preprocessing_summary,
                 output

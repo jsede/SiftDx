@@ -25,6 +25,7 @@ workflow finalisation {
         pair_id
         preprocessing_data
         preprocessing_summary
+        spikein_data
         tax_class_data
         negative
         table_template
@@ -46,6 +47,7 @@ workflow finalisation {
         zscore_data = zscore_calculation (
             pair_id,
             negative,
+            spikein_data,
             taxonomy_data,
             preprocessing_summary,
             output

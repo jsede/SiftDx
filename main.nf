@@ -42,6 +42,7 @@ workflow {
         pair_id,
         preprocessing_data.aln_prep_data,
         preprocessing_data.preprocessing_summary,
+        preprocessing_data.spikein_data,
         tax_class_data,
         negative,
         table_summary,
