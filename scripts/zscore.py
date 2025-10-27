@@ -138,15 +138,24 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     # calculate ERCC/Sequins RPM scale factor if applicable
     if sample_pg > 0:
         if os.path.isfile(os.path.abspath(spikein_input)) is True and os.stat(os.path.abspath(spikein_input)).st_size != 0:
-            scaled_pg = pg_calculation(sample_tr, sample_fr, spikein_input)
+            ercc_info = pd.read_csv(
+                spikein_input, 
+                sep="\t", 
+                header = None, 
+                names=["plus_reads", "minus_reads"],
+                usecols=[6,7],
+                dtype="int64"
+                )
+            scaled_pg = pg_calculation(sample_tr, sample_fr, ercc_info)
         else:
             scaled_pg = 0
         taxon_counts['scale_factor'] = taxon_counts['numreads']/sample_fr
         taxon_counts['estimated_pg'] = scaled_pg * taxon_counts['scale_factor']
-        taxon_counts.to_csv("pg_per_hit.csv", index=None)
+        taxon_counts.to_csv(dirpath + "/pg_per_hit.csv", index=None)
         taxon_counts = taxon_counts.drop(columns='scale_factor')
     else:
         taxon_counts['estimated_pg'] = 0
+        neg_counts['estimated_pg'] = 0
 
     # calculate the RPM for sample and negative
     taxon_counts['rpm_sample'] = taxon_counts['numreads']/taxon_sum
@@ -216,11 +225,11 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     for col in combined_counts.select_dtypes(include='object').columns:
         combined_counts = combined_counts.fillna('-')
     combined_counts['zscore'] = combined_counts.apply(set_zscore, axis=1)
-    zscore_output = "zscore.tsv"
+    zscore_output = dirpath + "/zscore.tsv"
     combined_counts.to_csv(zscore_output, sep="\t", index=None)
 
     # extract detected pathogens list
-    known_pgs = "detected_pathogens.tsv"
+    known_pgs = dirpath + "/detected_pathogens.tsv"
     pathogen_db_list = pathogen_db['Species'].to_list() + pathogen_db['AltNames'].to_list()
     match_species = taxon_counts[taxon_counts['species'].isin(pathogen_db_list) | taxon_counts['taxon'].isin(pathogen_db_list)]
     match_species = match_species[(match_species['taxon'] != 'No Hit')] # remove the No hit because z-score of no hit is never 0
