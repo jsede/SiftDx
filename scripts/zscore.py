@@ -34,7 +34,7 @@ phylum_exclusion = [
 
 final_column_order = [
     "taxon",
-    "avgseqlen"
+    "avgseqlen",
     "numreads",
     "final_taxid",
     "accession",
