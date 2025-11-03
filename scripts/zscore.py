@@ -16,6 +16,7 @@ synthetic_list = [
     "reporter vector",
     "homo sapiens",
     "unclassified",
+    "cellular root",
     "root"
 ]
 
@@ -166,18 +167,19 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     zscore_df = zscore_df[['taxon', 'rpm_sample', 'rpm_ctrl']]
     zscore_df['zscore'] = (zscore_df['rpm_sample'] - zscore_df['rpm_ctrl'].mean())/zscore_df['rpm_ctrl'].std()
     zscored = pd.merge(zscore_df, taxon_counts, on='taxon', how='inner').drop(columns="rpm_sample_y").rename(columns={'rpm_sample_x': 'rpm_sample'})
+    zscored['zscore'] = zscored.apply(set_zscore, axis=1)
 
     # need to check if the zscore calculations get rescaled if the numbers are too high.
     zscore_max = zscore_df['zscore'].max()
     zscore_min = zscore_df['zscore'].min()
     if zscore_max >= 99 and zscore_min != zscore_max:
-        zscore_df['zscore'] = (
-            (zscore_df['zscore'] - zscore_min) / (zscore_max - zscore_min) * (99 - 1) + 1
+        zscored['zscore'] = (
+            (zscored['zscore'] - zscore_min) / (zscore_max - zscore_min) * (99 - 1) + 1
         )
-        zscore_max = zscore_df['zscore'].max()
-        zscore_min = zscore_df['zscore'].min()
+        zscore_max = zscored['zscore'].max()
+        zscore_min = zscored['zscore'].min()
     elif zscore_max >= 99 and zscore_min == zscore_max:
-        zscore_df['zscore'] = 99
+        zscored['zscore'] = 99
 
     # grabbing only the taxon that are not in each other
     sample_only = taxon_counts[~taxon_counts['taxon'].isin(neg_counts['taxon'])].dropna(subset=['taxon']).reset_index(drop=True)
@@ -198,6 +200,7 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
 
     # stack the files, and merge the final zscores in
     combined_counts = pd.concat([sample_only, neg_only, zscored], ignore_index=True)
+    combined_counts['zscore'] = combined_counts.apply(set_zscore, axis=1)
 
     # separate the sample only & negative only 
     hundo_only = combined_counts[combined_counts['zscore'] == 100].copy()
@@ -224,7 +227,6 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     combined_counts.update(hundo_only)
     for col in combined_counts.select_dtypes(include='object').columns:
         combined_counts = combined_counts.fillna('-')
-    combined_counts['zscore'] = combined_counts.apply(set_zscore, axis=1)
     zscore_output = dirpath + "/zscore.tsv"
     combined_counts.to_csv(zscore_output, sep="\t", index=None)
 
