@@ -8,7 +8,7 @@ include { zscore_calculation } from './modules/zscore_calculation.nf'
 
 workflow {    
     def output = params.output ?: new File(params.r1).parent
-    def pair_id = new File(params.r1).name.split('_')[0]
+    def pair_id = new File(params.r1).name.split('_S')[0]
     def reads = [file(params.r1), file(params.r2)]
     def negative = params.ndata ?: null
     def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : (params.sequins ? params.bowtie2_index_sequins : params.bowtie2_index) // if ERCC/Sequins is flag provided, set bowtie2_index
