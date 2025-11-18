@@ -85,7 +85,7 @@ def blast_cleanup(file, name, taxdump, dirpath, entrez_cred):
     
     bacteria_condition = (blast_df['superkingdom'] == 'Bacteria') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 95)
     eukaryota_condition = (blast_df['superkingdom'] == 'Eukaryota') | (blast_df['superkingdom'] == 'Archaea') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 98)
-    viruses_condition = (blast_df['superkingdom'] == 'Viruses') & (blast_df['alnlen'] > 0.5) & (blast_df['pident'] > 75)
+    viruses_condition = (blast_df['superkingdom'] == 'Viruses') & (blast_df['alnlen'] > 0.4) & (blast_df['pident'] > 75)
     nothing_condition = ~blast_df['superkingdom'].isin(exc_kingdom)
 
     blast_df = blast_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
@@ -136,13 +136,15 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     minimap_df["alnlen"] = minimap_df['alen']/minimap_df['qlen']
     bacteria_condition = (minimap_df['superkingdom'] == 'Bacteria') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 95)
     eukaryota_condition = (minimap_df['superkingdom'] == 'Eukaryota') | (minimap_df['superkingdom'] == 'Archaea') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 98)
-    viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 75)
+    viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.4) & (minimap_df['pident'] > 75)
     nothing_condition = ~minimap_df['superkingdom'].isin(exc_kingdom)
 
     minimap_df = minimap_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+
     minimap_df.drop_duplicates(subset="MM2_NT", keep="first", inplace=True)
     full_minimap_df = minimap_df[["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"]]
     minimap_df = minimap_df[["MM2_NT", "accession"]]
+
     return minimap_df, full_minimap_df
     
 def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
@@ -192,7 +194,7 @@ def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
 
     bacteria_condition = (diamond_df['superkingdom'] == 'Bacteria') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 95)
     eukaryota_condition = (diamond_df['superkingdom'] == 'Eukaryota') | (diamond_df['superkingdom'] == 'Archaea') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 98)
-    viruses_condition = (diamond_df['superkingdom'] == 'Viruses') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 75)
+    viruses_condition = (diamond_df['superkingdom'] == 'Viruses') & (diamond_df['alnlen'] > 0.4) & (diamond_df['pident'] > 75)
     nothing_condition = ~diamond_df['superkingdom'].isin(exc_kingdom)
 
     diamond_df = diamond_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]

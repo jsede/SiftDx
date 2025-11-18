@@ -82,7 +82,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     if os.path.isfile(minimap_lr) is True and os.path.getsize(os.path.realpath(minimap_lr)) != 0:
         minimap_lr_df, full_mm2_reads_df = cleaners.minimap_cleanup(minimap_lr, "MM2_NT", taxdump, database, dirpath, entrez_cred)
     full_mm2_reads_df = full_mm2_reads_df.rename(columns={"MM2_NT": "Fasta_Headers"})
-    
+
     # Filter out empty or all-NA DataFrames before concatenation
     minimap_parts = [
         ("minimap_contigs_df", minimap_contigs_df),
@@ -213,8 +213,10 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         else row["MM2_Species"],
         axis=1,
     )
-    merged_df.drop(columns=["BLAST_Species", "MM2_Species"], inplace=True) # drop more unncessary columns from merge.
-    
+    #merged_df.drop(columns=["BLAST_Species", "MM2_Species"], inplace=True) # drop more unncessary columns from merge.
+    test = dirpath + "/test.tsv"
+    merged_df.to_csv(test, sep="\t", index=None)
+
     # clean up the columns again make sure everything is a string.
     col_list = ["NT_Species", "NR_Species"]
     for col in col_list:
@@ -282,7 +284,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     full_sample_df = full_sample_df.merge(
         lineage_df, left_on="final_taxid", right_on='taxid', how='left'
     )   
-    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids"]).fillna("-")
+    full_sample_df = full_sample_df.drop(columns=["taxid","sscinames","staxids", "BLAST_Species"]).fillna("-")
     
     full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
     full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
