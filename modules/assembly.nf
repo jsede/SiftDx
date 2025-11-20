@@ -44,7 +44,7 @@ process unassembled_reads {
             path("unassembled_reads_rev.fq.gz"),
             path("reads_mapped_to_contigs.cov_stats"),
             path("unassembled_summary.txt"),
-        path("final.contigs.fq")
+            path("final.contigs.fq")
     
     
     script:
@@ -84,13 +84,15 @@ process megahit_fail {
         tuple path("unassembled_reads_fwd.fq.gz"),
             path("unassembled_reads_rev.fq.gz"),
             path("reads_mapped_to_contigs.cov_stats"),
-            path("unassembled_summary.txt")
+            path("unassembled_summary.txt"),
+            path("final.contigs.fq")
 
     script:
     """
     cp ${fullyQc_1} unassembled_reads_fwd.fq.gz
     cp ${fullyQc_2} unassembled_reads_rev.fq.gz
     cp ${cov_stats} reads_mapped_to_contigs.cov_stats
+    cp ${megahit_contigs} final.contigs.fq
     awk '{s++} END {printf "total_unassembled_reads: %.0f\\n", (s/4)*2}' unassembled_reads_fwd.fq.gz > unassembled_summary.txt
     """
 }
