@@ -17,6 +17,7 @@ synthetic_list = [
     "homo sapiens",
     "unclassified",
     "cellular root",
+    "cellular organisms",
     "root"
 ]
 
