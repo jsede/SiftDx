@@ -231,7 +231,6 @@ def html_loop(taxon_df, negative):
     
     # drop the species with genus representatives from the main taxon_df
     taxon_df = taxon_df[~taxon_df['taxon_label'].isin(nested_labels)]
-    taxon_df.to_csv("/Users/wfon4473/Documents/Bioinformatics/all_testdirs/siftdx/table_testdir/debug_taxon_df.tsv", sep="\t", index=False)
 
     # Process the rows without genus-level representatives first
     for _, row in taxon_df.iterrows():
