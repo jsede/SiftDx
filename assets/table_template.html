@@ -82,7 +82,7 @@
             outline: none;
             transition: 0.4s;
             display: flex;
-            align-items: center;  /* Ensures vertical centering */
+            align-items: center;
             min-height: auto;
         }
         .accordion .button-content {
@@ -90,6 +90,7 @@
             justify-content: space-between;
             width: 100%;
         }
+
 
         .accordion span {
             flex: 1;
@@ -103,7 +104,7 @@
             background-color: white;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.2s ease-out;
+            transition: max-height 0.25s ease-out;
             line-height: 2;
             margin-right: 10px;
         }
@@ -116,8 +117,14 @@
             font-size: 12px;
             line-height: 1.5;
         }
+        .panel .panel {
+            max-height: none !important;
+            overflow: visible !important;
+            padding-left: 15px; /* optional indentation */
+        }
 
-        .accordion:after {
+        /* Only top-level accordions get + / - */
+        .results_accordion > .accordion:after {
             content: '+';
             font-size: 13px;
             color: #777;
@@ -125,10 +132,21 @@
             margin-left: 10px;
         }
 
-        .active-accordion:after {
+        .results_accordion > .accordion.active-accordion:after {
             content: "-"; /* "minus" sign (-) */
         }
 
+        /* .accordion:after {
+            content: '+';
+            font-size: 13px;
+            color: #777;
+            float: right;
+            margin-left: 10px;
+        }/* 
+
+        /* .active-accordion:after {
+            content: "-"; */
+        
         .highlight {
             background-color: #ffff99 !important;
         }
@@ -196,23 +214,28 @@
         </div>
 
     <script>
+        /* ---- TAB SWITCHING ---- */
         function openTab(evt, tabName) {
-        var i, tabContent, tabLinks;
-        tabContent = document.getElementsByClassName("tab");
-        for (i = 0; i < tabContent.length; i++) {
-            tabContent[i].style.display = "none";
-        }
-        tabLinks = document.getElementsByClassName("tab-link");
-        for (i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].classList.remove("active-tab");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.classList.add("active-tab");
+            var i, tabContent, tabLinks;
+            tabContent = document.getElementsByClassName("tab");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+            tabLinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].classList.remove("active-tab");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active-tab");
         }
 
+        /* ---- ACCORDION TOGGLE ---- */
         function toggleAccordion() {
             this.classList.toggle("active-accordion");
-            var panel = this.nextElementSibling;
+
+            let panel = this.nextElementSibling;
+            if (!panel) return;
+
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
@@ -220,12 +243,17 @@
             }
         }
 
+        /* ---- Attach accordion listeners to ALL accordion buttons ---- */
+        function attachAccordionListeners() {
+            document.querySelectorAll(".accordion").forEach(btn => {
+                btn.removeEventListener("click", toggleAccordion);
+                btn.addEventListener("click", toggleAccordion);
+            });
+        }
+
+        /* ---- Initial Load ---- */
         window.addEventListener("DOMContentLoaded", function () {
-            // Set up accordion toggle behavior
-            var acc = document.getElementsByClassName("accordion");
-            for (var i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", toggleAccordion);
-            }
+            attachAccordionListeners();
 
             // Open the Bacteria tab by default
             var defaultTabButton = document.querySelector(".tab-link[onclick*='bacteria_tab']");
@@ -234,25 +262,40 @@
             }
         });
 
+        /* ---- SHOW ALL ---- */
         document.getElementById('showAllButton').addEventListener('click', function() {
             var panels = document.getElementsByClassName('panel');
             for (var j = 0; j < panels.length; j++) {
                 var panel = panels[j];
                 panel.style.maxHeight = panel.scrollHeight + "px";
-                panel.previousElementSibling.classList.add('active-accordion');
+                if (panel.previousElementSibling)
+                    panel.previousElementSibling.classList.add('active-accordion');
+            }
+
+            /* force all ancestor panels to resize */
+            for (var j = 0; j < panels.length; j++) {
+                let parent = panels[j].parentElement;
+                while (parent) {
+                    if (parent.classList && parent.classList.contains("panel") && parent.style.maxHeight) {
+                        parent.style.maxHeight = parent.scrollHeight + "px";
+                    }
+                    parent = parent.parentElement;
+                }
             }
         });
 
+        /* ---- HIDE ALL ---- */
         document.getElementById('hideAllButton').addEventListener('click', function() {
             var panels = document.getElementsByClassName('panel');
             for (var j = 0; j < panels.length; j++) {
                 var panel = panels[j];
                 panel.style.maxHeight = null;
-                panel.previousElementSibling.classList.remove('active-accordion');
-        }
+                if (panel.previousElementSibling)
+                    panel.previousElementSibling.classList.remove('active-accordion');
+            }
         });
-    </script>
-    <script>
+
+        /* ---- SEARCH FUNCTIONALITY ---- */
         document.getElementById("accordionSearch").addEventListener("input", function () {
             var query = this.value.toLowerCase();
             var accordions = document.getElementsByClassName("accordion");
