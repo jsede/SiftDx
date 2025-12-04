@@ -219,7 +219,7 @@ workflow taxonomic_classification {
 
         blast_data = merge_blast(
             pair_id,
-            blast_chunks,
+            blast_chunks.collect(),
             output
         )
 
