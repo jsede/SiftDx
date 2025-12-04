@@ -123,7 +123,7 @@ process split_input {
         val output
 
     output:
-        path "chunk_*"
+        path "*_chunk_*"
 
     script:
     """
@@ -167,35 +167,6 @@ process merge_blast {
     cat ${blast_chunks.join(' ')} > nt_alignments_sr_blast.tsv
     """
 }
-process blast{
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nt_alignments_sr_blast.tsv"
-
-    input:
-        val pair_id
-        tuple path(megahit_contigs),
-            path(combined_sr_fq),
-            path(combined_sr_fa),
-            path(combined_lr_contigs_fq),
-            path(combined_lr_contigs_fa),
-            path(unassembled_reads_longer_fwd),
-            path(unassembled_reads_longer_rev),
-            path(cov_stats),
-            path(fqc_txt)
-        val output
-    
-    output:
-        path "nt_alignments_sr_blast.tsv"
-
-    script:
-    """
-    blastn -task megablast \\
-        -query "${combined_sr_fa}" \\
-        -db "${params.blast_db}" \\
-        -max_target_seqs 10 \\
-        -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids" \\
-        -out nt_alignments_sr_blast.tsv
-    """
-}
 
 workflow taxonomic_classification {
     take:
@@ -234,39 +205,24 @@ workflow taxonomic_classification {
         )
 
         // Call Blast on the shorter reads.
-        
-        blast_file_ch = preprocessing_data.map { 
-            _megahit_contigs, _combined_sr_fq, combined_sr_fa, _combined_lr_contigs_fq,
-            _combined_lr_contigs_fa, _unassembled_fwd, _unassembled_rev, _cov_stats, _fqc_txt ->
-                combined_sr_fa 
-        }
-        blast_file = blast_file_ch.toList().get(0)
-        blast_size = file(blast_file).getSize()
-        if (blast_size > 4_000_000) {
-            blast_split = split_input(
-                pair_id,
-                preprocessing_data,
-                output
-            )
+        blast_split = split_input(
+            pair_id,
+            preprocessing_data,
+            output
+        )
 
-            blast_chunks = split_blast(
-                pair_id,
-                blast_split.out,
-                output
-            )
+        blast_chunks = split_blast(
+            pair_id,
+            blast_split,
+            output
+        )
 
-            blast_data = merge_blast(
-                pair_id,
-                blast_chunks.out,
-                output
-            )
-        } else {
-            blast_data = blast(
-                pair_id,
-                preprocessing_data,
-                output
-            )
-        }
+        blast_data = merge_blast(
+            pair_id,
+            blast_chunks,
+            output
+        )
+
     emit:
         mm2_contigs
             .concat(mm2_reads)
