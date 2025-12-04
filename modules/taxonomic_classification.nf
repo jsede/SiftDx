@@ -240,8 +240,7 @@ workflow taxonomic_classification {
             _combined_lr_contigs_fa, _unassembled_fwd, _unassembled_rev, _cov_stats, _fqc_txt ->
                 combined_sr_fa 
         }
-        blast_file = blast_file_ch.first()
-        
+        blast_file = blast_file_ch.toList().get(0)
         blast_size = file(blast_file).getSize()
         if (blast_size > 4_000_000) {
             blast_split = split_input(
