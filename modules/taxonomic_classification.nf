@@ -209,13 +209,11 @@ workflow taxonomic_classification {
             pair_id,
             preprocessing_data,
             output
-        )
-        split_files = split_blast(pair_id, blast_split, output)
-                .flatten()
+        ).flatten()
 
         blast_chunks = split_blast(
             pair_id,
-            split_files,
+            blast_split,
             output
         )
 
