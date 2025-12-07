@@ -127,7 +127,7 @@ process split_input {
 
     script:
     """
-    ${params.python} ${baseDir}/scripts/split_fasta.py ${combined_sr_fa} 20000
+    ${params.python} ${baseDir}/scripts/split_fasta.py ${combined_sr_fa} 10000
     """
 }
 
