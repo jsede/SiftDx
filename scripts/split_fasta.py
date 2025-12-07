@@ -32,4 +32,4 @@ def split_fasta(input_fasta, chunk_size):
     print(f"Created {chunk_index-1} chunks in: {out_dir}")
 
 if __name__ == "__main__":
-    split_fasta(sys.argv[1], 20000)
+    split_fasta(sys.argv[1], 10000)
