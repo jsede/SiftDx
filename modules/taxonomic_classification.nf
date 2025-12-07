@@ -53,7 +53,7 @@ process minimap2_reads {
 }
 
 process k2_pluspf {
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "combined_rc.kraken.txt"
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "combined_rc.kraken.*"
 
     input:
         val pair_id
@@ -75,6 +75,7 @@ process k2_pluspf {
     """
     cat ${combined_lr_contigs_fa} ${combined_sr_fa} > combined_rc.fa
     kraken2 --db ${params.pluspf_db} --use-names --threads 8 combined_rc.fa > combined_rc.kraken.txt
+    ktImportTaxonomy -t 5 -m 3 -o combined_rc.kraken.html combined_rc.kraken.txt
     """
 }
 
