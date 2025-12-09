@@ -30,6 +30,9 @@ def get_taxon_rank(row, taxid_name, taxdump):
 
 def get_taxon_lineage(taxid, taxdump, entrez_cred):
     result_dict = {}
+    if str(taxid) in ['-', '1', '0']:
+        logging.info("TaxID is not valid, returning empty lineage")
+        return None
     try:
         lineage = taxdump.getAncestry(taxid)
         rank = [node.rank for node in lineage]
