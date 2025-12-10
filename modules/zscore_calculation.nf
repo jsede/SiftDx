@@ -1,5 +1,6 @@
 process gen_zscore {
     publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "*.tsv"
+    publishDir "${output}/${pair_id}/results", mode: 'copy', pattern: "rpm-zscore.html"
     
     input:
         val pair_id
@@ -35,7 +36,8 @@ process gen_zscore {
             printf "taxa_id_sample_and_negative: %d\\n", both
         }
     ' zscore.tsv > zscore_summary.txt
-
+    
+    ktImportTaxonomy -m 4 -i krona_input.tsv -o rpm-zscore.html
     """
     }
 

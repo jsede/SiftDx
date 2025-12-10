@@ -238,5 +238,17 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     match_species = match_species[(match_species['taxon'] != 'No Hit')] # remove the No hit because z-score of no hit is never 0
     match_species.to_csv(known_pgs, sep="\t", index=None)
 
+    # set up for tpm krona chart
+    krona_headers = {
+        'taxon': '#queryID',
+        'final_taxid': '#taxID',
+        'zscore': '#score',
+        'rpm': '#magnitude'
+    }  
+    krona_path = dirpath + "/krona_input.tsv"
+    krona_csv = combined_counts[['taxon', 'final_taxid', 'zscore', 'rpm_sample']]
+    krona_csv.rename(columns=krona_headers, inplace=True)
+    krona_csv.to_csv(krona_path, sep = '\t', index=False)
+
 if __name__ == "__main__":
     zscore_calculation(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
