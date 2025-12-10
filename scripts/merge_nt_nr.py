@@ -214,8 +214,7 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         axis=1,
     )
     #merged_df.drop(columns=["BLAST_Species", "MM2_Species"], inplace=True) # drop more unncessary columns from merge.
-    test = dirpath + "/test.tsv"
-    merged_df.to_csv(test, sep="\t", index=None)
+
 
     # clean up the columns again make sure everything is a string.
     col_list = ["NT_Species", "NR_Species"]
