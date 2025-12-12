@@ -147,7 +147,7 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
 
     return minimap_df, full_minimap_df
     
-def diamond_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
+def diamond_cleanup(file, name, taxdump, dirpath, entrez_cred):
     loaded_cache = assists.load_cache_files(dirpath)
     diamond_df = pd.read_csv(
             file, sep="\t", header=None, 

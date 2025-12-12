@@ -1,5 +1,8 @@
 import os
 import sys
+import glob
+import shutil
+from pathlib import Path
 import logging
 import taxidTools
 import assists
@@ -36,6 +39,8 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     minimap_contigs = input_paths["minimap2_contig_out"]
     minimap_lr = input_paths["minimap2_reads_out"]
     kraken_file = input_paths["kraken_pluspf_file"]
+    mm2_folder = input_paths["mm2_data"]
+    diamond_folder = input_paths["diamond_data"]
 
     check_files = [
         fasta_file,
@@ -50,7 +55,10 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     for f in check_files:
         assists.check_files(f)
 
-        # clean up the fasta file so that its now a dataframe column
+    for json in Path(diamond_folder).glob("*.json"):
+        shutil.copy2(json, Path(dirpath) / json.name)
+
+    # clean up the fasta file so that its now a dataframe column
     headers, lengths = cleaners.convert_fasta_to_list(fasta_file)
     fasta_df = pd.DataFrame({"Fasta_Headers": headers, "Seq_Length": lengths})
     covstats_df = cleaners.extract_name_numreads(covstats_file)
@@ -70,58 +78,21 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     full_blast_df = full_blast_df.rename(columns={"NT": "Fasta_Headers"})
     logging.info("Cleaned up BLAST output and ready to merge")
 
-    # clean up minimap, join them together and merge it with
-    logging.info("Starting to clean up Minimap2 output")
-    minimap_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
-    full_mm2_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
-    if os.path.isfile(minimap_contigs) is True and os.path.getsize(os.path.realpath(minimap_contigs)) != 0:
-        minimap_contigs_df, full_mm2_contigs_df = cleaners.minimap_cleanup(minimap_contigs, "MM2_NT", taxdump, database, dirpath, entrez_cred)
-    full_mm2_contigs_df = full_mm2_contigs_df.rename(columns={"MM2_NT": "Fasta_Headers"})
-    minimap_lr_df = pd.DataFrame(columns = ["MM2_NT", "accession"])
-    full_mm2_reads_df = pd.DataFrame(columns = ["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
-    if os.path.isfile(minimap_lr) is True and os.path.getsize(os.path.realpath(minimap_lr)) != 0:
-        minimap_lr_df, full_mm2_reads_df = cleaners.minimap_cleanup(minimap_lr, "MM2_NT", taxdump, database, dirpath, entrez_cred)
-    full_mm2_reads_df = full_mm2_reads_df.rename(columns={"MM2_NT": "Fasta_Headers"})
-
-    # Filter out empty or all-NA DataFrames before concatenation
-    minimap_parts = [
-        ("minimap_contigs_df", minimap_contigs_df),
-        ("minimap_lr_df", minimap_lr_df),
-    ]
-    minimap_parts = [(k, df) for k, df in minimap_parts if not df.empty and not df.isna().all().all()]
-    if minimap_parts:
-        minimap_df = pd.concat([df for _, df in minimap_parts], keys=[k for k, _ in minimap_parts])
-    else:
-        minimap_df = pd.DataFrame(columns=["MM2_NT", "accession"])
-
-    full_mm2_parts = [
-        ("full_mm2_contigs_df", full_mm2_contigs_df),
-        ("full_mm2_reads_df", full_mm2_reads_df),
-    ]
-    full_mm2_parts = [(k, df) for k, df in full_mm2_parts if not df.empty and not df.isna().all().all()]
-    if full_mm2_parts:
-        full_minimap_df = pd.concat([df for _, df in full_mm2_parts], keys=[k for k, _ in full_mm2_parts])
-    else:
-        full_minimap_df = pd.DataFrame(columns=["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
-    mm2_accession_list = minimap_df["accession"].dropna().to_list()
-    mm2_accession_list = list(dict.fromkeys(mm2_accession_list))
-    logging.info("Merged and cleaned up Minimap output and ready to assign taxonomy")
+    # import the externally created minimap dataframes
+    mm2_data = os.path.join(mm2_folder, "mm2_data.tsv")
+    if os.path.isfile(mm2_data) or os.path.getsize(os.path.realpath(mm2_data)) != 0:
+        minimap_df = pd.read_csv(mm2_data, sep="\t", header=0)
+    full_mm2_data = os.path.join(mm2_folder, "full_mm2_data.tsv")
+    if os.path.isfile(full_mm2_data) or os.path.getsize(os.path.realpath(full_mm2_data)) != 0:
+        full_minimap_df = pd.read_csv(full_mm2_data, sep="\t", header=0)
     
-    at.nucl_accession_search(database, mm2_accession_list, dirpath, entrez_cred)
-    
-    # clean up diamond
-    logging.info("Starting to clean up Diamond output")
-    diamond_df = pd.DataFrame(columns = ["NR", "accession"])
-    full_diamond_df = pd.DataFrame(columns = ["NR", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
-    if os.path.isfile(diamond_file) is True and os.path.getsize(os.path.realpath(diamond_file)) != 0:
-        diamond_df, full_diamond_df = cleaners.diamond_cleanup(diamond_file, "NR", taxdump, database, dirpath, entrez_cred) # filtering the percentage identity to above 75.
-    full_diamond_df = full_diamond_df.rename(columns={"NR": "Fasta_Headers"})
-    diamond_acc_list = diamond_df["accession"].dropna().to_list()
-    diamond_acc_list = list(dict.fromkeys(diamond_acc_list))
-    logging.info("Cleaned up Diamond output and ready to assign taxonomy")
-
-    logging.info("Searching prot databases for taxids")
-    at.prot_accession_search(database, diamond_acc_list, dirpath, entrez_cred)
+    # import the externally created diamond dataframes
+    diamond_data = os.path.join(diamond_folder, "diamond_data.tsv")
+    if diamond_data is None or os.path.getsize(os.path.realpath(diamond_data)) != 0:
+        diamond_df = pd.read_csv(diamond_data, sep="\t", header=0)
+    full_diamond_data = os.path.join(diamond_folder, "full_diamond_data.tsv")
+    if full_diamond_data is None or os.path.getsize(os.path.realpath(full_diamond_data)) != 0:
+        full_diamond_df = pd.read_csv(full_diamond_data, sep="\t", header=0)
 
     kraken_df = pd.read_csv(
         kraken_file,
@@ -213,9 +184,6 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
         else row["MM2_Species"],
         axis=1,
     )
-    #merged_df.drop(columns=["BLAST_Species", "MM2_Species"], inplace=True) # drop more unncessary columns from merge.
-    test = dirpath + "/test.tsv"
-    merged_df.to_csv(test, sep="\t", index=None)
 
     # clean up the columns again make sure everything is a string.
     col_list = ["NT_Species", "NR_Species"]

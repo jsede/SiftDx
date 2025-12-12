@@ -1,3 +1,108 @@
+process clean_mm2 {
+    input:
+        val pair_id
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats),
+            path(fqc_txt)
+        tuple path(mm2_contigs), // minimap2_contig_out.paf
+            path(mm2_contigs_m8), // minimap2_contig_out_frompaf.m8
+            path(mm2_reads), // minimap2_reads_out.paf
+            path(mm2_reads_m8), // minimap2_reads_out_frompaf.m8
+            path(k2_pluspf), // combined_rc.kraken.txt
+            path(nr_alignments), // nr_alignments_file.tsv
+            path(nt_alignments) //n t_alignments_sr_blast.tsv
+        val entrez_email
+        val entrez_api_key
+        val output
+    
+    output:
+        path("mm2_out")
+    
+    script:
+    """
+    cat <<EOF > inputs.txt
+    combined_lr_contigs_fa ${combined_lr_contigs_fa}
+    cov_stats ${cov_stats}
+    minimap2_contig_out ${mm2_contigs_m8}
+    minimap2_reads_out ${mm2_reads_m8}
+    kraken_pluspf_file ${k2_pluspf}
+    nr_alignments_file ${nr_alignments}
+    nt_alignments_sr_file ${nt_alignments}
+    EOF
+
+    mkdir -p mm2_out
+
+    ${params.python} ${baseDir}/scripts/clean_mm2.py ${params.database} ${params.taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
+
+    [ -f mm2_data.tsv ] && mv mm2_data.tsv mm2_out/
+    [ -f full_mm2_data.tsv ] && mv full_mm2_data.tsv mm2_out/
+
+    for f in *.json; do
+        [ -f "\$f" ] && mv "\$f" mm2_out/
+    done
+
+    """
+}
+
+process clean_diamond {
+    input:
+        val pair_id
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats),
+            path(fqc_txt)
+        tuple path(mm2_contigs), // minimap2_contig_out.paf
+            path(mm2_contigs_m8), // minimap2_contig_out_frompaf.m8
+            path(mm2_reads), // minimap2_reads_out.paf
+            path(mm2_reads_m8), // minimap2_reads_out_frompaf.m8
+            path(k2_pluspf), // combined_rc.kraken.txt
+            path(nr_alignments), // nr_alignments_file.tsv
+            path(nt_alignments) //n t_alignments_sr_blast.tsv
+        path(mm2_data)
+        val entrez_email
+        val entrez_api_key
+        val output
+    
+    output:
+        path "diamond_out"
+    
+    script:
+    """
+    cat <<EOF > inputs.txt
+    combined_lr_contigs_fa ${combined_lr_contigs_fa}
+    cov_stats ${cov_stats}
+    minimap2_contig_out ${mm2_contigs_m8}
+    minimap2_reads_out ${mm2_reads_m8}
+    kraken_pluspf_file ${k2_pluspf}
+    nr_alignments_file ${nr_alignments}
+    nt_alignments_sr_file ${nt_alignments}
+    EOF
+
+    mkdir -p diamond_out
+
+    ${params.python} ${baseDir}/scripts/clean_diamond.py ${params.database} ${params.taxdump} inputs.txt ${mm2_data} ${entrez_email} ${entrez_api_key}
+
+    [ -f diamond_data.tsv ] && mv diamond_data.tsv diamond_out/
+    [ -f full_diamond_data.tsv ] && mv full_diamond_data.tsv diamond_out/
+
+    for f in *.json; do
+        [ -f "\$f" ] && mv "\$f" diamond_out/
+    done
+
+    """
+}
+
 process merge_nt_nr {
     publishDir "${output}/${pair_id}/summary", mode: 'copy', pattern: "summary.txt"
     publishDir "${output}/${pair_id}/analysis", mode: 'copy', pattern: "final_decisions.tsv"
@@ -22,6 +127,8 @@ process merge_nt_nr {
             path(k2_pluspf), // combined_rc.kraken.txt
             path(nr_alignments), // nr_alignments_file.tsv
             path(nt_alignments) //n t_alignments_sr_blast.tsv
+        path(mm2_data)
+        path(diamond_data)
         val entrez_email
         val entrez_api_key
         val output
@@ -43,6 +150,8 @@ process merge_nt_nr {
     kraken_pluspf_file ${k2_pluspf}
     nr_alignments_file ${nr_alignments}
     nt_alignments_sr_file ${nt_alignments}
+    mm2_data ${mm2_data}
+    diamond_data ${diamond_data}
     EOF
 
     ${params.python} ${baseDir}/scripts/merge_nt_nr.py ${params.database} ${params.taxdump} inputs.txt ${entrez_email} ${entrez_api_key}
@@ -107,10 +216,31 @@ workflow merge_taxonomy {
         output
     
     main:
+        mm2_data = clean_mm2(
+            pair_id,
+            preprocessing_data,
+            tax_class_data,
+            entrez_email,
+            entrez_api_key,
+            output
+        )
+
+        diamond_data = clean_diamond(
+            pair_id,
+            preprocessing_data,
+            tax_class_data,
+            mm2_data,
+            entrez_email,
+            entrez_api_key,
+            output
+        )
+
         merge_data = merge_nt_nr(
             pair_id,
             preprocessing_data,
             tax_class_data,
+            mm2_data,
+            diamond_data,
             entrez_email,
             entrez_api_key,
             output
