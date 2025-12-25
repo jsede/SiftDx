@@ -261,11 +261,12 @@ def html_loop(taxon_df, negative):
             accordion_html = ""
 
             # start genus accordion
+            sp_metric = f"Z-score: {row['zscore']}" if negative != "None" else f"RPM: {row['rpm_sample']}"
             genus_html = f"""
             <button class="accordion">
                 <span class="button-content">
                     <span class="taxon">{row['genus']}</span>
-                    <span class="zscore">Zscore: {row['zscore']}</span>
+                    <span class="zscore">{sp_metric}</span>
                 </span>
             </button>
             <div class="panel">
