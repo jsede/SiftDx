@@ -208,7 +208,7 @@ process sortmerna {
 
 process fullyqc {
     cache 'lenient'
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_output"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_*.fq.gz"
 
     input:
         val pair_id
