@@ -285,6 +285,7 @@ def html_loop(taxon_df, negative):
                     sp_lineage = ' > '.join(lineage_parts)
                 except:
                     sp_pident_str = "-"
+                    sp_lineage = "-"
                 
                 sp_metric = f"Z-score: {sp_row['zscore']}" if negative != "None" else f"RPM: {sp_row['rpm_sample']}"
 
