@@ -15,7 +15,10 @@ def decision(species_df, taxdump, dirpath, entrez_cred):
     loaded_cache = assists.load_cache_files(dirpath)
 
     # lets firstly check if the row contains "-"
-    species_df["match"] = species_df.apply(lambda row: row[1:].nunique() == 1, axis=1)
+    species_df["match"] = species_df.apply(
+        lambda row: row[1:].astype(str).nunique() == 1,
+        axis=1
+    )
     logging.info(f"Finding identical species matches...")
 
     # apply the determine final species function for every row.
@@ -43,7 +46,7 @@ def decision(species_df, taxdump, dirpath, entrez_cred):
     stacked_df.sort_values(by='Fasta_Headers', inplace=True, ascending=False)
     stacked_df['final_taxid'] = stacked_df["final_taxid"].replace("0", '-')
     stacked_df[["final", "final_taxid"]] = stacked_df.apply(
-        lambda row: fix_taxid(row, taxdump),
+        lambda row: fix_taxid(row, taxdump, entrez_cred),
         axis=1,
         result_type="expand"
     )
@@ -258,7 +261,7 @@ def taxid_assignment(row, taxdump):
 
     return consensus_lineage, consensus_taxid
 
-def fix_taxid(row, taxdump):
+def fix_taxid(row, taxdump, entrez_cred):
     if row['final_taxid'] == "-" and row['final'] != '-':
         og_taxid = row['final_taxid']
         species = None
@@ -269,7 +272,7 @@ def fix_taxid(row, taxdump):
         except KeyError as exc:
             logging.error("Generated an exception: %s", exc)
         if species is None:
-            species = es.search_species(row['final'])
+            species = es.search_species(row['final'], entrez_cred)
             row['final_taxid'] = species
             logging.info(f"{row['final']} was assigned {og_taxid}, replacing with {species} via Taxonomy Entrez")
     return row['final'], row['final_taxid']
