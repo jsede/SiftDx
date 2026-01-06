@@ -20,7 +20,21 @@ workflow {
     def table_summary = params.table_summary // the table summary html template
     def pipeline_template = params.pipeline_template // the pipeline summary html template
 
+    if (!params.na || !['DNA', 'RNA'].contains(params.na.toUpperCase())) {
+        error "Invalid value for --na. Must be either 'DNA' or 'RNA'."
+    }
+
+
+    log.info "Pair ID: ${pair_id}"
+    log.info "Negative: ${negative}"
+    log.info "Output: ${output}"
+    log.info "Kraken2 database: ${params.kraken2_db}"
+    log.info "Bowtie2 index: ${bowtie2_index}"
+    log.info "ERCC config: ${params.ercc_config}"
+    log.info "Sequins config: ${params.sequins_config}"
+
     // Call the preprocessing workflow
+    log.info "Starting preprocessing."
     preprocessing_data = preprocessing(
         pair_id,
         reads,
@@ -30,14 +44,17 @@ workflow {
         cov_stats,
         output
     )
-    
-    //Call the taxonomic classification workflow
+
+    log.info "Preprocessing complete. Starting taxonomic classification."
+    // Call the taxonomic classification workflow
     tax_class_data = taxonomic_classification(
         pair_id,
         preprocessing_data.aln_prep_data,
         output
     )
     
+    log.info "Taxonomic classification complete. Starting finalisation."
+    // Call the finalisation workflow
     finalisation_data = finalisation(
         pair_id,
         preprocessing_data.aln_prep_data,

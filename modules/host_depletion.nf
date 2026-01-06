@@ -271,19 +271,6 @@ workflow host_depletion {
         output  // the output directory
 
     main:
-        if (!params.na || !['DNA', 'RNA'].contains(params.na.toUpperCase())) {
-            error "Invalid value for --na. Must be either 'DNA' or 'RNA'."
-        }
-
-        log.info "Starting preprocessing:"
-        log.info "Pair ID: ${pair_id}"
-        log.info "Output: ${output}"
-        log.info "Kraken2 database: ${params.kraken2_db}"
-        log.info "Bowtie2 index: ${bowtie2_index}"
-        log.info "ERCC config: ${params.ercc_config}"
-        log.info "Sequins config: ${params.sequins_config}"
-        
-
         // Call Kraken2
         kraken2_data = kraken2(
             pair_id,
