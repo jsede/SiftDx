@@ -340,36 +340,37 @@ def collapse_same_species(df, taxdump):
         'final_taxid': lambda x: ';'.join(sorted({str(a) for a in x if a != '-' and pd.notna(a)})) or 'None',
         'accession': lambda x: ';'.join(sorted({str(v) for v in x if str(v) != '-'}))
     }
-
-        # First, find rows with duplicate 'final' entries
+    
+    # First, find rows with duplicate 'final' entries
     duplicate_final = df[df.duplicated(subset='final', keep=False)]
-    if duplicate_final.empty:
-        return df
+    collapsed_df = df
+    if not duplicate_final.empty: # this will happen if there are no duplicates (usually low taxa)
+        collapsed_df = pd.DataFrame()  # Initialize an empty DataFrame to hold the collapsed results
+        # Columns to include in aggregation
+        aggregation_columns = list(agg_dict.keys())
+        aggregation_columns.append('final')
 
-    # Columns to include in aggregation
-    aggregation_columns = list(agg_dict.keys())
-    aggregation_columns.append('final')
+        # Keep only the relevant columns for aggregation
+        aggregation_df = duplicate_final[aggregation_columns]
 
-    # Keep only the relevant columns for aggregation
-    aggregation_df = duplicate_final[aggregation_columns]
+        # Perform aggregation
+        aggregated = aggregation_df.groupby('final').agg(agg_dict).reset_index()
 
-    # Perform aggregation
-    aggregated = aggregation_df.groupby('final').agg(agg_dict).reset_index()
+        # Add back any taxonomy or metadata columns using first occurrence
+        non_numeric_cols = [
+            'superkingdom', 'kingdom', 'phylum', 'class', 'order',
+            'family', 'genus', 'species', 'subspecies'
+        ]
+        for col in non_numeric_cols:
+            if col in df.columns:
+                aggregated[col] = duplicate_final.groupby('final')[col].first().values
 
-    # Add back any taxonomy or metadata columns using first occurrence
-    non_numeric_cols = [
-        'superkingdom', 'kingdom', 'phylum', 'class', 'order',
-        'family', 'genus', 'species', 'subspecies'
-    ]
-    for col in non_numeric_cols:
-        if col in df.columns:
-            aggregated[col] = duplicate_final.groupby('final')[col].first().values
+        # Drop original duplicated rows
+        df = df[~df.duplicated(subset='final', keep=False)]
 
-    # Drop original duplicated rows
-    df = df[~df.duplicated(subset='final', keep=False)]
-
-    # Concatenate cleaned df and aggregated one
-    collapsed_df = pd.concat([df, aggregated], ignore_index=True)
+        # Concatenate cleaned df and aggregated one
+        collapsed_df = pd.concat([df, aggregated], ignore_index=True)
+   
     columns_to_drop = [
         'Fasta_Headers', 'Kraken_Species', 'NT_Species', 'NR_Species'
     ]
