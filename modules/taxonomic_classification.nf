@@ -126,7 +126,7 @@ process split_input {
         val output
 
     output:
-        path "*_chunk_*", optional: true
+        path "*_chunk_*"
 
     script:
     """
@@ -141,7 +141,7 @@ process split_blast {
         val output
 
     output:
-        path "${chunk.simpleName}.blast.tsv", optional: true
+        path "${chunk.simpleName}.blast.tsv"
 
     script:
     """
@@ -238,7 +238,7 @@ workflow taxonomic_classification {
             sr_fa.size() > 0
         }
         invalid_files = preprocessing_data.filter { contigs, sr_fq, sr_fa, lr_contigs_fq, lr_contigs_fa, unass_lr_fwd, unass_lr_rev, cov_stats, fqc_txt ->
-            sr_fa.empty
+            sr_fa.size() == 0
         }
 
         blast_split = split_input(
