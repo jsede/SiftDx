@@ -126,7 +126,7 @@ process split_input {
         val output
 
     output:
-        path "*_chunk_*"
+        path "*_chunk_*", optional: true
 
     script:
     """
@@ -141,7 +141,7 @@ process split_blast {
         val output
 
     output:
-        path "${chunk.simpleName}.blast.tsv"
+        path "${chunk.simpleName}.blast.tsv", optional: true
 
     script:
     """
@@ -168,6 +168,31 @@ process merge_blast {
     script:
     """
     cat ${blast_chunks.join(' ')} > nt_alignments_sr_blast.tsv
+    """
+}
+
+process empty_blast {
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nt_alignments_sr_blast.tsv"
+    input:
+        val pair_id
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats),
+            path(fqc_txt)
+        val output
+
+    output:
+        path "nt_alignments_sr_blast.tsv"
+
+    script:
+    """
+    : > nt_alignments_sr_blast.tsv
+
     """
 }
 
@@ -208,9 +233,17 @@ workflow taxonomic_classification {
         )
 
         // Call Blast on the shorter reads.
+        // Check if there are even reads to do this on.
+        valid_files = preprocessing_data.filter { contigs, sr_fq, sr_fa, lr_contigs_fq, lr_contigs_fa, unass_lr_fwd, unass_lr_rev, cov_stats, fqc_txt ->
+            sr_fa.size() > 0
+        }
+        invalid_files = preprocessing_data.filter { contigs, sr_fq, sr_fa, lr_contigs_fq, lr_contigs_fa, unass_lr_fwd, unass_lr_rev, cov_stats, fqc_txt ->
+            sr_fa.empty
+        }
+
         blast_split = split_input(
             pair_id,
-            preprocessing_data,
+            valid_files,
             output
         ).flatten()
 
@@ -220,11 +253,20 @@ workflow taxonomic_classification {
             output
         )
 
-        blast_data = merge_blast(
+        blast_results = merge_blast(
             pair_id,
             blast_chunks.collect(),
             output
         )
+
+        empty_blast_data = empty_blast(
+            pair_id,
+            invalid_files,
+            output
+        )
+
+        blast_data = Channel.empty()
+        blast_data = blast_data.mix(blast_results, empty_blast_data)
 
     emit:
         mm2_contigs
