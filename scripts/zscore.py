@@ -168,19 +168,24 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     zscore_df = zscore_df[['taxon', 'rpm_sample', 'rpm_ctrl']]
     zscore_df['zscore'] = (zscore_df['rpm_sample'] - zscore_df['rpm_ctrl'].mean())/zscore_df['rpm_ctrl'].std()
     zscored = pd.merge(zscore_df, taxon_counts, on='taxon', how='inner').drop(columns="rpm_sample_y").rename(columns={'rpm_sample_x': 'rpm_sample'})
-    zscored['zscore'] = zscored.apply(set_zscore, axis=1)
+    if not zscored.empty:
+        zscored['zscore'] = zscored.apply(set_zscore, axis=1)
 
-    # need to check if the zscore calculations get rescaled if the numbers are too high.
-    zscore_max = zscore_df['zscore'].max()
-    zscore_min = zscore_df['zscore'].min()
-    if zscore_max >= 99 and zscore_min != zscore_max:
-        zscored['zscore'] = (
-            (zscored['zscore'] - zscore_min) / (zscore_max - zscore_min) * (99 - 1) + 1
-        )
-        zscore_max = zscored['zscore'].max()
-        zscore_min = zscored['zscore'].min()
-    elif zscore_max >= 99 and zscore_min == zscore_max:
-        zscored['zscore'] = 99
+        # need to check if the zscore calculations get rescaled if the numbers are too high.
+        zscore_max = zscore_df['zscore'].max()
+        zscore_min = zscore_df['zscore'].min()
+        if zscore_max >= 99 and zscore_min != zscore_max:
+            zscored['zscore'] = (
+                (zscored['zscore'] - zscore_min) / (zscore_max - zscore_min) * (99 - 1) + 1
+            )
+            zscore_max = zscored['zscore'].max()
+            zscore_min = zscored['zscore'].min()
+        elif zscore_max >= 99 and zscore_min == zscore_max:
+            zscored['zscore'] = 99
+        
+        # set zscore_max to 1 if <1
+        if zscore_max <= 1:
+            zscore_max = 1
 
     # grabbing only the taxon that are not in each other
     sample_only = taxon_counts[~taxon_counts['taxon'].isin(neg_counts['taxon'])].dropna(subset=['taxon']).reset_index(drop=True)
@@ -209,10 +214,6 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     # Get RPM bounds from 100-zscore group
     hundo_rpm_max = hundo_only['rpm_sample'].max()
     hundo_rpm_min = hundo_only['rpm_sample'].min()
-
-    # set zscore_max to 1 if <1
-    if zscore_max <= 1:
-        zscore_max = 1
         
     # Rescale to be between zscore_max → 100
     if hundo_rpm_max != hundo_rpm_min:
@@ -246,7 +247,7 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
         'rpm': '#magnitude'
     }  
     krona_path = dirpath + "/krona_input.tsv"
-    krona_csv = combined_counts[['taxon', 'final_taxid', 'zscore', 'rpm_sample']]
+    krona_csv = combined_counts[['taxon', 'final_taxid', 'zscore', 'rpm_sample']].copy()
     krona_csv.rename(columns=krona_headers, inplace=True)
     krona_csv.to_csv(krona_path, sep = '\t', index=False)
 
