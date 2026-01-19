@@ -43,9 +43,9 @@ process clean_mm2 {
     [ -f mm2_data.tsv ] && mv mm2_data.tsv mm2_out/
     [ -f full_mm2_data.tsv ] && mv full_mm2_data.tsv mm2_out/
 
-    for f in *.json; do
-        [ -f "\$f" ] && mv "\$f" mm2_out/
-    done
+    if ls *.json >/dev/null 2>&1; then
+        mv *.json mm2_out/
+    fi
 
     """
 }
@@ -96,10 +96,9 @@ process clean_diamond {
     [ -f diamond_data.tsv ] && mv diamond_data.tsv diamond_out/
     [ -f full_diamond_data.tsv ] && mv full_diamond_data.tsv diamond_out/
 
-    for f in *.json; do
-        [ -f "\$f" ] && mv "\$f" diamond_out/
-    done
-
+    if ls *.json >/dev/null 2>&1; then
+        mv *.json diamond_out/
+    fi
     """
 }
 
