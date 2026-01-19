@@ -20,6 +20,12 @@ process minimap2_contigs {
     
     script:
     """
+    if [[ ! -s ${megahit_contigs} ]]; then
+        echo "No input data for Minimap2 on contigs, creating empty output file."
+        : > minimap2_contig_out.paf
+        : > minimap2_contig_out_frompaf.m8
+        exit 0
+    fi
     minimap2 -c --split-prefix mm2_contigs ${params.mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
     ${params.python} ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
     """
@@ -75,6 +81,11 @@ process k2_pluspf {
     script:
     """
     cat ${combined_lr_contigs_fa} ${combined_sr_fa} > combined_rc.fa
+    if [[ ! -s combined_rc.fa ]]; then
+        echo "No input data for Kraken2, creating empty output file."
+        : > combined_rc.kraken.txt
+        exit 0
+    fi
     kraken2 --db ${params.pluspf_db} --use-names --threads 8 combined_rc.fa > combined_rc.kraken.txt
     ${params.python} ${baseDir}/scripts/gen_k2_krona.py combined_rc.fa ${cov_stats} combined_rc.kraken.txt
     ktImportTaxonomy -t 1 -m 3 -o combined_rc.kraken.html combined_rc.kraken.txt
@@ -102,6 +113,12 @@ process diamond {
     
     script:
     """
+    if [[ ! -s ${combined_lr_contigs_fq} ]]; then
+        echo "No input data for Diamond, creating empty output file."
+        : > nr_alignments_file.tsv
+        exit 0
+    fi
+
     diamond blastx --db ${params.diamond_db} \
         --query ${combined_lr_contigs_fq} --mid-sensitive --max-target-seqs 1 \
         --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids\
