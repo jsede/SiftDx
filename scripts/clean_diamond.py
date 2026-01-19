@@ -48,9 +48,22 @@ def diamond_cleanup(database, taxdump, input_file, mm2_data, entrez_cred):
     headers, lengths = cleaners.convert_fasta_to_list(fasta_file)
     fasta_df = pd.DataFrame({"Fasta_Headers": headers, "Seq_Length": lengths})
     covstats_df = cleaners.extract_name_numreads(covstats_file)
-    fasta_df = fasta_df.merge(
-        covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
-    )
+    if not fasta_df.empty or not covstats_df.empty:
+        fasta_df = fasta_df.merge(
+            covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
+        )
+        fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
+        logging.info("Created Fasta Headers")
+    else:
+        logging.warning("Fasta or Covstats DataFrame is empty, skipping merge.")
+        diamond_df = pd.DataFrame(columns = ["NR", "accession"])
+        full_diamond_df = pd.DataFrame(columns = ["NR", "sscinames", "staxids", "pident", "qlen", "evalue", "bitscore"])
+        diamond_data = dirpath + "/diamond_data.tsv"
+        diamond_df.to_csv(diamond_data, sep="\t", index=None)
+        full_diamond_data = dirpath + "/full_diamond_data.tsv"
+        full_diamond_df.to_csv(full_diamond_data, sep="\t", index=None)
+        logging.info("Exporting Diamond cleaned data")
+        sys.exit(0)
     fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
     logging.info("Created Fasta Headers")
 
@@ -72,7 +85,7 @@ def diamond_cleanup(database, taxdump, input_file, mm2_data, entrez_cred):
     diamond_df.to_csv(diamond_data, sep="\t", index=None)
     full_diamond_data = dirpath + "/full_diamond_data.tsv"
     full_diamond_df.to_csv(full_diamond_data, sep="\t", index=None)
-    logging.info("Exporting Minimap2 cleaned data")
+    logging.info("Exporting Diamond cleaned data")
 
 if __name__ == "__main__":
     diamond_cleanup(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], [sys.argv[5], sys.argv[6]])

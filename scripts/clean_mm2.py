@@ -45,11 +45,22 @@ def mm2_cleanup(database, taxdump, input_file, entrez_cred):
     headers, lengths = cleaners.convert_fasta_to_list(fasta_file)
     fasta_df = pd.DataFrame({"Fasta_Headers": headers, "Seq_Length": lengths})
     covstats_df = cleaners.extract_name_numreads(covstats_file)
-    fasta_df = fasta_df.merge(
-        covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
-    )
-    fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
-    logging.info("Created Fasta Headers")
+    if not fasta_df.empty or not covstats_df.empty:
+        fasta_df = fasta_df.merge(
+            covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
+        )
+        fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
+        logging.info("Created Fasta Headers")
+    else:
+        logging.warning("Fasta or Covstats DataFrame is empty, skipping merge.")
+        minimap_df = pd.DataFrame(columns=["MM2_NT", "accession"])
+        full_minimap_df = pd.DataFrame(columns=["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"])
+        mm2_data = dirpath + "/mm2_data.tsv"
+        minimap_df.to_csv(mm2_data, sep="\t", index=None)
+        full_mm2_data = dirpath + "/full_mm2_data.tsv"
+        full_minimap_df.to_csv(full_mm2_data, sep="\t", index=None)
+        logging.info("Exporting Minimap2 cleaned data")
+        sys.exit(0)
 
     logging.info("Starting to clean up Minimap2 output")
     minimap_contigs_df = pd.DataFrame(columns = ["MM2_NT", "accession"])

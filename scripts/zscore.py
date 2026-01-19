@@ -166,8 +166,12 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     # calculate zscore for everything that it can (which is only the samples with both rpm_sample and rpm_ctrl)
     zscore_df = pd.merge(taxon_counts, neg_counts, on='taxon', how='inner')
     zscore_df = zscore_df[['taxon', 'rpm_sample', 'rpm_ctrl']]
-    zscore_df['zscore'] = (zscore_df['rpm_sample'] - zscore_df['rpm_ctrl'].mean())/zscore_df['rpm_ctrl'].std()
+    if len(zscore_df) == 1:
+        zscore_df['zscore'] = 1
+    else:
+        zscore_df['zscore'] = (zscore_df['rpm_sample'] - zscore_df['rpm_ctrl'].mean())/zscore_df['rpm_ctrl'].std()
     zscored = pd.merge(zscore_df, taxon_counts, on='taxon', how='inner').drop(columns="rpm_sample_y").rename(columns={'rpm_sample_x': 'rpm_sample'})
+    zscore_max = 0
     if not zscored.empty:
         zscored['zscore'] = zscored.apply(set_zscore, axis=1)
 
@@ -183,9 +187,9 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
         elif zscore_max >= 99 and zscore_min == zscore_max:
             zscored['zscore'] = 99
         
-        # set zscore_max to 1 if <1
-        if zscore_max <= 1:
-            zscore_max = 1
+    # set zscore_max to 1 if <1
+    if np.isnan(zscore_max) or zscore_max <= 1:
+        zscore_max = 1
 
     # grabbing only the taxon that are not in each other
     sample_only = taxon_counts[~taxon_counts['taxon'].isin(neg_counts['taxon'])].dropna(subset=['taxon']).reset_index(drop=True)

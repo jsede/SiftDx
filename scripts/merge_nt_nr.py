@@ -62,12 +62,37 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     headers, lengths = cleaners.convert_fasta_to_list(fasta_file)
     fasta_df = pd.DataFrame({"Fasta_Headers": headers, "Seq_Length": lengths})
     covstats_df = cleaners.extract_name_numreads(covstats_file)
-    fasta_df = fasta_df.merge(
-        covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
-    )
-    fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
-    logging.info("Created Fasta Headers")
-
+    if not fasta_df.empty or not covstats_df.empty:
+            fasta_df = fasta_df.merge(
+                covstats_df, left_on="Fasta_Headers", right_on="#rname", how='left'
+            )
+            fasta_df['numreads'] = fasta_df['numreads'].fillna("1").astype(int)
+            logging.info("Created Fasta Headers")
+    else:
+        logging.warning("Fasta or Covstats DataFrame is empty, skipping merge.")
+        full_sample_df = pd.DataFrame(columns=[
+            "Fasta_Headers", "Seq_Length", "numreads", 
+            "Kraken_Species", "NT_Species", "NR_Species",
+            "final", "final_taxid", "accession",
+            "pident", "alnlen", "evalue", "bitscore",
+            "superkingdom", "kingdom", "phylum", "class",
+            "order", "family", "genus", "species", "subspecies"
+        ])
+        collapse_df = pd.DataFrame(columns=[
+            "taxon", "avgseqlen", "numreads", "final_taxid",
+            "accession", "pident", "alnlen", "evalue", "bitscore", "rank",
+            "superkingdom", "kingdom", "phylum", "class",
+            "order", "family", "genus", "species", "subspecies"
+        ])
+        full_stacked_df = pd.DataFrame(columns=[
+            'Fasta_Headers', 'Seq_Length', 'numreads', 'Kraken_Species', 
+            'NT_Species', 'NR_Species', 'final', 'final_taxid'])
+        full_stacked_df.to_csv(dirpath + "/final_decisions.tsv",sep="\t", index=None)
+        full_read_contig_info = dirpath + "/full_read_contig_info.tsv"
+        full_sample_df.to_csv(full_read_contig_info, sep="\t", index=None)
+        zscore_input = dirpath + "/zscore_input.tsv"
+        collapse_df.to_csv(zscore_input, sep="\t", index=None)
+        sys.exit(0)
     
     # clean up the blast_sr file by dropping duplicates
     logging.info("Starting to clean up BLAST output")
@@ -203,7 +228,14 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     sample_df, full_sample_df = dt.decision(merged_df, taxdump, dirpath, entrez_cred)
     dataframes = [full_kraken_df, full_blast_df, full_minimap_df, full_diamond_df]
     non_empty_dataframes = [df for df in dataframes if not df.empty and not df.isna().all().all()]
-    all_hits_df = pd.concat(non_empty_dataframes)
+    if non_empty_dataframes:
+        all_hits_df = pd.concat(non_empty_dataframes)
+    else:
+        hits_cols = [
+            'Fasta_Headers', 'sscinames', 'staxids', 'accession', 
+            'pident', 'alnlen', 'evalue', 'bitscore', 'BLAST_Species'
+        ]
+        all_hits_df = pd.DataFrame(columns=hits_cols)
 
     desired_cols = [
         'taxid', 'superkingdom', 'kingdom', 'phylum', 'class',
@@ -220,18 +252,21 @@ def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     all_hits_list = list(dict.fromkeys(all_hits_list))
     cleaners.get_lineage(all_hits_list, taxdump, dirpath, entrez_cred)
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
-    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
-    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
-    lineage_df['rank'] = lineage_df['no rank'].replace('no rank', 'root')
-    # check if superkingdom column exists, if not create it based on domain and acellular root
-    # this seems to be an issue with newer taxdump versions, but the one we test on was from 2023.
-    if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None
-    if "acellular root" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
-    if "domain" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
 
+    if lineage_cache:
+        dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+        lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+        lineage_df['rank'] = lineage_df['no rank'].replace('no rank', 'root')
+        # check if superkingdom column exists, if not create it based on domain and acellular root
+        # this seems to be an issue with newer taxdump versions, but the one we test on was from 2023.
+        if "superkingdom" not in lineage_df.columns:
+            lineage_df["superkingdom"] = None
+        if "acellular root" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+        if "domain" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+    else:
+        lineage_df = pd.DataFrame(columns=desired_cols)
     for col in desired_cols:
         if col not in lineage_df.columns:
             lineage_df[col] = ""

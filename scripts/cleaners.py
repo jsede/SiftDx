@@ -171,34 +171,40 @@ def diamond_cleanup(file, name, taxdump, dirpath, entrez_cred):
 
     get_lineage(taxids, taxdump, dirpath, entrez_cred)
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
-    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
-    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
-    lineage_df["no rank"] = lineage_df["no rank"].replace("no rank", "root")
-    
-    if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None
-    if "acellular root" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
-    if "domain" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+    if lineage_cache:
+        dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+        lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+        lineage_df["no rank"] = lineage_df["no rank"].replace("no rank", "root")
+        
+        if "superkingdom" not in lineage_df.columns:
+            lineage_df["superkingdom"] = None
+        if "acellular root" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+        if "domain" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
 
-    lineage_df = lineage_df[["taxid", "superkingdom", "species"]].dropna(how="all").astype(str)
+        lineage_df = lineage_df[["taxid", "superkingdom", "species"]].dropna(how="all").astype(str)
 
-    taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
-    taxid_to_species = dict(zip(lineage_df["taxid"], lineage_df["species"]))
-    
-    diamond_df["superkingdom"] = diamond_df["staxids"].map(taxid_to_kingdom)
-    diamond_df["sscinames"] = diamond_df["staxids"].map(taxid_to_species)
-    
-    diamond_df['alnlen'] = (diamond_df['length']*3)/diamond_df['qlen']
+        taxid_to_kingdom = dict(zip(lineage_df["taxid"], lineage_df["superkingdom"]))
+        taxid_to_species = dict(zip(lineage_df["taxid"], lineage_df["species"]))
+        
+        diamond_df["superkingdom"] = diamond_df["staxids"].map(taxid_to_kingdom)
+        diamond_df["sscinames"] = diamond_df["staxids"].map(taxid_to_species)
+        
+        diamond_df['alnlen'] = (diamond_df['length']*3)/diamond_df['qlen']
 
-    bacteria_condition = (diamond_df['superkingdom'] == 'Bacteria') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 95)
-    eukaryota_condition = (diamond_df['superkingdom'] == 'Eukaryota') | (diamond_df['superkingdom'] == 'Archaea') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 98)
-    viruses_condition = (diamond_df['superkingdom'] == 'Viruses') & (diamond_df['alnlen'] > 0.4) & (diamond_df['pident'] > 75)
-    nothing_condition = ~diamond_df['superkingdom'].isin(exc_kingdom)
+        bacteria_condition = (diamond_df['superkingdom'] == 'Bacteria') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 95)
+        eukaryota_condition = (diamond_df['superkingdom'] == 'Eukaryota') | (diamond_df['superkingdom'] == 'Archaea') & (diamond_df['alnlen'] > 0.5) & (diamond_df['pident'] > 98)
+        viruses_condition = (diamond_df['superkingdom'] == 'Viruses') & (diamond_df['alnlen'] > 0.4) & (diamond_df['pident'] > 75)
+        nothing_condition = ~diamond_df['superkingdom'].isin(exc_kingdom)
 
-    diamond_df = diamond_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
-    diamond_df.drop_duplicates(subset="NR", keep="first", inplace=True)
+        diamond_df = diamond_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+        diamond_df.drop_duplicates(subset="NR", keep="first", inplace=True)
+    else:
+        diamond_df["superkingdom"] = None
+        diamond_df["sscinames"] = None
+        diamond_df["alnlen"] = None
+        
     full_diamond_df = diamond_df[["NR", "accession", "sscinames", "staxids", "pident", "alnlen", "evalue", "bitscore"]]
     diamond_df = diamond_df[["NR", "accession"]]
     return diamond_df, full_diamond_df
