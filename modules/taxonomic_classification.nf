@@ -92,9 +92,7 @@ process k2_pluspf {
     """
 }
 
-process diamond {
-    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nr_alignments_file.tsv"
-
+process split_fastq {
     input:
         val pair_id
         tuple path(megahit_contigs),
@@ -109,23 +107,56 @@ process diamond {
         val output
 
     output:
-        path "nr_alignments_file.tsv"
-    
+        path "*_part_*.fastq"
+
     script:
     """
-    if [[ ! -s ${combined_lr_contigs_fq} ]]; then
-        echo "No input data for Diamond, creating empty output file."
-        : > nr_alignments_file.tsv
-        exit 0
-    fi
-
-    diamond blastx --db ${params.diamond_db} \
-        --query ${combined_lr_contigs_fq} --mid-sensitive --max-target-seqs 1 \
-        --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids\
-        --masking 0 -c 1 -b 6 \
-        --out nr_alignments_file.tsv
+    ${params.python} ${baseDir}/scripts/split_fastq.py ${combined_lr_contigs_fq}
     """
+}
 
+process diamond_chunks {
+
+    input:
+        val pair_id
+        path chunk
+        val output
+
+    output:
+        path "${chunk.simpleName}.diamond.tsv"
+
+    script:
+    """
+    diamond blastx \
+        --db ${params.diamond_db} \
+        --query ${chunk} \
+        --mid-sensitive \
+        --max-target-seqs 1 \
+        --outfmt 6 qseqid sseqid pident length mismatch gapopen \
+        qstart qend sstart send evalue bitscore qlen staxids \
+        --masking 0 -c 1 -b 6 \
+        --out ${chunk.simpleName}.diamond.tsv
+    """
+}
+
+process merge_diamond {
+
+    publishDir "${output}/${pair_id}/alignments",
+        mode: 'copy',
+        pattern: "nr_alignments_file.tsv"
+
+    input:
+        val pair_id
+        path diamond_chunks
+        val output
+
+    output:
+        path "nr_alignments_file.tsv"
+
+    script:
+    """
+    cat ${diamond_chunks.join(' ')} > nr_alignments_file.tsv
+    """
 }
 
 process split_input {
@@ -243,9 +274,21 @@ workflow taxonomic_classification {
         )
 
         // Call Diamond on the combined contigs and longer reads.
-        diamond_data = diamond(
+        diamond_split = split_fastq(
             pair_id,
             preprocessing_data,
+            output
+        ).flatten()
+
+        diamond_chunks = diamond_chunks(
+            pair_id,
+            diamond_split,
+            output
+        )
+
+        diamond_data = merge_diamond(
+            pair_id,
+            diamond_chunks.collect(),
             output
         )
 
