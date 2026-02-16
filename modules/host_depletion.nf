@@ -172,7 +172,7 @@ process sequins {
 
 process sortmerna {
     cache 'lenient'
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_*.fq.gz"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyQc_*.fq.gz"
 
     input:
         val pair_id
@@ -208,7 +208,7 @@ process sortmerna {
 
 process fullyqc {
     cache 'lenient'
-    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyqc_*.fq.gz"
+    publishDir "${output}/${pair_id}/preprocessing", mode: 'copy', pattern: "fullyQc_*.fq.gz"
 
     input:
         val pair_id
