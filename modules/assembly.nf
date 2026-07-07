@@ -124,8 +124,8 @@ process alignment_prep {
 
     script:
     """
-    ${params.python} ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_fwd} unassembled_reads_longer_fwd.fq unassembled_reads_shorter_fwd.fq
-    ${params.python} ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_rev} unassembled_reads_longer_rev.fq unassembled_reads_shorter_rev.fq 
+    ${params.python} ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_fwd} unassembled_reads_longer_fwd.fq unassembled_reads_shorter_fwd.fq ${params.min_read_length} ${params.max_read_length}
+    ${params.python} ${baseDir}/scripts/separate_reads_by_size.py ${unassembled_reads_rev} unassembled_reads_longer_rev.fq unassembled_reads_shorter_rev.fq ${params.min_read_length} ${params.max_read_length}
 
     seqtk seq -F '#' ${megahit_contigs} > megahit_contigs.fq
     seqtk mergepe unassembled_reads_shorter_fwd.fq unassembled_reads_shorter_rev.fq > combined_sr_file.fq

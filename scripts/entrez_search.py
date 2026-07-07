@@ -21,6 +21,7 @@ def search_nt_taxid(accession, entrez_cred):
     search_handle, search_record = None, None
     for retry in range(max_retries):
         try:
+            time.sleep(0.34)
             search_handle = Entrez.esummary(db="nuccore", id=accession)
             search_record = Entrez.read(search_handle)
             logging.info(f"Searching for {accession} in Nuccore in Entrez")
@@ -52,7 +53,8 @@ def search_prot_taxid(accession, entrez_cred):
     for retry in range(max_retries):
         try:
             logging.info(f"Searching for {accession} in Protein Entrez")
-            
+            time.sleep(0.34)
+
             # timeout handling.
             signal.signal(signal.SIGALRM, timeout_handler)
             signal.alarm(timeout_seconds)
@@ -78,6 +80,7 @@ def search_prot_taxid(accession, entrez_cred):
                 search_handle.close()
 
             return accession, taxid
+            break  # Exit the retry loop if successful
 
         except Exception as e:
             logging.info(f"Search for {accession} in Protein FAILED, {e}")
@@ -98,6 +101,7 @@ def search_taxid(taxid, entrez_cred):
     for retry in range(max_retries):
         try:
             logging.info(f"Searching for {taxid} in Taxonomy Entrez")
+            time.sleep(0.34)
             try:
                 search_handle = Entrez.efetch(db="taxonomy", id=taxid)
                 search_record = Entrez.read(search_handle)
@@ -108,6 +112,7 @@ def search_taxid(taxid, entrez_cred):
                 species = search_record[0]["ScientificName"]
             if search_handle:
                 search_handle.close()
+            break  # Exit the retry loop if successful
 
             return species
 
@@ -129,6 +134,7 @@ def search_species(name, entrez_cred):
     for retry in range(max_retries):
         try:
             logging.info(f"Searching for {name} in Taxonomy Entrez")
+            time.sleep(0.34)
             try:
                 search_handle = Entrez.esearch(db="taxonomy", term=name)
                 search_record = Entrez.read(search_handle)
@@ -145,6 +151,7 @@ def search_species(name, entrez_cred):
             if search_handle:
                 search_handle.close()
             return taxid
+            break  # Exit the retry loop if successful
 
         except Exception as e:
             logging.info(f"Search for {name} in Taxonomy FAILED, {e}")
@@ -162,12 +169,32 @@ def search_lineage(taxid, entrez_cred):
     Entrez.email = entrez_cred[0]
     Entrez.api_key = entrez_cred[1]
     
-    handle = Entrez.efetch(db="taxonomy", id=str(taxid), retmode="xml")
-    records = Entrez.read(handle)
-    if not records:
-        return None
+    max_retries = 3
+    search_handle, search_record = None, None
 
-    record = records[0]
+    for retry in range(max_retries):
+        try:
+            time.sleep(0.34)
+            search_handle = Entrez.efetch(db="taxonomy", id=str(taxid), retmode="xml")
+            search_record = Entrez.read(search_handle)
+            if search_record:
+                break  # Exit the retry loop if successful
+            else: 
+                logging.info(f"No record found for {taxid} in Taxonomy.")
+                return None
+
+        except Exception as e:
+            logging.info(f"Search for lineage of {taxid} in Taxonomy FAILED, {e}")
+            if retry < max_retries - 1:
+                time.sleep(2)
+            else:
+                logging.error(f"Maximum retries reached for {taxid}. Giving up.")
+                return None
+    
+    if not search_record:
+        return None
+    
+    record = search_record[0]
     lineage_ex = record.get("LineageEx", [])
     
     lineage_dict = {'taxid': int(taxid)}
@@ -187,5 +214,7 @@ def search_lineage(taxid, entrez_cred):
     if "domain" in lineage_dict:
         lineage_dict["superkingdom"] = lineage_dict.pop("domain")
     normalised = {key: lineage_dict.get(key, '-') for key in desired_cols}
-
+    
+    if search_handle:
+        search_handle.close()
     return normalised

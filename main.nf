@@ -14,6 +14,8 @@ workflow {
                 name.contains('_R') ?
                 name.split('_R')[0] :
                 name
+    def sr_aligner = params.srmode.toLowerCase() // choose the aligner for the shorter reads (blast, mmseqs2)
+    def nr_aligner = params.nrmode.toLowerCase() // choose the aligner for the nr database (diamond, mmseqs2)
     def reads = [file(params.r1), file(params.r2)]
     def negative = params.ndata ?: null
     def bowtie2_index = params.ercc ? params.bowtie2_index_ercc : (params.sequins ? params.bowtie2_index_sequins : params.bowtie2_index) // if ERCC/Sequins is flag provided, set bowtie2_index
@@ -29,6 +31,13 @@ workflow {
         error "Invalid value for --na. Must be either 'DNA' or 'RNA'."
     }
 
+    if (!(sr_aligner in ["blast", "mmseqs2"])) {
+        error "Mode must be: blast or mmseqs2"
+    }
+
+    if (!(nr_aligner in ["diamond", "mmseqs2"])) {
+        error "Mode must be: diamond or mmseqs2"
+    }
 
     log.info "Pair ID: ${pair_id}"
     log.info "Negative: ${negative}"

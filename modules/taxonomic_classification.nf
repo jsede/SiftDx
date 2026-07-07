@@ -26,7 +26,7 @@ process minimap2_contigs {
         : > minimap2_contig_out_frompaf.m8
         exit 0
     fi
-    minimap2 -c --split-prefix mm2_contigs ${params.mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
+    minimap2 -K 512M -c --split-prefix mm2_contigs ${params.mm2_index} ${megahit_contigs} > minimap2_contig_out.paf
     ${params.python} ${baseDir}/scripts/paf2blast6.py minimap2_contig_out.paf
     """
 }
@@ -53,7 +53,7 @@ process minimap2_reads {
 
     script:
     """
-    minimap2 -c -x sr --split-prefix mm2_reads ${params.mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
+    minimap2 -K 512M -c -x sr --split-prefix mm2_reads ${params.mm2_index} ${unassembled_reads_longer_fwd} ${unassembled_reads_longer_rev} > minimap2_reads_out.paf
     ${params.python} ${baseDir}/scripts/paf2blast6.py minimap2_reads_out.paf
     """
 }
@@ -92,7 +92,7 @@ process k2_pluspf {
     """
 }
 
-process split_fastq {
+process diamond_contigs {
     input:
         val pair_id
         tuple path(megahit_contigs),
@@ -107,47 +107,103 @@ process split_fastq {
         val output
 
     output:
-        path "*_part_*.fastq"
+        path "contigs.diamond.tsv"
 
     script:
     """
-    ${params.python} ${baseDir}/scripts/split_fastq.py ${combined_lr_contigs_fq}
+    if [ ! -s ${megahit_contigs} ]; then
+        echo "No contigs, skipping DIAMOND."
+        touch contigs.diamond.tsv
+        exit 0
+    fi
+    diamond blastx \
+        --db ${params.diamond_db} \
+        --query ${megahit_contigs} \
+        --mid-sensitive \
+        --max-target-seqs 1 \
+        --outfmt 6 qseqid sseqid pident length mismatch gapopen \
+        qstart qend sstart send evalue bitscore qlen staxids \
+        --masking 0 -c 1 -b 6 -F 15\
+        --out contigs.diamond.tsv
     """
 }
 
-process diamond_chunks {
-
+process mmseqs2_contigs {
     input:
         val pair_id
-        path chunk
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats),
+            path(fqc_txt)
         val output
 
     output:
-        path "${chunk.simpleName}.diamond.tsv"
+        path "contigs.diamond.tsv"
+
+    script:
+    """
+    if [ ! -s ${megahit_contigs} ]; then
+        echo "No contigs, skipping MMseqs2."
+        touch contigs.diamond.tsv
+        exit 0
+    fi
+    mmseqs easy-search ${megahit_contigs} ${params.mmseqs2_db} contigs.diamond.tsv tmp --format-output "query,target,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore,qlen,staxids"
+    """
+}
+
+process diamond_lr {
+
+    input:
+        val pair_id
+        path lr_fq
+        val output
+
+    output:
+        path "${lr_fq.simpleName}.diamond.tsv"
 
     script:
     """
     diamond blastx \
         --db ${params.diamond_db} \
-        --query ${chunk} \
+        --query ${lr_fq} \
         --mid-sensitive \
         --max-target-seqs 1 \
         --outfmt 6 qseqid sseqid pident length mismatch gapopen \
         qstart qend sstart send evalue bitscore qlen staxids \
         --masking 0 -c 1 -b 6 \
-        --out ${chunk.simpleName}.diamond.tsv
+        --out ${lr_fq.simpleName}.diamond.tsv
+    """
+}
+
+process mmseqs2_lr {
+
+    input:
+        val pair_id
+        path lr_fq
+        val output
+
+    output:
+        path "${lr_fq.simpleName}.diamond.tsv"
+
+    script:
+    """
+    mmseqs easy-search ${lr_fq} ${params.mmseqs2_db} ${lr_fq.simpleName}.diamond.tsv tmp --format-output "query,target,pident,length,mismatch,gapopen,qstart,qend,sstart,send,evalue,bitscore,qlen,staxids"
     """
 }
 
 process merge_diamond {
 
-    publishDir "${output}/${pair_id}/alignments",
-        mode: 'copy',
-        pattern: "nr_alignments_file.tsv"
+    publishDir "${output}/${pair_id}/alignments", mode: 'copy', pattern: "nr_alignments_file.tsv"
 
     input:
         val pair_id
-        path diamond_chunks
+        path contigs_diamond
+        path lr_diamond
         val output
 
     output:
@@ -155,7 +211,7 @@ process merge_diamond {
 
     script:
     """
-    cat ${diamond_chunks.join(' ')} > nr_alignments_file.tsv
+    cat ${contigs_diamond} ${lr_diamond.join(' ')} > nr_alignments_file.tsv
     """
 }
 
@@ -178,7 +234,7 @@ process split_input {
 
     script:
     """
-    ${params.python} ${baseDir}/scripts/split_fasta.py ${combined_sr_fa} 10000
+    ${params.python} ${baseDir}/scripts/split_fasta.py ${combined_sr_fa}
     """
 }
 
@@ -196,7 +252,7 @@ process split_blast {
     blastn -task megablast \
         -query ${chunk} \
         -db ${params.blast_db} \
-        -max_target_seqs 10 \
+        -max_target_seqs 5 \
         -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen staxids" \
         -out ${chunk.simpleName}.blast.tsv
     """
@@ -244,6 +300,34 @@ process empty_blast {
     """
 }
 
+process mmseqs2_sr {
+    input:
+        val pair_id
+        tuple path(megahit_contigs),
+            path(combined_sr_fq),
+            path(combined_sr_fa),
+            path(combined_lr_contigs_fq),
+            path(combined_lr_contigs_fa),
+            path(unassembled_reads_longer_fwd),
+            path(unassembled_reads_longer_rev),
+            path(cov_stats),
+            path(fqc_txt)
+        val output
+
+    output:
+        path "nt_alignments_sr_blast.tsv"
+
+    script:
+    """
+    mmseqs easy-search ${combined_sr_fa} ${params.mmseqs2_db} \
+        nt_alignments_sr_blast.tsv tmp \
+        --format-output "query,target,pident,alnlen,mismatch,gapopen,qstart,qend,tstart,tend,evalue,bits,qlen,taxid" \
+        --split-memory-limit ${params.split_memory_limit} \
+        --max-seqs 5 -s 4\
+        --search-type 3
+    """
+}
+
 workflow taxonomic_classification {
     take:
         pair_id
@@ -252,7 +336,7 @@ workflow taxonomic_classification {
 
     main:
         // Call Minimap2 on the contigs only.
-
+        log.info "Running Minimap2 for taxonomic classification of contigs."
         mm2_contigs = minimap2_contigs(
             pair_id,
             preprocessing_data,
@@ -260,6 +344,7 @@ workflow taxonomic_classification {
         )
         
         // Call Minimap2 on the longer reads.
+        log.info "Running Minimap2 for taxonomic classification of longer reads."
         mm2_reads = minimap2_reads(
             pair_id,
             preprocessing_data,
@@ -267,28 +352,54 @@ workflow taxonomic_classification {
         )
         
         // Call Kraken2 with the PlusPF database
+        log.info "Running Kraken2 for taxonomic classification of contigs, longer and shorter reads."
         k2_pluspf_data = k2_pluspf(
             pair_id,
             preprocessing_data,
             output
         )
 
-        // Call Diamond on the combined contigs and longer reads.
-        diamond_split = split_fastq(
-            pair_id,
-            preprocessing_data,
-            output
-        ).flatten()
+        lr_reads_ch = preprocessing_data
+            .map { tuple ->
+                [
+                    tuple[5],  // fwd
+                    tuple[6]   // rev
+                ]
+            }
+            .flatten()
 
-        diamond_chunks = diamond_chunks(
-            pair_id,
-            diamond_split,
-            output
-        )
+        // Call Diamond on the combined contigs and longer reads.
+        
+        if (params.nrmode == "diamond") {
+            diamond_contigs = diamond_contigs(
+                pair_id,
+                preprocessing_data,
+                output
+            )
+
+            diamond_lr = diamond_lr(
+                pair_id,
+                lr_reads_ch,
+                output
+            )
+        } else if (params.nrmode == "mmseqs2") {
+            diamond_contigs = mmseqs2_contigs(
+                pair_id,
+                preprocessing_data,
+                output
+            )
+            
+            diamond_lr = mmseqs2_lr(
+                pair_id,
+                lr_reads_ch,
+                output
+            )
+        }
 
         diamond_data = merge_diamond(
             pair_id,
-            diamond_chunks.collect(),
+            diamond_contigs,
+            diamond_lr.collect(),
             output
         )
 
@@ -301,32 +412,41 @@ workflow taxonomic_classification {
             sr_fa.size() == 0
         }
 
-        blast_split = split_input(
-            pair_id,
-            valid_files,
-            output
-        ).flatten()
+        if (params.srmode == "blast") {
+            blast_split = split_input(
+                pair_id,
+                valid_files,
+                output
+            ).flatten()
 
-        blast_chunks = split_blast(
-            pair_id,
-            blast_split,
-            output
-        )
+            blast_chunks = split_blast(
+                pair_id,
+                blast_split,
+                output
+            )
 
-        blast_results = merge_blast(
-            pair_id,
-            blast_chunks.collect(),
-            output
-        )
+            blast_results = merge_blast(
+                pair_id,
+                blast_chunks.collect(),
+                output
+            )
 
-        empty_blast_data = empty_blast(
-            pair_id,
-            invalid_files,
-            output
-        )
+            empty_blast_data = empty_blast(
+                pair_id,
+                invalid_files,
+                output
+            )
 
-        blast_data = Channel.empty()
-        blast_data = blast_data.mix(blast_results, empty_blast_data)
+            blast_data = Channel.empty()
+            blast_data = blast_data.mix(blast_results, empty_blast_data)
+
+        } else if (params.srmode == "mmseqs2") {
+            blast_data = mmseqs2_sr(
+                pair_id,
+                valid_files,
+                output
+            )
+        }
 
     emit:
         mm2_contigs

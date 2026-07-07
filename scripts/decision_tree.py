@@ -111,6 +111,12 @@ def determine_final_species(row, taxdump, entrez_cred):
         "reporter vector",
     ]
     
+    # Screen for synthetic first and replace with - if
+    for col in ["Kraken_Species", "NT_Species", "NR_Species"]:
+        if col in row.index and row[col] != "-":
+            if any(substring.lower() in row[col].lower() for substring in synthetic_list):
+                row[col] = "-"
+                
     # If all rows match, then just print one of the columns (they all match anyway so it doesnt matter which we pick)
     if row["match"] is True:
         return row["Kraken_Species"], row["Kraken_taxid"]
@@ -185,21 +191,6 @@ def determine_final_species(row, taxdump, entrez_cred):
         and row["Kraken_Species"] != "-"
     ):
         return row["Kraken_Species"], row["Kraken_taxid"]  # or row["NR_Species"], row["NR_taxid"]
-    
-
-        
-    # If Kraken is "-", and either NR or NT contains stuff within the "synthetic list", then return NT or NR thats not synthetic, if both synthetic then final is "-"
-    elif row["Kraken_Species"] == '-':
-        best_match = None
-        for species in [row["NT_Species"], row["NR_Species"]]:
-            for substring in synthetic_list:
-                if substring.lower() not in species.lower():
-                    best_match = species
-                    best_match_taxid = row["MM2_taxid"] if species == row["NT_Species"] else row["NR_taxid"]
-        if best_match is not None:
-            return best_match, best_match_taxid
-        else:
-            return "-", "-"
         
     else:
         # Extract and compare genus if all previous conditions fail
