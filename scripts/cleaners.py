@@ -119,28 +119,32 @@ def minimap_cleanup(file, name, taxdump, database, dirpath, entrez_cred):
     
     get_lineage(taxids, taxdump, dirpath, entrez_cred)
     lineage_cache = assists.check_lineage_json(loaded_cache[10])
-    dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
-    lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
-    lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
+    if lineage_cache:
+        dfs = [pd.DataFrame(entry, index=[0]) for entry in lineage_cache]
+        lineage_df = pd.concat(dfs, ignore_index=True, sort=False)
+        lineage_df['no rank'] = lineage_df['no rank'].replace('no rank', 'root')
 
-    if "superkingdom" not in lineage_df.columns:
-        lineage_df["superkingdom"] = None
-    if "acellular root" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
-    if "domain" in lineage_df.columns:
-        lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
+        if "superkingdom" not in lineage_df.columns:
+            lineage_df["superkingdom"] = None
+        if "acellular root" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["acellular root"])
+        if "domain" in lineage_df.columns:
+            lineage_df["superkingdom"] = lineage_df["superkingdom"].fillna(lineage_df["domain"])
 
-    lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
-    mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
-    minimap_df['superkingdom'] = minimap_df['MM2_taxid'].map(mapping_dict)
-    minimap_df["alnlen"] = minimap_df['alen']/minimap_df['qlen']
-    bacteria_condition = (minimap_df['superkingdom'] == 'Bacteria') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 95)
-    eukaryota_condition = (minimap_df['superkingdom'] == 'Eukaryota') | (minimap_df['superkingdom'] == 'Archaea') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 98)
-    viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.4) & (minimap_df['pident'] > 75)
-    nothing_condition = ~minimap_df['superkingdom'].isin(exc_kingdom)
+        lineage_df = lineage_df[['taxid', 'superkingdom']].dropna(how='all')
+        mapping_dict = dict(zip(lineage_df['taxid'], lineage_df['superkingdom']))
+        minimap_df['superkingdom'] = minimap_df['MM2_taxid'].map(mapping_dict)
+        minimap_df["alnlen"] = minimap_df['alen']/minimap_df['qlen']
+        bacteria_condition = (minimap_df['superkingdom'] == 'Bacteria') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 95)
+        eukaryota_condition = (minimap_df['superkingdom'] == 'Eukaryota') | (minimap_df['superkingdom'] == 'Archaea') & (minimap_df['alnlen'] > 0.5) & (minimap_df['pident'] > 98)
+        viruses_condition = (minimap_df['superkingdom'] == 'Viruses') & (minimap_df['alnlen'] > 0.4) & (minimap_df['pident'] > 75)
+        nothing_condition = ~minimap_df['superkingdom'].isin(exc_kingdom)
 
-    minimap_df = minimap_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
-
+        minimap_df = minimap_df[(bacteria_condition | eukaryota_condition | viruses_condition | nothing_condition)]
+    else:
+        minimap_df["superkingdom"] = None
+        minimap_df["alnlen"] = None 
+    
     minimap_df.drop_duplicates(subset="MM2_NT", keep="first", inplace=True)
     full_minimap_df = minimap_df[["MM2_NT", "accession", "MM2_taxid", "pident", "alnlen", "evalue", "bitscore"]]
     minimap_df = minimap_df[["MM2_NT", "accession"]]
