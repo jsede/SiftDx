@@ -513,202 +513,195 @@ Akhmeta virus,,,viral,,,,is a known pathogen,,,1,1.0.1
 Alphapapillomavirus 4,,,viral,,337043,,is a known pathogen (Oncovirus),,,1,1.0.0
 Alphapapillomavirus 7,,,viral,,337042,,is a known pathogen (Oncovirus),,,1,1.0.0
 Alphapapillomavirus 9,,,viral,,337041,,is a known pathogen (Oncovirus),,,1,1.0.0
-Andes orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Argentinian mammarenavirus,,,viral,,2169991,,is a known pathogen,,,1,1.0.0
-Australian bat lyssavirus,,,viral,,90961,NC_003243.1,is a known pathogen,,Yes,"1,2",1.0.0
-Avian orthoavulavirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
-Banna virus,,,viral,,77763,,is a known pathogen,,,1,1.0.0
-Barmah Forest virus,,,viral,,11020,NC_001786.1,is a known pathogen,,Yes,"1,2",1.0.0
-Bayou orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Betacoronavirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
+Andes orthohantavirus,Orthohantavirus andesense,,viral,,,,is a known pathogen,,,1,1.0.1
+Argentinian mammarenavirus,Mammarenavirus juninense;Junin virus,,viral,,2169991,,is a known pathogen,,,1,1.0.0
+Australian bat lyssavirus,Lyssavirus australis,,viral,,90961,NC_003243.1,is a known pathogen,,Yes,"1,2",1.0.0
+Avian orthoavulavirus 1,Orthoavulavirus javaense,,viral,,,,is a known pathogen,,,1,1.0.1
+Banna virus,Seadornavirus bannaense,,viral,,77763,,is a known pathogen,,,1,1.0.0
+Barmah Forest virus,Alphavirus barmah,,viral,,11020,NC_001786.1,is a known pathogen,,Yes,"1,2",1.0.0
+Bayou orthohantavirus,Orthohantavirus bayoui,,viral,,,,is a known pathogen,,,1,1.0.1
+Betacoronavirus 1,Betacoronavirus gravedinis,,viral,,,,is a known pathogen,,,1,1.0.1
 Betapolyomavirus macacae,SV40,,viral,Progressive multifocal leukoencephalopathy,,,is a known pathogen,,,35,1.0.2
 Bhanja bandavirus,,,viral,,,,is a known pathogen,,,22,1.0.0
-Black Creek Canal orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Black Creek Canal orthohantavirus,Orthohantavirus nigrorivense,,viral,,,,is a known pathogen,,,1,1.0.1
 Borna disease virus,Mammalian 1 orthobornavirus,,viral,,,,has been reported in case reports,,,,1.0.0
-Bourbon virus,,,viral,,,,is a known pathogen,,,3,1.0.0
-Bufavirus-3,,,viral,,,,is a known pathogen,,,1,1.0.1
-Bundibugyo ebolavirus,,,viral,viral haemorrhagic fever,565995,NC_014373.1,is a known pathogen,,Yes,"1,2",1.0.0
-Bunyamwera orthobunyavirus,,,viral,,1933179,NC_001925.1 (L); NC_001926.1 (M); NC_001927.1 (S),is a known pathogen,,,1,1.0.0
-Bwamba orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Cache Valley orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Cali mammarenavirus,,,viral,,2169993,,is a known pathogen,,,1,1.0.0
-California encephalitis orthobunyavirus,California encephalitis virus,,viral,,1933264,,is a known pathogen,,,1,1.0.0
-Cardiovirus A,,,viral,,1821749,,is a known pathogen,,,1,1.0.0
-Chandipura vesiculovirus,Chandipura virus,,viral,,1972576,NC_020805.1,is a known pathogen,,,1,1.0.0
-Chapare mammarenavirus,Chapare virus,,viral,Chapare Hemorrhagic Fever,499556,,is a known pathogen,,,1,1.0.0
-Chikungunya virus,,,viral,,37124,NC_004162.2,is a known pathogen,,Yes,"1,2",1.0.0
-Colorado tick fever virus,Colorado tick fever coltivirus,,viral,Colorado Tick Fever,,,is a known pathogen,,,3,1.0.0
-Cosavirus A,,,viral,,1330491,,is a known pathogen,,,1,1.0.0
-Cowpox virus,,,viral,,10243,NC_003663.2,is a known pathogen,,,1,1.0.0
-Coxsackievirus,,,viral,"Hand, foot, and mouth disease",12066,,is a known pathogen,,,"1,3",1.0.0
-Crimean-Congo hemorrhagic fever orthonairovirus,,,viral,viral haemorrhagic fever,1980519,,is a known pathogen,,Yes,"1,2",1.0.0
-Dabie bandavirus,Severe fever with thrombocytopenia virus or Huaiyangshan banyangvirus,,viral,Severe fever with thrombocytopenia syndrome,,,is a known pathogen,,,,1.0.0
-Dengue virus,,,viral,Dengue,12637,,is a known pathogen,,Yes,"1,2",1.0.0
-Dhori thogotovirus,,,viral,,11318,,is a known pathogen,,,1,1.0.0
-Dobrava-Belgrade orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Dugbe orthonairovirus,,,viral,,1980521,,is a known pathogen,,,1,1.0.0
-Duvenhage lyssavirus,,,viral,,38767,,is a known pathogen,,,1,1.0.0
-Eastern equine encephalitis virus,,,viral,,11021,NC_003899.1,is a known pathogen,,,1,1.0.0
+Bourbon virus,Thogotovirus bourbonense,,viral,,,,is a known pathogen,,,3,1.0.0
+Bufavirus-3,Carnivore protoparvovirus-3,,viral,,,,is a known pathogen,,,1,1.0.1
+Bundibugyo ebolavirus,Orthoebolavirus bundibugyoense,,viral,viral haemorrhagic fever,565995,NC_014373.1,is a known pathogen,,Yes,"1,2",1.0.0
+Bunyamwera orthobunyavirus,Orthobunyavirus bunyamweraense,,viral,,1933179,NC_001925.1 (L); NC_001926.1 (M); NC_001927.1 (S),is a known pathogen,,,1,1.0.0
+Bwamba orthobunyavirus,Orthobunyavirus bwambaense,,viral,,,,is a known pathogen,,,1,1.0.1
+Cache Valley orthobunyavirus, 	Orthobunyavirus cacheense,,viral,,,,is a known pathogen,,,1,1.0.1
+Cali mammarenavirus,Mammarenavirus caliense,,viral,,2169993,,is a known pathogen,,,1,1.0.0
+California encephalitis orthobunyavirus,California encephalitis virus;Orthobunyavirus encephalitidis,,viral,,1933264,,is a known pathogen,,,1,1.0.0
+Cardiovirus A,Cardiovirus rueckerti;Encephalomyocarditis virus,,viral,,1821749,,is a known pathogen,,,1,1.0.0
+Chandipura vesiculovirus,Chandipura virus;Vesiculovirus chandipura,,viral,,1972576,NC_020805.1,is a known pathogen,,,1,1.0.0
+Chapare mammarenavirus,Chapare virus;Mammarenavirus chapareense,,viral,Chapare Hemorrhagic Fever,499556,,is a known pathogen,,,1,1.0.0
+Chikungunya virus,Alphavirus chikungunya,,viral,,37124,NC_004162.2,is a known pathogen,,Yes,"1,2",1.0.0
+Colorado tick fever virus,Colorado tick fever coltivirus;Coltivirus dermacentoris,,viral,Colorado Tick Fever,,,is a known pathogen,,,3,1.0.0
+Cosavirus A,Cosavirus asiani,,viral,,1330491,,is a known pathogen,,,1,1.0.0
+Cowpox virus,Orthopoxvirus cowpox,,viral,,10243,NC_003663.2,is a known pathogen,,,1,1.0.0
+Coxsackie A virus,Enterovirus A,,viral,"Hand, foot, and mouth disease",138948,,is a known pathogen,,,"1,3",1.0.0
+Coxsackie B virus,Enterovirus B,,viral,"Bornholm disease",12066,,is a known pathogen,,,"1,3",1.0.0
+Crimean-Congo hemorrhagic fever orthonairovirus,Orthonairovirus haemorrhagiae,,viral,viral haemorrhagic fever,1980519,,is a known pathogen,,Yes,"1,2",1.0.0
+Dabie bandavirus,Severe fever with thrombocytopenia virus;Bandavirus dabieense;Huaiyangshan banyangvirus,,viral,Severe fever with thrombocytopenia syndrome,,,is a known pathogen,,,,1.0.0
+Dengue virus,Orthoflavivirus denguei,,viral,Dengue,12637,,is a known pathogen,,Yes,"1,2",1.0.0
+Dhori thogotovirus,Thogotovirus dhoriense,,viral,,11318,,is a known pathogen,,,1,1.0.0
+Dobrava-Belgrade orthohantavirus,Orthohantavirus dobravaense,,viral,,,,is a known pathogen,,,1,1.0.1
+Dugbe orthonairovirus,Orthonairovirus dugbeense,,viral,,1980521,,is a known pathogen,,,1,1.0.0
+Duvenhage lyssavirus,Lyssavirus duvenhage,,viral,,38767,,is a known pathogen,,,1,1.0.0
+Eastern equine encephalitis virus,Alphavirus eastern,,viral,,11021,NC_003899.1,is a known pathogen,,,1,1.0.0
 Echovirus,,,viral,,33758,,is a known pathogen,,,1,1.0.0
-Enterovirus A,,,viral,"Hand, foot, and mouth disease",138948,,is a known pathogen,,,1,1.0.0
-Enterovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
 Enterovirus C,Poliovirus,,viral,Poliomyelitis,138950,,is a known pathogen,,Yes,"1,2",1.0.0
 Enterovirus D,,,viral,,138951,,is a known pathogen,,,1,1.0.0
-European bat lyssavirus,,,viral,,38768,NC_009527.1,is a known pathogen,,,1,1.0.0
-Everglades virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Getah virus,,,viral,,59300,GCF_000855805.1,is a known pathogen,,,1,1.0.0
-Guanarito mammarenavirus,,,viral,,45219,NC_005082.1 (L); NC_005077.1 (S),is a known pathogen,,,1,1.0.0
-Guaroa orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Hantaan orthohantavirus,,,viral,,1980471,NC_005219.1,is a known pathogen,,,1,1.0.0
-Heartland banyangvirus,Heartland bandavirus,,viral,,2560519,NC_024495.1 (L); NC_024494.1 (M); NC_024496.1 (S),is a known pathogen,,,1,1.0.0
-Hendra henipavirus,Hendra Virus,,viral,,63330,NC_001906.3,is a known pathogen,,,1,1.0.0
-Hepacivirus C,Hepatitis C Virus,,viral,Hepatitis C,11103,NC_004102.1 (G1); NC_009823.1 (G2); NC_009824.1 (G3); NC_009825.1 (G4); NC_009826.1 (G5); NC_009827.1 (G6),is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
-Hepatitis B virus,,,viral,,10407,NC_003977.2,is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
-Hepatitis delta virus,,,viral,Hepatitis D,12475,NC_001653.2,is a known pathogen,,Yes,"1,2",1.0.0
-Hepatovirus A,,,viral,Hepatitis A,12092,NC_001489.1,is a known pathogen,,Yes,"1,2",1.0.0
+European bat lyssavirus 1,Lyssavirus hamburg,,viral,,38768,NC_009527.1,is a known pathogen,,,1,1.0.0
+European bat lyssavirus 2,Lyssavirus helsinki,,viral,,38768,NC_009527.1,is a known pathogen,,,1,1.0.0
+Everglades virus,Alphavirus everglades,,viral,,,,is a known pathogen,,,1,1.0.1
+Getah virus,Alphavirus getah,,viral,,59300,GCF_000855805.1,is a known pathogen,,,1,1.0.0
+Guanarito mammarenavirus,Mammarenavirus guanaritoense,,viral,"Venezuelan hemorrhagic fever",45219,NC_005082.1 (L); NC_005077.1 (S),is a known pathogen,,,1,1.0.0
+Guaroa orthobunyavirus,Orthobunyavirus guaroaense,,viral,,,,is a known pathogen,,,1,1.0.1
+Hantaan orthohantavirus,Orthohantavirus hantanense,,viral,,1980471,NC_005219.1,is a known pathogen,,,1,1.0.0
+Heartland banyangvirus,Heartland bandavirus;Bandavirus heartlandense,,viral,,2560519,NC_024495.1 (L); NC_024494.1 (M); NC_024496.1 (S),is a known pathogen,,,1,1.0.0
+Hendra henipavirus,Hendra Virus;Henipavirus hendraense,,viral,,63330,NC_001906.3,is a known pathogen,,,1,1.0.0
+Hepacivirus C,Hepatitis C Virus;Orthohepacivirus hominis,,viral,Hepatitis C,11103,NC_004102.1 (G1); NC_009823.1 (G2); NC_009824.1 (G3); NC_009825.1 (G4); NC_009826.1 (G5); NC_009827.1 (G6),is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
+Hepatitis B virus,Orthohepadnavirus hominoidei,,viral,,10407,NC_003977.2,is a known pathogen (Oncovirus),,Yes,"1,2",1.0.0
+Hepatitis delta virus,Deltavirus cameroonense;Deltavirus carense;Deltavirus italiense;Deltavirus japanense;Deltavirus peruense;Deltavirus senegalense;Deltavirus taiwanense;Deltavirus togense,,viral,Hepatitis D,12475,NC_001653.2,is a known pathogen,,Yes,"1,2",1.0.0
+Hepatovirus A,Hepatovirus ahepa,,viral,Hepatitis A,12092,NC_001489.1,is a known pathogen,,Yes,"1,2",1.0.0
 Human adenovirus sp.,,,viral,,1907210,,is a known pathogen,,,1,1.0.0
-Human alphaherpesvirus 1,Herpes Simplex Virus 1,,viral,Herpes,10298,NC_001806.2,is a known pathogen,,,1,1.0.0
-Human alphaherpesvirus 2,Herpes Simplex Virus 2,,viral,Herpes,10310,NC_001798.2,is a known pathogen,,,1,1.0.0
-Human alphaherpesvirus 3,Varicella-Zoster Virus,,viral,Chickenpox/Shingles,10335,NC_001348.1,is a known pathogen,,,1,1.0.0
-Human astrovirus,,,viral,,1868658,NC_001943.1,is a known pathogen,,,1,1.0.0
-Human betaherpesvirus 5,Human Cytomegalovirus,,viral,,10359,NC_006273.2,is a known pathogen (Oncovirus),,,1,1.0.0
-Human betaherpesvirus 6,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human betaherpesvirus 6A,Human Herpesvirus 6A,,viral,,10368,NC_001664.2,is a known pathogen,,,1,1.0.0
-Human betaherpesvirus 6B,Human Herpesvirus 6B,,viral,,10368,NC_000898.1,is a known pathogen,,,,1.0.0
-Human betaherpesvirus 7,,,viral,,10372,NC_001716.2,is a known pathogen,,,1,1.0.0
-Human bocavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human coronavirus 229E,,,viral,,,NC_002645.1,is a known pathogen,,,,1.0.0
-Human coronavirus HKU1,,,viral,,,NC_006577.2,is a known pathogen,,,,1.0.0
-Human coronavirus NL63,,,viral,,,NC_005831.2,is a known pathogen,,,,1.0.0
-Human coronavirus OC43,,,viral,,,KU131570.1,is a known pathogen,,,,1.0.0
-Human gammaherpesvirus 4,Epstein Barr Virus,,viral,,10376,NC_009334.1,is a known pathogen (Oncovirus),,,1,1.0.0
-Human gammaherpesvirus 8,Kaposi's sarcoma-associated herpesvirus,,viral,,37296,NC_009333.1,is a known pathogen (Oncovirus),,,1,1.0.0
-Human immunodeficiency virus,Human immunodeficiency virus 1,,viral,,12721,NC_001802.1,is a known pathogen,,Yes,"1,2",1.0.0
-Human mastadenovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human mastadenovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human mastadenovirus C,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human mastadenovirus D,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human mastadenovirus F,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human metapneumovirus,,,viral,,,NC_004148.2,is a known pathogen,,,,1.0.0
-Human orthopneumovirus,Respiratory Syncytial Virus,,viral,,11250,NC_001803.1,is a known pathogen,,Yes,"1,2",1.0.0
-Human orthorubulavirus 2,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human orthorubulavirus 4,,,viral,,,,is a known pathogen,,,1,1.0.1
-Human parainfluenzavirus,,,viral,,,,is a known pathogen,,,,1.0.0
-Human polyomavirus 1,BK polyomavirus; Betapolyomavirus hominis,,viral,,1891762,,is a known pathogen,,,1,1.0.0
-Human polyomavirus 10,MW polyomavirus; Deltapolyomavirus decihominis,,viral,,,,is a known pathogen,,,1,1.0.1
-Human polyomavirus 2,John Cunningham virus; JC polyomavirus; Betapolyomavirus secuhominis,,viral,Progressive multifocal leukoencephalopathy,1891763,,is a known pathogen,,,1,1.0.0
-Human polyomavirus 3,KI polyomavirus; Betapolyomavirus tertihominis,,viral,,1891764,,is a known pathogen,,,1,1.0.0
-Human polyomavirus 4,WU polyomavirus; Betapolyomavirus quartihominis,,viral,,1891765,,is a known pathogen,,,1,1.0.0
-Human polyomavirus 5,Merkel Cell Polyomavirus; Alphapolyomavirus quintihominis,,viral,,493803,NC_004108.1 (L); NC_004109.1 (M); NC_004110.1 (S),is a known pathogen (Oncovirus),,,1,1.0.0
-Human polyomavirus 8,Trichodysplasia spinulosa polyomavirus,,viral,Trichodysplasia spinulosa,1891727,,has been reported in case reports,,,12,1.0.0
-Human respirovirus 1,,,viral,,12730,,is a known pathogen,,,1,1.0.0
-Human respirovirus 3,,,viral,,11216,,is a known pathogen,,,1,1.0.0
-Human rhinovirus sp.,,,viral,,169066,,is a known pathogen,,,1,1.0.0
-Human rubulavirus 2,,,viral,,1979160,,is a known pathogen,,,1,1.0.0
-Human rubulavirus 4,,,viral,,1979161,,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 1,Herpes Simplex Virus 1;Simplexvirus humanalpha1,,viral,Herpes,10298,NC_001806.2,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 2,Herpes Simplex Virus 2;Simplexvirus humanalpha2,,viral,Herpes,10310,NC_001798.2,is a known pathogen,,,1,1.0.0
+Human alphaherpesvirus 3,Varicella-Zoster Virus;Varicellovirus humanalpha3,,viral,Chickenpox/Shingles,10335,NC_001348.1,is a known pathogen,,,1,1.0.0
+Human astrovirus,Mamastrovirus hominis,,viral,,1868658,NC_001943.1,is a known pathogen,,,1,1.0.0
+Human betaherpesvirus 5,Human Cytomegalovirus;Cytomegalovirus humanbeta5,,viral,,10359,NC_006273.2,is a known pathogen (Oncovirus),,,1,1.0.0
+Human betaherpesvirus 6A,Human Herpesvirus 6A;Roseolovirus humanbeta6a,,viral,,10368,NC_001664.2,is a known pathogen,,,1,1.0.0
+Human betaherpesvirus 6B,Human Herpesvirus 6B;Roseolovirus humanbeta6b,,viral,,10368,NC_000898.1,is a known pathogen,,,,1.0.0
+Human betaherpesvirus 7,Roseolovirus humanbeta7,,viral,,10372,NC_001716.2,is a known pathogen,,,1,1.0.0
+Human bocavirus,Bocaparvovirus primate1;Bocaparvovirus primate2,,viral,,,,is a known pathogen,,,1,1.0.1
+Human coronavirus 229E,Alphacoronavirus chicagoense,,viral,,,NC_002645.1,is a known pathogen,,,,1.0.0
+Human coronavirus HKU1,Betacoronavirus hongkongense,,viral,,,NC_006577.2,is a known pathogen,,,,1.0.0
+Human coronavirus NL63,Alphacoronavirus amsterdamense,,viral,,,NC_005831.2,is a known pathogen,,,,1.0.0
+Human coronavirus OC43,Betacoronavirus gravedinis,,viral,,,KU131570.1,is a known pathogen,,,,1.0.0
+Human gammaherpesvirus 4,Epstein Barr Virus;Lymphocryptovirus humangamma4,,viral,,10376,NC_009334.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Human gammaherpesvirus 8,Kaposi's sarcoma-associated herpesvirus;Rhadinovirus humangamma8,,viral,,37296,NC_009333.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Human immunodeficiency virus,Human immunodeficiency virus 1;Lentivirus humimdef1;Lentivirus humimdef2,,viral,,12721,NC_001802.1,is a known pathogen,,Yes,"1,2",1.0.0
+Human adenovirus 12,Mastadenovirus adami,,viral,,,,is a known pathogen,,,1,1.0.1
+Human adenovirus 3,Mastadenovirus blackbeardi,,viral,,,,is a known pathogen,,,1,1.0.1
+Human adenovirus 2,Mastadenovirus caesari,,viral,,,,is a known pathogen,,,1,1.0.1
+Human adenovirus 9,Mastadenovirus dominans,,viral,,,,is a known pathogen,,,1,1.0.1
+Human adenovirus 4,Mastadenovirus exoticum,,viral,,,,is a known pathogen,,,1,1.0.1
+Human adenovirus 40,Mastadenovirus faecale,,viral,,,,is a known pathogen,,,1,1.0.1
+Human metapneumovirus,Metapneumovirus hominis,,viral,,,NC_004148.2,is a known pathogen,,,,1.0.0
+Human orthopneumovirus,Respiratory Syncytial Virus;Orthopneumovirus hominis,,viral,,11250,NC_001803.1,is a known pathogen,,Yes,"1,2",1.0.0
+Human orthorubulavirus 2,human parainfluenza virus;Orthorubulavirus laryngotracheitidis,,viral,,,,is a known pathogen,,,1,1.0.1
+Human orthorubulavirus 4,human parainfluenza virus;Orthorubulavirus hominis,,viral,,,,is a known pathogen,,,1,1.0.1
+Human polyomavirus 1,BK polyomavirus;Betapolyomavirus hominis,,viral,,1891762,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 10,MW polyomavirus;Deltapolyomavirus decihominis,,viral,,,,is a known pathogen,,,1,1.0.1
+Human polyomavirus 2,John Cunningham virus; JC polyomavirus;Betapolyomavirus secuhominis,,viral,Progressive multifocal leukoencephalopathy,1891763,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 3,KI polyomavirus;Betapolyomavirus tertihominis,,viral,,1891764,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 4,WU polyomavirus;Betapolyomavirus quartihominis,,viral,,1891765,,is a known pathogen,,,1,1.0.0
+Human polyomavirus 5,Merkel Cell Polyomavirus;Alphapolyomavirus quintihominis,,viral,,493803,NC_004108.1 (L); NC_004109.1 (M); NC_004110.1 (S),is a known pathogen (Oncovirus),,,1,1.0.0
+Human polyomavirus 8,Trichodysplasia spinulosa polyomavirus;Alphapolyomavirus octihominis,,viral,Trichodysplasia spinulosa,1891727,,has been reported in case reports,,,12,1.0.0
+Human respirovirus 1,Human parainfluenza virus type 1;Respirovirus laryngotracheitidis,,viral,,12730,,is a known pathogen,,,1,1.0.0
+Human respirovirus 3Human parainfluenza virus type 3;Respirovirus pneumoniae,,viral,,11216,,is a known pathogen,,,1,1.0.0
 Human torovirus,,,viral,,67605,,is a known pathogen,,,1,1.0.0
-Ilesha orthobunyavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Ilheus virus,,,viral,,,,is a known pathogen,,,33,1.0.0
-Influenza A virus,,,viral,,11320,,is a known pathogen,,,1,1.0.0
-Influenza B virus,,,viral,,11520,,is a known pathogen,,Yes,"1,2",1.0.0
-Influenza C virus,,,viral,,11552,,is a known pathogen,,Yes,"1,2",1.0.0
-Isfahan vesiculovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Jamestown Canyon orthobunyavirus,Jamestown Canyon virus,,viral,,2560532,,is a known pathogen,,Yes,"1,2",1.0.0
+Ilesha orthobunyavirus,Orthobunyavirus ileshaense,,viral,,,,is a known pathogen,,,1,1.0.1
+Influenza A virus,Alphainfluenzavirus influenzae,,viral,,11320,,is a known pathogen,,,1,1.0.0
+Influenza B virus,Betainfluenzavirus influenzae,,viral,,11520,,is a known pathogen,,Yes,"1,2",1.0.0
+Influenza C virus,Gammainfluenzavirus influenzae,,viral,,11552,,is a known pathogen,,Yes,"1,2",1.0.0
+Isfahan vesiculovirus,Vesiculovirus isfahan,,viral,,,,is a known pathogen,,,1,1.0.1
+Jamestown Canyon orthobunyavirus,Jamestown Canyon virus;Orthobunyavirus jamestownense,,viral,,2560532,,is a known pathogen,,Yes,"1,2",1.0.0
 Orthoflavivirus japonicum,Japanese encephalitis virus,,viral,Japanese encephalitis,11072,NC_001437.1,is a known pathogen,,Yes,"1,2",1.0.0
-Kyasanur Forest disease virus,Alkhurma hemorrhagic fever virus,,viral,Kyasanur Forest disease,33743,NC_039218.1,is a known pathogen,,Yes,"1,2",1.0.0
-La Crosse orthobunyavirus,,,viral,,2560547,GCF_000850965.1,is a known pathogen,,,1,1.0.0
-Lagos bat lyssavirus,,,viral,,38766,NC_020807.1,is a known pathogen,,,1,1.0.0
-Langat virus,,,viral,,11085,NC_003690.1,is a known pathogen,,,1,1.0.0
-Lassa mammarenavirus,,,viral,viral haemorrhagic fever,11620,NC_004297.1 (L Seg); NC_004296.1 (S Seg),is a known pathogen,,Yes,"1,2",1.0.0
-Louping ill virus,,,viral,,11086,NC_001809.1,is a known pathogen,,,1,1.0.0
-Lujo mammarenavirus,Lujo virus,,viral,Lujo hemorrhagic fever,,,is a known pathogen,,,3,1.0.0
-Lymphocytic choriomeningitis mammarenavirus,,,viral,,11623,NC_004291.1 (L); NC_004294.1 (S),is a known pathogen,,,1,1.0.0
-Macacine alphaherpesvirus 1,,,viral,,10325,,is a known pathogen,,,1,1.0.0
-Machupo mammarenavirus,,,viral,,11628,,is a known pathogen,,,1,1.0.0
-Mammalian orthoreovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Mammalian rubulavirus 5,,,viral,,1979162,,is a known pathogen,,,1,1.0.0
-Marburg marburgvirus,,,viral,viral haemorrhagic fever,11269,NC_001608.3,is a known pathogen,,Yes,"1,2",1.0.0
-Mayaro virus,,,viral,,59301,NC_003417.1,is a known pathogen,,,1,1.0.0
-Measles morbillivirus,,,viral,Measles,11234,NC_001498.1,is a known pathogen,,Yes,"1,2",1.0.0
-Middelburg virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Middle East respiratory syndrome-related coronavirus,,,viral,,1335626,NC_019843.3,is a known pathogen,,Yes,"1,2",1.0.0
-Mokola lyssavirus,,,viral,,12538,,is a known pathogen,,,1,1.0.0
-Molluscum contagiosum virus,,,viral,,10279,NC_001731.1,is a known pathogen,,,1,1.0.0
-Monkeypox virus,,,viral,,10244,NC_003310.1,is a known pathogen,,Yes,"1,2",1.0.0
-Mucambo virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Mumps rubulavirus,,,viral,Mumps,1979165,NC_002200.1,is a known pathogen,,Yes,"1,2",1.0.0
+Kyasanur Forest disease virus,Alkhurma hemorrhagic fever virus;Orthoflavivirus kyasanurense,,viral,Kyasanur Forest disease,33743,NC_039218.1,is a known pathogen,,Yes,"1,2",1.0.0
+La Crosse orthobunyavirus,Orthobunyavirus lacrosseense,,viral,,2560547,GCF_000850965.1,is a known pathogen,,,1,1.0.0
+Lagos bat lyssavirus,Lyssavirus lagos,,viral,,38766,NC_020807.1,is a known pathogen,,,1,1.0.0
+Langat virus,Orthoflavivirus langatense,,viral,,11085,NC_003690.1,is a known pathogen,,,1,1.0.0
+Lassa mammarenavirus,Mammarenavirus lassaense,,viral,viral haemorrhagic fever,11620,NC_004297.1 (L Seg); NC_004296.1 (S Seg),is a known pathogen,,Yes,"1,2",1.0.0
+Louping ill virus,Orthoflavivirus loupingi,,viral,,11086,NC_001809.1,is a known pathogen,,,1,1.0.0
+Lujo mammarenavirus,Lujo virus;Mammarenavirus lujoense,,viral,Lujo hemorrhagic fever,,,is a known pathogen,,,3,1.0.0
+Lymphocytic choriomeningitis mammarenavirus,Mammarenavirus choriomeningitidis,,viral,,11623,NC_004291.1 (L); NC_004294.1 (S),is a known pathogen,,,1,1.0.0
+Macacine alphaherpesvirus 1,Simplexvirus macacinealpha1,,viral,,10325,,is a known pathogen,,,1,1.0.0
+Machupo mammarenavirus,Mammarenavirus machupoense,,viral,,11628,,is a known pathogen,,,1,1.0.0
+Mammalian orthoreovirus,Orthoreovirus mammalis,,viral,,,,is a known pathogen,,,1,1.0.1
+Mammalian rubulavirus 5,Orthorubulavirus mammalis,,viral,,1979162,,is a known pathogen,,,1,1.0.0
+Marburg marburgvirus,Orthomarburgvirus marburgense,,viral,viral haemorrhagic fever,11269,NC_001608.3,is a known pathogen,,Yes,"1,2",1.0.0
+Mayaro virus,Alphavirus mayaro,,viral,,59301,NC_003417.1,is a known pathogen,,,1,1.0.0
+Measles morbillivirus,Morbillivirus hominis,,viral,Measles,11234,NC_001498.1,is a known pathogen,,Yes,"1,2",1.0.0
+Middelburg virus,Alphavirus middelburg,,viral,,,,is a known pathogen,,,1,1.0.1
+Middle East respiratory syndrome-related coronavirus,Betacoronavirus cameli,,viral,,1335626,NC_019843.3,is a known pathogen,,Yes,"1,2",1.0.0
+Mokola lyssavirus,Lyssavirus mokola,,viral,,12538,,is a known pathogen,,,1,1.0.0
+Molluscum contagiosum virus,Molluscipoxvirus molluscum,,viral,,10279,NC_001731.1,is a known pathogen,,,1,1.0.0
+Monkeypox virus, Orthopoxvirus monkeypox,,viral,,10244,NC_003310.1,is a known pathogen,,Yes,"1,2",1.0.0
+Mucambo virus,Alphavirus mucambo,,viral,,,,is a known pathogen,,,1,1.0.1
+Mumps rubulavirus,Orthorubulavirus parotitidis,,viral,Mumps,1979165,NC_002200.1,is a known pathogen,,Yes,"1,2",1.0.0
 Mupapillomavirus 1,,,viral,,334203,,is a known pathogen (Oncovirus),,,1,1.0.0
-Murray Valley encephalitis virus,,,viral,Murray Valley encephalitis,11079,NC_000943.1,is a known pathogen,,Yes,"1,2",1.0.0
-Nairobi sheep disease orthonairovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Naples phlebovirus,,,viral,,,,is a known pathogen,,,1,1.0.1
-New York hantavirus,,,viral,Hantavirus pulmonary syndrome,44755,,is a known pathogen,,,1,1.0.0
-Nipah henipavirus,Nipah Virus,,viral,,121791,NC_002728.1,is a known pathogen,,,1,1.0.0
-Norwalk virus,Norovirus,GI,viral,Winter vomiting disease,11983,NC_001959.2,is a known pathogen,,,1,1.0.0
-Omsk hemorrhagic fever virus,,,viral,Omsk hemorrhagic fever,12542,NC_005062.1,is a known pathogen,,Yes,"1,2",1.0.0
-Onyong-nyong virus,,,viral,,2169701,NC_001512.1,is a known pathogen,,,1,1.0.0
-Orf virus,,,viral,,10258,,is a known pathogen,,,1,1.0.0
-Oropouche orthobunyavirus,Oropouche virus,,viral,Oropouche fever,1933309,,is a known pathogen,,,1,1.0.0
-Orthohepevirus A,Hepatitis E Virus,,viral,,1678143,NC_001434.1,is a known pathogen,,Yes,"1,2",1.0.0
-Orungo virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Parechovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
-Parechovirus B,,,viral,,,,is a known pathogen,,,1,1.0.1
-Pegivirus C,,,viral,,1985356,,is a known pathogen,,,1,1.0.0
-Powassan virus,,,viral,,11083,NC_003687.1,is a known pathogen,,,1,1.0.0
-Primate erythroparvovirus 1,Parvovirus B19 or Human Bocavirus 2,,viral,,194440,NC_028101.1,is a known pathogen,,,1,1.0.0
-Primate T-lymphotropic virus 1,,,viral,,194441,NC_001436.1,is a known pathogen (Oncovirus),,,1,1.0.0
-Primate T-lymphotropic virus 2,,,viral,,1511900,NC_001488.1,is a known pathogen (Oncovirus),,,1,1.0.0
-Primate erythroparvovirus 1,,,viral,,,,is a known pathogen,,,1,1.0.1
-Pseudocowpox virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Punta Toro phlebovirus,Punta Toro virus,,viral,,1933186,NC_027203.1 (L); NC_027201.1 (M); NC_027202.1 (N),is a known pathogen,,,1,1.0.0
-Puumala orthohantavirus,,,viral,,1980486,,is a known pathogen,,,1,1.0.0
-Rabies lyssavirus,,,viral,Rabies,11292,NC_001542.1,is a known pathogen,,Yes,"1,2",1.0.0
-Rhinovirus A,,,viral,,,,is a known pathogen,,,1,1.0.1
-Rhinovirus C,,,viral,,,,is a known pathogen,,,1,1.0.1
-Rift Valley fever phlebovirus,,,viral,Rift Valley fever,1933187,,is a known pathogen,,  ,1,1.0.0
-Rocio virus,,,viral,Rocio viral encephalitis,,,is a known pathogen,,,32,1.0.0
-Rosavirus A,,,viral,,1511805,,is a known pathogen,,Yes,"1,2",1.0.0
-Ross River virus,,,viral,Ross River Fever,11029,NC_001544.1,is a known pathogen,,Yes,"1,2",1.0.0
-Rotavirus A,,,viral,,28875,,is a known pathogen,,Yes,"1,2",1.0.0
-Rotavirus B,,,viral,,28876,,is a known pathogen,,Yes,"1,2",1.0.0
-Rotavirus C,,,viral,,36427,,is a known pathogen,,Yes,"1,2",1.0.0
-Rubella virus,,,viral,Rubella,11041,,is a known pathogen,,Yes,"1,2",1.0.0
+Murray Valley encephalitis virus,Orthoflavivirus murrayense,,viral,Murray Valley encephalitis,11079,NC_000943.1,is a known pathogen,,Yes,"1,2",1.0.0
+Nairobi sheep disease orthonairovirus,Orthonairovirus nairobiense,,viral,,,,is a known pathogen,,,1,1.0.1
+Naples phlebovirus,Phlebovirus napoliense,,viral,,,,is a known pathogen,,,1,1.0.1
+New York hantavirus,Orthohantavirus sinnombreense,,viral,Hantavirus pulmonary syndrome,44755,,is a known pathogen,,,1,1.0.0
+Nipah henipavirus,Nipah Virus;Henipavirus nipahense,,viral,,121791,NC_002728.1,is a known pathogen,,,1,1.0.0
+Norwalk virus,Norovirus;Norovirus norwalkense,GI,viral,Winter vomiting disease,11983,NC_001959.2,is a known pathogen,,,1,1.0.0
+Omsk hemorrhagic fever virus, Orthoflavivirus omskense,,viral,Omsk hemorrhagic fever,12542,NC_005062.1,is a known pathogen,,Yes,"1,2",1.0.0
+Onyong-nyong virus, Alphavirus onyong,,viral,,2169701,NC_001512.1,is a known pathogen,,,1,1.0.0
+Orf virus,Parapoxvirus orf,,viral,,10258,,is a known pathogen,,,1,1.0.0
+Oropouche orthobunyavirus,Oropouche virus;Orthobunyavirus oropoucheense,,viral,Oropouche fever,1933309,,is a known pathogen,,,1,1.0.0
+Orthohepevirus A,Hepatitis E Virus;Paslahepevirus balayani,,viral,,1678143,NC_001434.1,is a known pathogen,,Yes,"1,2",1.0.0
+Orungo virus,Orbivirus orungoense,,viral,,,,is a known pathogen,,,1,1.0.1
+Parechovirus A,Parechovirus ahumpari,,viral,,,,is a known pathogen,,,1,1.0.1
+Parechovirus B,Parechovirus beljungani,,viral,,,,is a known pathogen,,,1,1.0.1
+Pegivirus C,Pegivirus hominis,,viral,,1985356,,is a known pathogen,,,1,1.0.0
+Powassan virus,Orthoflavivirus powassanense,,viral,,11083,NC_003687.1,is a known pathogen,,,1,1.0.0
+Primate erythroparvovirus 1,Parvovirus B19;Human Bocavirus 2;Erythroparvovirus primate1,,viral,,194440,NC_028101.1,is a known pathogen,,,1,1.0.0
+Primate T-lymphotropic virus 1,Deltaretrovirus priTlym1,,viral,,194441,NC_001436.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Primate T-lymphotropic virus 2,Deltaretrovirus priTlym2,,viral,,1511900,NC_001488.1,is a known pathogen (Oncovirus),,,1,1.0.0
+Primate erythroparvovirus 1,Erythroparvovirus primate1,,viral,,,,is a known pathogen,,,1,1.0.1
+Pseudocowpox virus,Parapoxvirus pseudocowpox,,viral,,,,is a known pathogen,,,1,1.0.1
+Punta Toro phlebovirus,Punta Toro virus;Phlebovirus toroense,,viral,,1933186,NC_027203.1 (L); NC_027201.1 (M); NC_027202.1 (N),is a known pathogen,,,1,1.0.0
+Puumala orthohantavirus,Orthohantavirus puumalaense,,viral,,1980486,,is a known pathogen,,,1,1.0.0
+Rabies lyssavirus,Lyssavirus rabies,,viral,Rabies,11292,NC_001542.1,is a known pathogen,,Yes,"1,2",1.0.0
+Rhinovirus A,Enterovirus alpharhino,,viral,,,,is a known pathogen,,,1,1.0.1
+Rhinovirus C,Enterovirus cerhino,,viral,,,,is a known pathogen,,,1,1.0.1
+Rift Valley fever phlebovirus,Phlebovirus riftense,,viral,Rift Valley fever,1933187,,is a known pathogen,,  ,1,1.0.0
+Rocio virus,Ilheus virus;Orthoflavivirus ilheusense;Rosavirus acaliforni,,viral,Rocio viral encephalitis,,,is a known pathogen,,,32,1.0.0
+Rosavirus A,Rosavirus acaliforni,,viral,,1511805,,is a known pathogen,,Yes,"1,2",1.0.0
+Ross River virus,Alphavirus rossriver,,viral,Ross River Fever,11029,NC_001544.1,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus A,Rotavirus alphagastroenteritidis,,viral,,28875,,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus B,Rotavirus betagastroenteritidis,,viral,,28876,,is a known pathogen,,Yes,"1,2",1.0.0
+Rotavirus C, Rotavirus tritogastroenteritidis,,viral,,36427,,is a known pathogen,,Yes,"1,2",1.0.0
+Rubella virus, Rubivirus rubellae,,viral,Rubella,11041,,is a known pathogen,,Yes,"1,2",1.0.0
 Russian Spring-Summer encephalitis virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Saint Louis encephalitis virus,,,viral,St. Louis encephalitis,11080,,is a known pathogen,,,1,1.0.0
-Salivirus A,,,viral,,1330524,,is a known pathogen,,,1,1.0.0
-Sapporo virus,,,viral,,95342,,is a known pathogen,,,1,1.0.0
-Semliki Forest Virus,,,viral,,11033,,is a known pathogen,,,1,1.0.0
-Seoul orthohantavirus,,,viral,,1980490,,is a known pathogen,,,1,1.0.0
-Severe acute respiratory syndrome-related coronavirus,,,viral,SARS,694009,NC_004718.3,is a known pathogen,,Yes,"1,2",1.0.0
-Severe acute respiratory syndrome-related coronavirus 2,,,viral,COVID-19,2697049,NC_045512.2,is a known pathogen,,Yes,"1,2",1.0.0
-Sicilian phlebovirus,Sandfly fever Turkey virus,,viral,Sandfly fever,28292,,is a known pathogen,,,1,1.0.0
-Sin Nombre orthohantavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Saint Louis encephalitis virus,Orthoflavivirus louisense,,viral,St. Louis encephalitis,11080,,is a known pathogen,,,1,1.0.0
+Salivirus A,Salivirus aklasse,,viral,,1330524,,is a known pathogen,,,1,1.0.0
+Sapporo virus,Sapovirus sapporoense,,viral,,95342,,is a known pathogen,,,1,1.0.0
+Semliki Forest Virus,Alphavirus semliki,,viral,,11033,,is a known pathogen,,,1,1.0.0
+Seoul orthohantavirus,Orthohantavirus seoulense,,viral,,1980490,,is a known pathogen,,,1,1.0.0
+Severe acute respiratory syndrome-related coronavirus,Betacoronavirus pandemicum,,viral,SARS,694009,NC_004718.3,is a known pathogen,,Yes,"1,2",1.0.0
+Severe acute respiratory syndrome-related coronavirus 2,Betacoronavirus pandemicum,,viral,COVID-19,2697049,NC_045512.2,is a known pathogen,,Yes,"1,2",1.0.0
+Sicilian phlebovirus,Sandfly fever Turkey virus;Phlebovirus siciliaense,,viral,Sandfly fever,28292,,is a known pathogen,,,1,1.0.0
+Sin Nombre orthohantavirus,Orthohantavirus sinnombreense,,viral,,,,is a known pathogen,,,1,1.0.1
 Simian foamy virus,,,viral,,11642,NC_001364.1,is a known pathogen,,,1,1.0.0
-Sindbis virus,Ockelbo virus,,viral,Sindbis fever,11034,NC_001547.1,is a known pathogen,,,1,1.0.0
-Snowshoe hare orthobunyavirus,,,viral,,2560767,,is a known pathogen,,,1,1.0.0
+Sindbis virus,Ockelbo viru;Alphavirus sindbis,,viral,Sindbis fever,11034,NC_001547.1,is a known pathogen,,,1,1.0.0
+Snowshoe hare orthobunyavirus,Orthobunyavirus khatangaense,,viral,,2560767,,is a known pathogen,,,1,1.0.0
 Spondweni virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Sudan ebolavirus,,,viral,viral haemorrhagic fever,186540,,is a known pathogen,,Yes,"1,2",1.0.0
-Tai Forest ebolavirus,,,viral,viral haemorrhagic fever,186541,NC_014372.1,is a known pathogen,,Yes,"1,2",1.0.0
-Tanapox virus,,,viral,,99000,,is a known pathogen,,,1,1.0.0
-Tick-borne encephalitis virus,,,viral,,11084,NC_001672.1,is a known pathogen,,,1,1.0.0
-Tonate virus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Sudan ebolavirus,Orthoebolavirus sudanense,,viral,viral haemorrhagic fever,186540,,is a known pathogen,,Yes,"1,2",1.0.0
+Tai Forest ebolavirus,Orthoebolavirus taiense,,viral,viral haemorrhagic fever,186541,NC_014372.1,is a known pathogen,,Yes,"1,2",1.0.0
+Tanapox virus,Yatapoxvirus tanapox,,viral,,99000,,is a known pathogen,,,1,1.0.0
+Tick-borne encephalitis virus,Orthoflavivirus encephalitidis,,viral,,11084,NC_001672.1,is a known pathogen,,,1,1.0.0
+Tonate virus,Alphavirus tonate,,viral,,,,is a known pathogen,,,1,1.0.1
 Torque teno virus,,,viral,,68887,,is a known pathogen,,,1,1.0.0
-Toscana phlebovirus,,,viral,,2734478,,is a known pathogen,,,1,1.0.0
-Trivittatus orthobunyavirus,,,viral,,2560823,,is a known pathogen,,,1,1.0.0
-unidentified human coronavirus,,,viral,,2749936,,is a known pathogen,,,1,1.0.0
-Uukuniemi uukuvirus,,,viral,,10245,NC_005221.1,is a known pathogen,,,1,1.0.0
+Toscana phlebovirus,Phlebovirus toscanaense,,viral,,2734478,,is a known pathogen,,,1,1.0.0
+Trivittatus orthobunyavirus,Orthobunyavirus achiotei,,viral,,2560823,,is a known pathogen,,,1,1.0.0
+Uukuniemi uukuvirus,Uukuvirus uukuniemiense,,viral,,10245,NC_005221.1,is a known pathogen,,,1,1.0.0
 Vaccinia virus,,,viral,,10255,NC_006998.1,is a known pathogen,,,1,1.0.0
-Variola virus,,,viral,Smallpox,11036,NC_001611.1,is a known pathogen,,Yes,"1,2",1.0.0
-Venezuelan equine encephalitis virus,,,viral,,11276,NC_001449.1,is a known pathogen,,,1,1.0.0
+Variola virus,Orthopoxvirus variola,,viral,Smallpox,11036,NC_001611.1,is a known pathogen,,Yes,"1,2",1.0.0
+Venezuelan equine encephalitis virus,Alphavirus venezuelan,,viral,,11276,NC_001449.1,is a known pathogen,,,1,1.0.0
 Vesicular stomatitis virus,,,viral,,11082,NC_001560.1,is a known pathogen,,,1,1.0.0
-Wesselsbron virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-West Nile virus,,,viral,West Nile Fever,11039,NC_001563.2,is a known pathogen,,Yes,"1,2",1.0.0
-Western equine encephalitis virus,Western equine encephalomyelitis viru,,viral,,38804,NC_003908.1,is a known pathogen,,,1,1.0.0
-Wesselsbron virus,,,viral,,11089,NC_005179.1,is a known pathogen,,,1,1.0.0
-Yaba monkey tumor virus,,,viral,,,,is a known pathogen,,,1,1.0.1
-Yellow fever virus,,,viral,Yellow Fever,186538,NC_002031.1,is a known pathogen,,Yes,"1,2",1.0.0
-Zaire ebolavirus,,,viral,viral haemorrhagic fever,64320,NC_002549.1,is a known pathogen,,Yes,"1,2",1.0.0
-Zika virus,,,viral,,694448,NC_012532.1,is a known pathogen,,Yes,"1,2",1.0.0
-unidentified human coronavirus,,,viral,,,,is a known pathogen,,,1,1.0.1
+Wesselsbron virus,Orthoflavivirus wesselsbronense,,viral,,,,is a known pathogen,,,1,1.0.1
+West Nile virus,Orthoflavivirus nilense,,viral,West Nile Fever,11039,NC_001563.2,is a known pathogen,,Yes,"1,2",1.0.0
+Western equine encephalitis virus,Western equine encephalomyelitis virus;Alphavirus western,,viral,,38804,NC_003908.1,is a known pathogen,,,1,1.0.0
+Wesselsbron virus,Orthoflavivirus wesselsbronense,,viral,,11089,NC_005179.1,is a known pathogen,,,1,1.0.0
+Yaba monkey tumor virus,Yatapoxvirus yabapox,,viral,,,,is a known pathogen,,,1,1.0.1
+Yellow fever virus,Orthoflavivirus flavi,,viral,Yellow Fever,186538,NC_002031.1,is a known pathogen,,Yes,"1,2",1.0.0
+Zaire ebolavirus,Orthoebolavirus zairense,,viral,viral haemorrhagic fever,64320,NC_002549.1,is a known pathogen,,Yes,"1,2",1.0.0
+Zika virus,Orthoflavivirus zikaense,,viral,,694448,NC_012532.1,is a known pathogen,,Yes,"1,2",1.0.0
 ,,,,,,,,,,,
 ,,,,,,,,,,,
 ,,,,,,,,,,,
