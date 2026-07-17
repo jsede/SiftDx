@@ -16,6 +16,11 @@ import species2lineage as sl
 
 def merge_nt_and_nr(database, taxdump, input_file, entrez_cred):
     # Load taxdump for TaxidTools
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s"
+    )
+
     node = taxdump + "/nodes.dmp"
     lineage = taxdump + "/rankedlineage.dmp"
     logging.info("Loading Taxdump")

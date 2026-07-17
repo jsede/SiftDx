@@ -116,60 +116,74 @@ def determine_final_species(row, taxdump, entrez_cred):
         if col in row.index and row[col] != "-":
             if any(substring.lower() in row[col].lower() for substring in synthetic_list):
                 row[col] = "-"
+                logging.info(f"{row[col]} for {row["Fasta_Headers"]} contains one of the synthetic strings, replacing with -")
                 
     # If all rows match, then just print one of the columns (they all match anyway so it doesnt matter which we pick)
     if row["match"] is True:
+        logging.info(f"All species in {row['Fasta_Headers']} match, returning {row["Kraken_Species"] and {row["Kraken_taxid"]}}")
         return row["Kraken_Species"], row["Kraken_taxid"]
+
     
     # Filtering the human reads
     elif (kraken_genus == "Homo" or row["Kraken_Species"] == "-") and \
         (nt_genus in primate_genus_list or
         nr_genus in primate_genus_list):
+        logging.info(f"Changing the final of {row["Fasta_Headers"]} to Homo sapiens and 9606 because the genus is related to primates")
         return "Homo sapiens", 9606
-        # If only one column contains valid data and the others are "-"
+    
+    # If only one column contains valid data and the others are "-"
     
     elif (
         row["Kraken_Species"] != "-"
         and row["NR_Species"] == "-"
         and row["NT_Species"] == "-"
     ):
+        logging.info(f"Only Kraken2 contains data for this row {row["Fasta_Headers"]}, returning {row["Kraken_Species"]}, {row["Kraken_taxid"]}")
         return row["Kraken_Species"], row["Kraken_taxid"]
     elif (
         row["Kraken_Species"] == "-"
         and row["NR_Species"] != "-"
         and row["NT_Species"] == "-"
     ):
+        logging.info(f"Only Kraken2 contains data for this row {row["Fasta_Headers"]}, returning {row["NR_Species"]}, {row["NR_taxid"]}")
         return row["NR_Species"], row["NR_taxid"]
     elif (
         row["Kraken_Species"] == "-"
         and row["NR_Species"] == "-"
         and row["NT_Species"] != "-"
     ):
+        logging.info(f"Only Kraken2 contains data for this row {row["Fasta_Headers"]}, returning {row["NT_Species"]}, {row["MM2_taxid"]}")
         return row["NT_Species"], row["MM2_taxid"]
     
     # If two columns match and the other column is not "-", then majority wins.
     elif row["Kraken_Species"] == row["NR_Species"] and row["Kraken_Species"] != "-":
+        logging.info(f"For {row["Fasta_Headers"]}, {row["Kraken_Species"]} and {row["NR_Species"]} are the same, but NT is blank.")
         return row["Kraken_Species"], row["Kraken_taxid"]
     elif row["Kraken_Species"] == row["NT_Species"] and row["Kraken_Species"] != "-":
+        logging.info(f"For {row["Fasta_Headers"]}, {row["Kraken_Species"]} and {row["NT_Species"]} are the same, but NR is blank.")
         return row["Kraken_Species"], row["Kraken_taxid"]
     elif row["NR_Species"] == row["NT_Species"] and row["NR_Species"] != "-":
-        return row["NR_Species"], row["NR_taxid"]
+        logging.info(f"For {row["Fasta_Headers"]}, {row["NR_Species"]} and {row["NT_Species"]} are the same, but Kraken2 is blank.")
+        return row["NT_Species"], row["MM2_taxid"]
 
     # If Kraken contains "Homo Sapiens" and NT contains "Naegleria fowleri" or other primates then its "Homo Sapiens"
     elif row["Kraken_Species"] == "Homo sapiens" and \
         (row["NT_Species"] == "Naegleria fowleri" or
         row["NR_Species"] =="Naegleria fowleri"):
+        logging.info(f"Removing Naegleria Fowleri (NT Contaminant) for {row["Fasta_Headers"]}, Kraken2 is Homo sapiens, so its Human")
         return row["Kraken_Species"], row["Kraken_taxid"]
     
     # Need to remove some more "Naegleria fowleri", so make it have to match two columns to call it "Naegleria fowleri"
     elif row["NT_Species"] == "Naegleria fowleri" and \
         row["Kraken_Species"] == "-" and \
         row["NR_Species"] == "-":
+        logging.info(f"Removing Naegleria Fowleri (NT Contaminant) for {row["Fasta_Headers"]}, needs Kraken2 to call NF as well")
         return "-", "-"
     
     elif row["NR_Species"] == "Naegleria fowleri" and \
         row["Kraken_Species"] == "-" and \
         row["NT_Species"] == "-":
+        logging.info(f"Removing Naegleria Fowleri (NR Contaminant) for {row["Fasta_Headers"]}, needs Kraken2 to call NF as well")
         return "-", "-"
     
     # If 2 columns contain "-", then print the column with stuff in it
@@ -178,35 +192,45 @@ def determine_final_species(row, taxdump, entrez_cred):
         and (row["NR_Species"] == row["NT_Species"] or nr_species == nt_species)
         and row["NR_Species"] != "-"
     ):
+        logging.info(f"Kraken2 is blank, NR and NT are the same for {row["Fasta_Headers"]}, returning {row["NR_Species"]}, {row["NR_taxid"]}")
         return row["NR_Species"], row["NR_taxid"]  # or row["NT_Species"], row["NT_taxid"]
     elif (
         (row["NR_Species"] == "-" or nr_species == "-")
         and (row["Kraken_Species"] == row["NT_Species"] or kraken_species == nt_species)
         and row["Kraken_Species"] != "-"
     ):
+        logging.info(f"NR is blank, Kraken2 and NT are the same for {row["Fasta_Headers"]}, returning {row["Kraken_Species"]}, {row["Kraken_taxid"]}")
         return row["Kraken_Species"], row["Kraken_taxid"]  # or row["NT_Species"], row["NT_taxid"]
     elif (
         (row["NT_Species"] == "-" or nt_species == "-")
         and (row["Kraken_Species"] == row["NR_Species"] or kraken_species == nr_species)
         and row["Kraken_Species"] != "-"
     ):
+        logging.info(f"NT is blank, Kraken2 and NR are the same for {row["Fasta_Headers"]}, returning {row["Kraken_Species"]}, {row["Kraken_taxid"]}")
         return row["Kraken_Species"], row["Kraken_taxid"]  # or row["NR_Species"], row["NR_taxid"]
         
     else:
         # Extract and compare genus if all previous conditions fail
         if kraken_genus and not nr_genus and not nt_genus:
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} returning Kraken2 genus {kraken_genus}")
             return kraken_genus, None
         elif not kraken_genus and nr_genus and not nt_genus:
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} returning NR genus {nr_genus}")
             return nr_genus, None
         elif not kraken_genus and not nr_genus and nt_genus:
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} returning NT genus {nt_genus}")
             return nt_genus, None
         elif kraken_genus == nr_genus:
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} as Kraken2 and NR are same genus {kraken_genus}")
             return kraken_genus, None
         elif kraken_genus == nt_genus:
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} as Kraken2 and NT are same genus {kraken_genus}")
             return kraken_genus, None
         elif nr_genus == nt_genus:
-            return nr_genus, None
+            logging.info(f"Making Genus level call for {row["Fasta_Headers"]} as NT and NR are same genus {nt_genus}")
+            return nt_genus, None
         elif (nt_genus == "Homo" or nr_genus == "Homo"):
+            logging.info(f"NT genus or NR genus is Homo, so returning Homo sapiens")
             return "Homo sapiens", 9606
         else:
             return None, None
@@ -249,7 +273,7 @@ def taxid_assignment(row, taxdump):
     if row['Kraken_Species'] == 'Homo sapiens' and consensus_lineage in human_lineage:
         consensus_lineage = row['Kraken_Species']
         consensus_taxid = row['Kraken_taxid']
-
+    logging.info(f"Consensus lineage determined for {row["Fasta_Headers"]}")
     return consensus_lineage, consensus_taxid
 
 def fix_taxid(row, taxdump, entrez_cred):
@@ -267,4 +291,3 @@ def fix_taxid(row, taxdump, entrez_cred):
             row['final_taxid'] = species
             logging.info(f"{row['final']} was assigned {og_taxid}, replacing with {species} via Taxonomy Entrez")
     return row['final'], row['final_taxid']
-
