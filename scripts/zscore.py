@@ -127,7 +127,7 @@ def zscore_calculation(sample_input, negative_folder, summary_input, spikein_inp
     
     # calculate the total reads
     sample_tr, sample_fr, sample_pg = calc_total_reads(summary_input)
-    negative_tr, negative_fr, negative_pg = calc_total_reads(summary_input)
+    negative_tr, negative_fr, negative_pg = calc_total_reads(neg_summary_input)
     
     # calculate the scale factor for RPM
     taxon_sum = sample_tr/1000000
