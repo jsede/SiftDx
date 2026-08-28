@@ -505,8 +505,8 @@ Uncinaria stenocephala,,,parasitic,,,,is a known pathogen,,,1,1.0.1
 Vittaforma corneae,,,fungal,Microsporidiosis,42399,,is a known pathogen,,,1,1.0.0
 Wangiella dermatitidis,,,fungal,Chromoblastomycosis,,,is a known pathogen,,,20,1.0.0
 Wuchereria bancrofti,,,parasitic,Lymphatic filariasis,6293,,is a known pathogen,,,"1,3",1.0.0
-Candida auris,,,fungal,,,,is a known pathogen,,,1,1.0.1
-Candida glabrata,,,fungal,,5478,,is a known pathogen,,,1,1.0.0
+Candida auris,Candidozyma auris,,fungal,,,,is a known pathogen,,,1,1.0.1
+Candida glabrata,Nakaseomyces glabratus,,fungal,,5478,,is a known pathogen,,,1,1.0.0
 Adeno-associated virus,,,viral,,272636,,is a known pathogen,,,1,1.0.0
 Aichivirus A,,,viral,,72149,,is a known pathogen,,,1,1.0.0
 Akhmeta virus,,,viral,,,,is a known pathogen,,,1,1.0.1
